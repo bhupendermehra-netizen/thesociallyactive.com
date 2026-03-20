@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManageController;
 use App\Http\Controllers\ExtraImageController;
+use Illuminate\Support\Facades\Auth;
+
 Route::get("/", [ManageController::class,"index"])->name("index");
 Route::get("/story", [ManageController::class,"about"])->name("about");
 Route::get("/contact", [ManageController::class,"contact"])->name("contact");
