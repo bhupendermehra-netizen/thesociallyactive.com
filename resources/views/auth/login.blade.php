@@ -1,139 +1,572 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="apple-touch-icon"
-      sizes="76x76"
-      href="admin/assets/img/apple-icon.png" />
-    <link rel="icon" type="image/png" href="admin/assets/img/favicon.png" />
-    <title>{{env('APP_NAME')}}</title>
-    <!-- Fonts and icons -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
-      rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    <script
-      src="https://kit.fontawesome.com/42d5adcbca.js"
-      crossorigin="anonymous"></script>
-    <!-- Nucleo Icons -->
-    <link href="admin/assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="admin/assets/css/nucleo-svg.css" rel="stylesheet" />
-    <!-- Main Styling -->
-    <link
-      href="admin/assets/css/soft-ui-dashboard-tailwind.css?v=1.0.5"
-      rel="stylesheet" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ env('APP_NAME') }} | Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    
-  </head>
+    :root {
+      --bg: #0d0b1a;
+      --sidebar: #100e1f;
+      --card: #17142e;
+      --hover: #1e1a38;
+      --lime: #dff811;
+      --teal: #67fcc6;
+      --purple: #7c3aed;
+      --text: #ffffff;
+      --muted: #a09bb5;
+      --danger: #ff6b81;
+      --border: #ffffff12;
+    }
 
-  <body
-    class="m-0 font-sans antialiased font-normal bg-white text-start text-base leading-default text-slate-500">
-    
-    <main class="mt-0 transition-all duration-200 ease-soft-in-out">
-      <section>
-        <div
-          class="relative flex items-center p-0 overflow-hidden bg-center bg-cover min-h-75-screen">
-          <div class="container z-10">
-            <div class="flex flex-wrap mt-0 -mx-3">
-              <div
-                class="flex flex-col w-full max-w-full px-3 mx-auto md:flex-0 shrink-0 md:w-6/12 lg:w-5/12 xl:w-4/12">
-                <div
-                  class="relative flex flex-col min-w-0 mt-32 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border">
-                  <div
-                    class="p-6 pb-0 mb-0 bg-transparent border-b-0 rounded-t-2xl">
-                    <h3
-                      class="relative z-10 font-bold text-transparent bg-gradient-to-tl from-blue-600 to-cyan-400 bg-clip-text">
-                      Welcome back
-                    </h3>
-                    <p class="mb-0">Enter your email and password to sign in</p>
-                  </div>
-                  <div class="flex-auto p-6">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                      <label class="mb-2 ml-1 font-bold text-xs text-slate-700"
-                        >Email</label
-                      >
-                      <div class="mb-4">
-                        <input
-                          type="email"
-                          class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
-                          placeholder="Email"
-                          aria-label="Email"
-                          name="email"
-                          aria-describedby="email-addon" />
-                          @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                          @enderror
-                      </div>
-                      <label class="mb-2 ml-1 font-bold text-xs text-slate-700"
-                        >Password</label
-                      >
-                      <div class="mb-4">
-                        <input
-                          type="password"
-                          class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
-                          placeholder="Password"
-                          aria-label="Password"
-                          name="password"
-                          aria-describedby="password-addon" />
-                          @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                      </div>
-                      <div class="min-h-6 mb-0.5 block pl-12">
-                        <input
-                          id="rememberMe"
-                          class="mt-0.54 rounded-10 duration-250 ease-soft-in-out after:rounded-circle after:shadow-soft-2xl after:duration-250 checked:after:translate-x-5.25 h-5 relative float-left -ml-12 w-10 cursor-pointer appearance-none border border-solid border-gray-200 bg-slate-800/10 bg-none bg-contain bg-left bg-no-repeat align-top transition-all after:absolute after:top-px after:h-4 after:w-4 after:translate-x-px after:bg-white after:content-[''] checked:border-slate-800/95 checked:bg-slate-800/95 checked:bg-none checked:bg-right"
-                          type="checkbox"
-                          name="remember"
-                           {{ old('remember') ? 'checked' : '' }} />
-                        <label
-                          class="mb-2 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                          for="rememberMe"
-                          >Remember me</label
-                        >
-                      </div>
-                      <div class="text-center">
-                        <button
-                          type="submit"
-                          class="inline-block w-full px-6 py-3 mt-6 mb-0 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer shadow-soft-md bg-x-25 bg-150 leading-pro text-xs ease-soft-in tracking-tight-soft bg-gradient-to-tl from-blue-600 to-cyan-400 hover:scale-102 hover:shadow-soft-xs active:opacity-85">
-                          Sign in
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                  
-                </div>
-              </div>
-              <div class="w-full max-w-full px-3 lg:flex-0 shrink-0 md:w-6/12">
-                <div
-                  class="absolute top-0 hidden w-3/5 h-full -mr-32 overflow-hidden -skew-x-10 -right-40 rounded-bl-xl md:block">
-                  <div
-                    class="absolute inset-x-0 top-0 z-0 h-full -ml-16 bg-cover skew-x-10"
-                    style="
-                      background-image: url('admin/assets/img/curved-images/curved6.jpg');
-                    "></div>
-                </div>
-              </div>
-            </div>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #07051a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── ANIMATED BG ── */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orbFloat 12s ease-in-out infinite alternate;
+    }
+
+    .bg-orb-1 {
+      width: 500px; height: 500px;
+      background: rgba(124, 58, 237, 0.25);
+      top: -150px; left: -100px;
+      animation-duration: 14s;
+    }
+
+    .bg-orb-2 {
+      width: 400px; height: 400px;
+      background: rgba(103, 252, 198, 0.12);
+      bottom: -120px; right: -80px;
+      animation-duration: 10s;
+      animation-delay: -4s;
+    }
+
+    .bg-orb-3 {
+      width: 300px; height: 300px;
+      background: rgba(223, 248, 17, 0.08);
+      top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation-duration: 18s;
+      animation-delay: -8s;
+    }
+
+    .bg-orb-4 {
+      width: 200px; height: 200px;
+      background: rgba(124, 58, 237, 0.18);
+      bottom: 10%; left: 20%;
+      animation-duration: 16s;
+      animation-delay: -2s;
+    }
+
+    /* Grid lines overlay */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    @keyframes orbFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(30px, -40px) scale(1.08); }
+      66%  { transform: translate(-20px, 20px) scale(0.95); }
+      100% { transform: translate(10px, -20px) scale(1.04); }
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 960px;
+      min-height: 560px;
+      display: flex;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    /* ── LEFT PANEL — GLASS ── */
+    .left-panel {
+      flex: 1;
+      background: rgba(23, 20, 46, 0.75);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon i {
+      color: #0d0b1a;
+      font-size: 18px;
+    }
+
+    .logo-text h1 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .logo-text p {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+      letter-spacing: 0.05em;
+    }
+
+    .form-heading {
+      margin-bottom: 28px;
+    }
+
+    .form-heading h2 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-heading p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .alert-error {
+      background: rgba(255, 107, 129, 0.12);
+      border: 1px solid rgba(255, 107, 129, 0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--danger);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap i.icon-left {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      background: var(--hover);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px 12px 40px;
+      font-size: 14px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrap input::placeholder { color: #4a4568; }
+
+    .input-wrap input:focus {
+      border-color: var(--lime);
+      box-shadow: 0 0 0 3px rgba(223, 248, 17, 0.12);
+    }
+
+    .input-wrap .toggle-eye {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .input-wrap .toggle-eye:hover { color: var(--text); }
+
+    .invalid-feedback {
+      display: block;
+      font-size: 12px;
+      color: var(--danger);
+      margin-top: 6px;
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .remember-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--lime);
+      cursor: pointer;
+    }
+
+    .btn-signin {
+      width: 100%;
+      padding: 14px;
+      background: var(--lime);
+      color: #0d0b1a;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-signin:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-signin:active { transform: translateY(0); }
+
+    /* ── RIGHT PANEL — GLASS ── */
+    .right-panel {
+      width: 420px;
+      background: rgba(15, 10, 40, 0.55);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* inner glow rings inside right panel */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(124, 58, 237, 0.18);
+      filter: blur(40px);
+    }
+
+    .blob-1 { width: 260px; height: 260px; top: -60px; right: -60px; }
+    .blob-2 { width: 160px; height: 160px; bottom: 20px; left: -40px; background: rgba(103,252,198,0.12); }
+    .blob-3 { width: 100px; height: 100px; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(223,248,17,0.06); }
+
+    /* glass card inside right panel */
+    .right-glass {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 36px 32px;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      width: 100%;
+    }
+
+    .right-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      width: 100%;
+    }
+
+    .shield-wrap {
+      width: 88px;
+      height: 88px;
+      background: rgba(223, 248, 17, 0.1);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      border: 1px solid rgba(223, 248, 17, 0.2);
+    }
+
+    .shield-wrap i { font-size: 36px; color: var(--lime); }
+
+    .right-content h3 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .right-content p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 280px;
+      margin: 0 auto 36px;
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      justify-content: center;
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-item .val {
+      font-family: 'Manrope', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--lime);
+    }
+
+    .stat-item .key {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .dots-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .dot.active { background: var(--lime); width: 20px; border-radius: 3px; }
+
+    @media (max-width: 768px) {
+      .right-panel { display: none; }
+      .left-panel { padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-scene">
+  <div class="bg-grid"></div>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+  <div class="bg-orb bg-orb-4"></div>
+</div>
+
+<div class="login-wrapper">
+
+  <!-- LEFT: FORM -->
+  <div class="left-panel">
+
+    <div class="logo-row">
+      <div class="logo-icon">
+        <i class="fas fa-bolt"></i>
+      </div>
+      <div class="logo-text">
+        <h1>TSA Admin</h1>
+        <p>THE NOCTURNAL ARCHITECT</p>
+      </div>
+    </div>
+
+    <div class="form-heading">
+      <h2>Welcome back 👋</h2>
+      <p>Sign in to access your dashboard</p>
+    </div>
+
+    @if($errors->any())
+      <div class="alert-error">
+        <i class="fas fa-circle-exclamation"></i>
+        {{ $errors->first() }}
+      </div>
+    @endif
+
+    <form method="POST" action="{{ route('login') }}">
+      @csrf
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope icon-left"></i>
+          <input type="email" name="email" value="{{ old('email') }}" placeholder="admin@example.com" required autofocus />
+        </div>
+        @error('email')
+          <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock icon-left"></i>
+          <input type="password" name="password" id="password" placeholder="••••••••" required />
+          <button type="button" class="toggle-eye" onclick="togglePassword()">
+            <i class="fas fa-eye" id="eye-icon"></i>
+          </button>
+        </div>
+        @error('password')
+          <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
+      </div>
+
+      <div class="remember-row">
+        <label class="remember-label">
+          <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} />
+          Remember me
+        </label>
+      </div>
+
+      <button type="submit" class="btn-signin">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </button>
+
+    </form>
+  </div>
+
+  <!-- RIGHT: DECORATIVE -->
+  <div class="right-panel">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="right-content">
+      <div class="right-glass">
+        <div class="shield-wrap">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <h3>Secure Admin Panel</h3>
+        <p>Manage your website content, pages, queries, and settings all from one place.</p>
+
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="val">100%</div>
+            <div class="key">Secure</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="val">24/7</div>
+            <div class="key">Access</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="val">Fast</div>
+            <div class="key">Dashboard</div>
           </div>
         </div>
-      </section>
-    </main>
-    
-  </body>
-  <!-- plugin for scrollbar  -->
-  <script src="admin/assets/js/plugins/perfect-scrollbar.min.js" async></script>
-  <!-- main script file  -->
-  <script
-    src="admin/assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5"
-    async></script>
+
+        <div class="dots-row">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function togglePassword() {
+    const input = document.getElementById('password');
+    const icon = document.getElementById('eye-icon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'fas fa-eye-slash';
+    } else {
+      input.type = 'password';
+      icon.className = 'fas fa-eye';
+    }
+  }
+</script>
+
+</body>
 </html>
