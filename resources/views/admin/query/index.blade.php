@@ -1,86 +1,87 @@
-@extends("admin.layout.app")
-@section("content")
+@extends('admin.layout.app')
+@section('page-title', 'Queries')
 
-      <div class="w-full px-6 py-6 mx-auto">
-        <!-- table 1 -->
+@section('content')
 
-        <div class="flex flex-wrap -mx-3">
-          <div class="flex-none w-full max-w-full px-3">
-            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
-              <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h6>Queries</h6>
-                
+<div class="tsa-card">
+  <div class="tsa-card-title">
+    <span>
+      <i class="fas fa-inbox" style="color:var(--teal);margin-right:8px;"></i>
+      All Queries
+    </span>
+    <span class="badge badge-teal">{{ count($query) }} Total</span>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="tsa-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Service</th>
+          <th>Message</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($query as $key => $data)
+        <tr>
+          <td class="muted">{{ $key + 1 }}</td>
+
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0d0b1a;flex-shrink:0;">
+                {{ strtoupper(substr($data->name, 0, 1)) }}
               </div>
-              <div class="flex-auto px-0 pt-0 pb-2">
-                <div class="p-0 overflow-x-auto">
-                  <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-                    <thead class="align-bottom">
-                      <tr>
-                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">#</th>
-                        <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Name</th>
-						  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Email</th>
-						  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Phone</th>
-						  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Service</th>
-						  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Message</th>
-						  <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Date</th>
-                        
-                        <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($query as $key => $data)
-                      <tr>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <p>{{$key+1}}</p>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>{{$data->name}}</h5>
-                          </div>
-                        </td>
-						  <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>{{$data->email}}</h5>
-                          </div>
-                        </td>
-						  
-						  <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>{{$data->phone}}</h5>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5 style="text-transform:uppercase">{{$data->service}}</h5>
-                          </div>
-                        </td>
-						  <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <p>{{$data->message}}</p>
-                          </div>
-                        </td>
-						  <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <p>{{$data->created_at}}</p>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-							<form action="{{route('admin.query.delete',$data->id)}}" method="POST">
-								@csrf
-                          <button type="submit" class="btn btn-danger btn-sm"> Delete</button>
-								</form>
-                        </td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <span style="font-weight:600;">{{ $data->name }}</span>
             </div>
-          </div>
-        </div>
+          </td>
 
-        
-    @endsection
+          <td class="muted">{{ $data->email }}</td>
+
+          <td class="muted">{{ $data->phone }}</td>
+
+          <td>
+            <span class="badge badge-muted" style="text-transform:uppercase;font-size:10px;">
+              {{ $data->service }}
+            </span>
+          </td>
+
+          <td class="muted" style="max-width:200px;white-space:normal;line-height:1.5;">
+            {{ Str::limit($data->message, 60) }}
+          </td>
+
+          <td class="muted" style="white-space:nowrap;">
+            {{ \Carbon\Carbon::parse($data->created_at)->format('d M Y') }}
+          </td>
+
+          <td>
+            <form action="{{ route('admin.query.delete', $data->id) }}" method="POST"
+              onsubmit="return confirm('Delete this query from {{ $data->name }}?')">
+              @csrf
+              <button type="submit" class="btn btn-red">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+        @endforeach
+
+        @if(count($query) === 0)
+        <tr>
+          <td colspan="8" style="text-align:center;padding:48px 20px;">
+            <i class="fas fa-inbox" style="font-size:36px;color:var(--muted);opacity:0.4;display:block;margin-bottom:12px;"></i>
+            <span style="color:var(--muted);font-size:14px;">No queries yet</span>
+          </td>
+        </tr>
+        @endif
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@endsection

@@ -1,53 +1,59 @@
-@extends("admin.layout.app")
-@section("content")
+@extends('admin.layout.app')
+@section('page-title', 'Pages')
 
-      <div class="w-full px-6 py-6 mx-auto">
-        <!-- table 1 -->
+@section('content')
 
-        <div class="flex flex-wrap -mx-3">
-          <div class="flex-none w-full max-w-full px-3">
-            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
-              <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h6>Pages</h6>
-                
+<div class="tsa-card">
+  <div class="tsa-card-title">
+    <span>
+      <i class="fas fa-file-lines" style="color:var(--lime);margin-right:8px;"></i>
+      All Pages
+    </span>
+    <a href="{{ route('admin.page.add') }}" class="btn btn-lime">
+      <i class="fas fa-plus"></i> Add New
+    </a>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="tsa-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Page Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($pages as $key => $data)
+        <tr>
+          <td class="muted">{{ $key + 1 }}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;border-radius:8px;background:rgba(223,248,17,0.1);border:1px solid rgba(223,248,17,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="fas fa-file" style="color:var(--lime);font-size:13px;"></i>
               </div>
-              <div class="flex-auto px-0 pt-0 pb-2">
-                <div class="p-0 overflow-x-auto">
-                  <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-                    <thead class="align-bottom">
-                      <tr>
-                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">#</th>
-                        <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Page</th>
-                        
-                        <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($pages as $key => $data)
-                      <tr>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <p>{{$key+1}}</p>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>{{$data->page}}</h5>
-                          </div>
-                        </td>
-                        
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <a href="{{route('admin.page.view',$data->page)}}" class="btn btn-primary btn-sm"> View </a>
-                        </td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <span style="font-weight:600;">{{ $data->page }}</span>
             </div>
-          </div>
-        </div>
+          </td>
+          <td>
+            <a href="{{ route('admin.page.view', $data->page) }}" class="btn btn-teal">
+              <i class="fas fa-eye"></i> View
+            </a>
+          </td>
+        </tr>
+        @endforeach
 
-        
-    @endsection
+        @if(count($pages) === 0)
+        <tr>
+          <td colspan="3" style="text-align:center;padding:48px;">
+            <i class="fas fa-file-lines" style="font-size:32px;color:var(--muted);opacity:0.4;display:block;margin-bottom:12px;"></i>
+            <span style="color:var(--muted);">No pages found</span>
+          </td>
+        </tr>
+        @endif
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@endsection

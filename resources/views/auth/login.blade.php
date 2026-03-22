@@ -1,200 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ env('APP_NAME') }} | Login</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="admin/assets/img/apple-icon.png" />
+    <link rel="icon" type="image/png" href="admin/assets/img/favicon.png" />
+    <title>{{env('APP_NAME')}}</title>
+    <!-- Fonts and icons -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+      rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script
+      src="https://kit.fontawesome.com/42d5adcbca.js"
+      crossorigin="anonymous"></script>
+    <!-- Nucleo Icons -->
+    <link href="admin/assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="admin/assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Main Styling -->
+    <link
+      href="admin/assets/css/soft-ui-dashboard-tailwind.css?v=1.0.5"
+      rel="stylesheet" />
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+    
+  </head>
 
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .input-field {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      font-size: 14px;
-      color: #334155;
-      outline: none;
-      transition: all 0.2s;
-      background: #f8fafc;
-    }
-    .input-field:focus {
-      border-color: #7c3aed;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
-    }
-    .invalid-feedback {
-      color: #ef4444;
-      font-size: 12px;
-      margin-top: 4px;
-      display: block;
-    }
-  </style>
-</head>
-
-<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-
-  <div class="w-full max-w-5xl flex rounded-3xl overflow-hidden shadow-2xl bg-white min-h-[560px]">
-
-    <!-- ===== LEFT PANEL - Form ===== -->
-    <div class="w-full md:w-1/2 p-10 flex flex-col justify-center">
-
-      <!-- Logo -->
-      <div class="mb-8">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-cyan-400 flex items-center justify-center shadow-lg mb-4">
-          <i class="fas fa-bolt text-white text-lg"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-slate-800">Welcome back 👋</h2>
-        <p class="text-sm text-slate-400 mt-1">Enter your credentials to access the dashboard</p>
-      </div>
-
-      <!-- Error Alert -->
-      @if($errors->any())
-        <div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600 flex items-center gap-2">
-          <i class="fas fa-circle-exclamation"></i>
-          {{ $errors->first() }}
-        </div>
-      @endif
-
-      <!-- Form -->
-      <form method="POST" action="{{ route('login') }}" class="space-y-5">
-        @csrf
-
-        <!-- Email -->
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-            Email Address
-          </label>
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-              <i class="fas fa-envelope"></i>
-            </span>
-            <input
-              type="email"
-              name="email"
-              value="{{ old('email') }}"
-              placeholder="admin@example.com"
-              required autofocus
-              class="input-field pl-10"
-            />
-          </div>
-          @error('email')
-            <span class="invalid-feedback">{{ $message }}</span>
-          @enderror
-        </div>
-
-        <!-- Password -->
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-            Password
-          </label>
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-              <i class="fas fa-lock"></i>
-            </span>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              required
-              class="input-field pl-10"
-            />
-          </div>
-          @error('password')
-            <span class="invalid-feedback">{{ $message }}</span>
-          @enderror
-        </div>
-
-        <!-- Remember & Forgot -->
-        <div class="flex items-center justify-between">
-          <label class="flex items-center gap-2 text-sm text-slate-600 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              name="remember"
-              {{ old('remember') ? 'checked' : '' }}
-              class="w-4 h-4 rounded border-gray-300 text-violet-600 focus:ring-violet-400 cursor-pointer"
-            />
-            Remember me
-          </label>
-          @if(Route::has('password.request'))
-            <a href="{{ route('password.request') }}"
-               class="text-sm text-violet-600 hover:text-violet-800 font-medium hover:underline transition">
-              Forgot password?
-            </a>
-          @endif
-        </div>
-
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="w-full py-3 px-6 bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-bold rounded-xl shadow-lg hover:opacity-90 hover:shadow-xl transition-all text-sm tracking-wide mt-2">
-          <i class="fas fa-sign-in-alt mr-2"></i> Sign In
-        </button>
-
-      </form>
-
-    </div>
-
-    <!-- ===== RIGHT PANEL - Decorative ===== -->
-    <div class="hidden md:flex md:w-1/2 relative bg-gradient-to-br from-violet-600 via-purple-600 to-cyan-500 items-center justify-center overflow-hidden">
-
-      <!-- Background circles decoration -->
-      <div class="absolute w-72 h-72 bg-white/10 rounded-full -top-16 -right-16"></div>
-      <div class="absolute w-48 h-48 bg-white/10 rounded-full bottom-10 -left-10"></div>
-      <div class="absolute w-32 h-32 bg-white/5 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-
-      <!-- Content -->
-      <div class="relative z-10 text-center px-10">
-        <div class="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-sm">
-          <i class="fas fa-shield-halved text-white text-4xl"></i>
-        </div>
-        <h3 class="text-white text-2xl font-bold mb-3">Secure Admin Panel</h3>
-        <p class="text-white/70 text-sm leading-relaxed">
-          Manage your website content, pages, queries, and settings from one place.
-        </p>
-
-        <!-- Stats -->
-        <div class="flex justify-center gap-6 mt-8">
-          <div class="text-center">
-            <p class="text-white text-xl font-bold">100%</p>
-            <p class="text-white/60 text-xs">Secure</p>
-          </div>
-          <div class="w-px bg-white/20"></div>
-          <div class="text-center">
-            <p class="text-white text-xl font-bold">24/7</p>
-            <p class="text-white/60 text-xs">Access</p>
-          </div>
-          <div class="w-px bg-white/20"></div>
-          <div class="text-center">
-            <p class="text-white text-xl font-bold">Fast</p>
-            <p class="text-white/60 text-xs">Dashboard</p>
+  <body
+    class="m-0 font-sans antialiased font-normal bg-white text-start text-base leading-default text-slate-500">
+    
+    <main class="mt-0 transition-all duration-200 ease-soft-in-out">
+      <section>
+        <div
+          class="relative flex items-center p-0 overflow-hidden bg-center bg-cover min-h-75-screen">
+          <div class="container z-10">
+            <div class="flex flex-wrap mt-0 -mx-3">
+              <div
+                class="flex flex-col w-full max-w-full px-3 mx-auto md:flex-0 shrink-0 md:w-6/12 lg:w-5/12 xl:w-4/12">
+                <div
+                  class="relative flex flex-col min-w-0 mt-32 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border">
+                  <div
+                    class="p-6 pb-0 mb-0 bg-transparent border-b-0 rounded-t-2xl">
+                    <h3
+                      class="relative z-10 font-bold text-transparent bg-gradient-to-tl from-blue-600 to-cyan-400 bg-clip-text">
+                      Welcome back
+                    </h3>
+                    <p class="mb-0">Enter your email and password to sign in</p>
+                  </div>
+                  <div class="flex-auto p-6">
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+                      <label class="mb-2 ml-1 font-bold text-xs text-slate-700"
+                        >Email</label
+                      >
+                      <div class="mb-4">
+                        <input
+                          type="email"
+                          class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
+                          placeholder="Email"
+                          aria-label="Email"
+                          name="email"
+                          aria-describedby="email-addon" />
+                          @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                          @enderror
+                      </div>
+                      <label class="mb-2 ml-1 font-bold text-xs text-slate-700"
+                        >Password</label
+                      >
+                      <div class="mb-4">
+                        <input
+                          type="password"
+                          class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
+                          placeholder="Password"
+                          aria-label="Password"
+                          name="password"
+                          aria-describedby="password-addon" />
+                          @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                      </div>
+                      <div class="min-h-6 mb-0.5 block pl-12">
+                        <input
+                          id="rememberMe"
+                          class="mt-0.54 rounded-10 duration-250 ease-soft-in-out after:rounded-circle after:shadow-soft-2xl after:duration-250 checked:after:translate-x-5.25 h-5 relative float-left -ml-12 w-10 cursor-pointer appearance-none border border-solid border-gray-200 bg-slate-800/10 bg-none bg-contain bg-left bg-no-repeat align-top transition-all after:absolute after:top-px after:h-4 after:w-4 after:translate-x-px after:bg-white after:content-[''] checked:border-slate-800/95 checked:bg-slate-800/95 checked:bg-none checked:bg-right"
+                          type="checkbox"
+                          name="remember"
+                           {{ old('remember') ? 'checked' : '' }} />
+                        <label
+                          class="mb-2 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
+                          for="rememberMe"
+                          >Remember me</label
+                        >
+                      </div>
+                      <div class="text-center">
+                        <button
+                          type="submit"
+                          class="inline-block w-full px-6 py-3 mt-6 mb-0 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer shadow-soft-md bg-x-25 bg-150 leading-pro text-xs ease-soft-in tracking-tight-soft bg-gradient-to-tl from-blue-600 to-cyan-400 hover:scale-102 hover:shadow-soft-xs active:opacity-85">
+                          Sign in
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="w-full max-w-full px-3 lg:flex-0 shrink-0 md:w-6/12">
+                <div
+                  class="absolute top-0 hidden w-3/5 h-full -mr-32 overflow-hidden -skew-x-10 -right-40 rounded-bl-xl md:block">
+                  <div
+                    class="absolute inset-x-0 top-0 z-0 h-full -ml-16 bg-cover skew-x-10"
+                    style="
+                      background-image: url('admin/assets/img/curved-images/curved6.jpg');
+                    "></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-    </div>
-    <!-- ===== END RIGHT PANEL ===== -->
-
-  </div>
-
-</body>
+      </section>
+    </main>
+    
+  </body>
+  <!-- plugin for scrollbar  -->
+  <script src="admin/assets/js/plugins/perfect-scrollbar.min.js" async></script>
+  <!-- main script file  -->
+  <script
+    src="admin/assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5"
+    async></script>
 </html>
