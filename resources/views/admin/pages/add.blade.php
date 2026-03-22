@@ -1,83 +1,126 @@
+@extends('admin.layout.app')
+@section('page-title', 'Add Page Section')
 
-@extends("admin.layout.app")
-@section("content")
-      <div class="w-full px-6 py-6 mx-auto">
-        <div class="flex flex-wrap -mx-3">
-          <div class="flex-none w-full max-w-full px-3">
-            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
-              <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <form action="{{route('admin.page.add')}}" method="Post" enctype="multipart/form-data">
-                  @csrf
-                  <div class="row">
-                    <div class="col-lg-4 col-12 mb-3">
-                      <label>Page</label>
-                      <input class="form-control" type="name" name="page" list="page_list" required>
-                      <datalist id="page_list">
-                        @foreach($pages as $data)
-                        <option value="{{$data->page}}">{{$data->page}}</option>
-                        @endforeach
-                      </datalist>
-                      
-                    </div>
-                    <div class="col-lg-4 col-12 mb-3">
-                      <label>Title</label>
-                      <input class="form-control" type="name" name="title" required>
-                    </div>
-                    <div class="col-lg-4 col-12 mb-3">
-                      <label>Section</label>
-                      <input class="form-control" type="text" name="section" required>
-                    </div>
-                    <div class="col-lg-12 mb-3">
-                      <h5>Fields</h5>
-                      
-                      <button class="btn btn-primary add_fields" type="button">Add</button>
-                      <div class="">
-                        <table class="table table-bordered">
-                          <thead>
-                            <th>Name</th>
-                            <th>Text</th>
-                            <th>Link</th>
-                            <th>Image</th>
-                            <th>Type</th>
-                          </thead>
-                          <tbody class="field_div">
-                            
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <button class="btn btn-success btn-lg" type="submit">Submit</button>
-                </form>
-            </div>
-          </div>
-        </div>
+@section('content')
 
-        
+<div style="margin-bottom:20px;">
+  <a href="{{ route('admin.page') }}" class="btn btn-ghost">
+    <i class="fas fa-arrow-left"></i> Back to Pages
+  </a>
+</div>
+
+<div class="tsa-card">
+  <div class="tsa-card-title">
+    <span><i class="fas fa-plus" style="color:var(--lime);margin-right:8px;"></i>Add New Section</span>
+  </div>
+
+  <form action="{{ route('admin.page.add') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+
+    {{-- Top Fields --}}
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
+      <div class="form-group" style="margin:0;">
+        <label>Page</label>
+        <input class="form-control" type="text" name="page" list="page_list"
+          placeholder="Select or type page name" required />
+        <datalist id="page_list">
+          @foreach($pages as $data)
+            <option value="{{ $data->page }}">{{ $data->page }}</option>
+          @endforeach
+        </datalist>
       </div>
-    </main>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+      <div class="form-group" style="margin:0;">
+        <label>Title</label>
+        <input class="form-control" type="text" name="title" placeholder="Section title" required />
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label>Section Key</label>
+        <input class="form-control" type="text" name="section" placeholder="e.g. hero_section" required />
+      </div>
+    </div>
 
-    <script>
-      $(document).ready(function(){
-        $(".add_fields").click(function(){
-          
-          $(".field_div").append(`
+    {{-- Fields Table --}}
+    <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:14px;font-weight:600;color:var(--text);">
+        <i class="fas fa-list" style="color:var(--teal);margin-right:8px;"></i>Fields
+      </div>
+      <button class="btn btn-teal add_fields" type="button">
+        <i class="fas fa-plus"></i> Add Field
+      </button>
+    </div>
+
+    <div style="overflow-x:auto;margin-bottom:24px;">
+      <table class="tsa-table" id="fields-table">
+        <thead>
           <tr>
-                              <td><input class="form-control" type="text" name="name[]"></td>
-                              <td><input class="form-control" type="text" name="text[]"></td>
-                              <td><input class="form-control" type="text" name="link[]"></td>
-                              <td><input class="form-control" type="file" name="image[]"></td>
-                              <td>
-                                <select class="form-control" name="type[]">
-                                  <option value="text">Text</option>
-                                  <option value="image">image</option>
-                                  <option value="link">Link</option>
-                                </select>
-                              </td>
-                            </tr>
-          `);
-        });
-      });
-      </script>
+            <th>Name</th>
+            <th>Text</th>
+            <th>Link</th>
+            <th>Image</th>
+            <th>Type</th>
+            <th style="width:50px;"></th>
+          </tr>
+        </thead>
+        <tbody class="field_div">
+          {{-- Rows added dynamically --}}
+        </tbody>
+      </table>
+      <div id="empty-fields" style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+        <i class="fas fa-plus-circle" style="font-size:24px;display:block;margin-bottom:8px;opacity:0.4;"></i>
+        Click "Add Field" to add fields
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-lime" style="padding:12px 32px;font-size:14px;">
+      <i class="fas fa-floppy-disk"></i> Save Section
+    </button>
+
+  </form>
+</div>
+
+@endsection
+
+@section('scripts')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+
+  function updateEmpty() {
+    const rows = $('.field_div tr').length;
+    $('#empty-fields').toggle(rows === 0);
+  }
+
+  updateEmpty();
+
+  $('.add_fields').click(function() {
+    $('#empty-fields').hide();
+    $('.field_div').append(`
+      <tr style="background:var(--card);">
+        <td><input class="form-control" type="text" name="name[]" placeholder="Field name" /></td>
+        <td><textarea class="form-control" name="text[]" style="min-height:60px;" placeholder="Content..."></textarea></td>
+        <td><input class="form-control" type="text" name="link[]" placeholder="https://" /></td>
+        <td><input class="form-control" type="file" name="image[]" style="font-size:12px;padding:6px 10px;" /></td>
+        <td>
+          <select class="form-control" name="type[]">
+            <option value="text">Text</option>
+            <option value="image">Image</option>
+            <option value="link">Link</option>
+          </select>
+        </td>
+        <td>
+          <button type="button" class="btn btn-red remove-row" style="padding:6px 10px;">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `);
+  });
+
+  $(document).on('click', '.remove-row', function() {
+    $(this).closest('tr').remove();
+    updateEmpty();
+  });
+
+});
+</script>
 @endsection

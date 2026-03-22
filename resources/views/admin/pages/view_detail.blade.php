@@ -1,82 +1,81 @@
-@extends("admin.layout.app")
-@section("content")
+@extends('admin.layout.app')
+@section('page-title', 'View Page')
 
-      <div class="w-full px-6 py-6 mx-auto">
-        <!-- table 1 -->
+@section('content')
 
-        <div class="flex flex-wrap -mx-3">
-          <div class="flex-none w-full max-w-full px-3">
-            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
-              <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h6>Pages</h6>
-                
-              </div>
-              <div class="flex-auto px-0 pt-0 pb-2">
-                <div class="p-0 overflow-x-auto">
-                  <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-                    <thead class="align-bottom">
-                      <tr>
-                        <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">#</th>
-                        <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Title</th>
-                        <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Page Section</th>
-                        
-                        <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($pages as $key => $data)
-                      <tr>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <p>{{$key+1}}</p>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>{{$data->title}}</h5>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>{{$data->section}}</h5>
-                          </div>
-                        </td>
-                        
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <a href="{{route('admin.page.edit',$data->id)}}" class="text-xs font-semibold leading-tight text-slate-400"> Edit </a>
-                        </td>
-                      </tr>
-                      @endforeach
-						  @if($extraImage > 0)
-                      <tr>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <p>{{count($pages)+1}}</p>
-                          </div>
-                        </td>
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>Extra Image</h5>
-                          </div>
-                        </td>
-						  <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <div class="flex px-2 py-1">
-                            <h5>-</h5>
-                          </div>
-                        </td>
-						                          
-                        <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                          <a href="{{route('admin.extraImage',$page)}}" class="text-xs font-semibold leading-tight text-slate-400"> View </a>
-                        </td>
-                      </tr>
-                      @endif
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+<div style="margin-bottom:20px;">
+  <a href="{{ route('admin.page') }}" class="btn btn-ghost">
+    <i class="fas fa-arrow-left"></i> Back to Pages
+  </a>
+</div>
 
-        
-    @endsection
+{{-- Page header info --}}
+<div class="tsa-card" style="margin-bottom:20px;padding:18px 24px;">
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div style="width:44px;height:44px;border-radius:12px;background:rgba(223,248,17,0.1);border:1px solid rgba(223,248,17,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <i class="fas fa-file-lines" style="color:var(--lime);font-size:18px;"></i>
+    </div>
+    <div>
+      <div style="font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:var(--text);">
+        {{ $pages->first()->page ?? $page ?? 'Page' }}
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+        {{ count($pages) }} section(s)
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- Sections table --}}
+<div class="tsa-card">
+  <div class="tsa-card-title">
+    <span>
+      <i class="fas fa-layer-group" style="color:var(--teal);margin-right:8px;"></i>
+      Page Sections
+    </span>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="tsa-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Page Section</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($pages as $key => $data)
+        <tr>
+          <td class="muted">{{ $key + 1 }}</td>
+          <td style="font-weight:600;">{{ $data->title }}</td>
+          <td>
+            <span class="badge badge-muted">{{ $data->section }}</span>
+          </td>
+          <td>
+            <a href="{{ route('admin.page.edit', $data->id) }}" class="btn btn-teal">
+              <i class="fas fa-pen"></i> Edit
+            </a>
+          </td>
+        </tr>
+        @endforeach
+
+        @if(isset($extraImage) && $extraImage > 0)
+        <tr>
+          <td class="muted">{{ count($pages) + 1 }}</td>
+          <td style="font-weight:600;">Extra Images</td>
+          <td><span class="badge badge-lime">Gallery</span></td>
+          <td>
+            <a href="{{ route('admin.extraImage', $page) }}" class="btn btn-lime">
+              <i class="fas fa-images"></i> View
+            </a>
+          </td>
+        </tr>
+        @endif
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@endsection

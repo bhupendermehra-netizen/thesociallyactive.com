@@ -359,15 +359,90 @@
     html.light-mode {
       --bg: #f0eef8;
       --card: #ffffff;
-      --hover: #f0edf8;
+      --hover: #ede9ff;
       --text: #0d0b1a;
       --muted: #5a5278;
-      --border: #00000010;
+      --border: #0000001a;
     }
 
+    /* sidebar stays dark in light mode */
     html.light-mode .sidebar { background: #1a1730; }
     html.light-mode .sidebar .nav-item { color: #a09bb5; }
-    html.light-mode .sidebar .nav-item:hover, html.light-mode .sidebar .nav-item.active { color: #fff; }
+    html.light-mode .sidebar .nav-item:hover,
+    html.light-mode .sidebar .nav-item.active { color: #fff; }
+    html.light-mode .sidebar .nav-label { color: #6b6488; }
+    html.light-mode .sidebar .logo-text span { color: #fff; }
+    html.light-mode .sidebar .logo-text small { color: #a09bb5; }
+    html.light-mode .sidebar .user-info span { color: #fff; }
+    html.light-mode .sidebar .user-info small { color: #a09bb5; }
+    html.light-mode .sidebar-footer { border-top-color: #ffffff10; }
+    html.light-mode .sidebar-logo { border-bottom-color: #ffffff10; }
+
+    /* main content light mode */
+    html.light-mode .main-content { background: #f0eef8; }
+    html.light-mode .admin-navbar { background: rgba(240,238,248,0.9); border-bottom-color: #0000001a; }
+    html.light-mode .breadcrumb a { color: #5a5278; }
+    html.light-mode #theme-toggle { background: #fff; border-color: #0000001a; color: #5a5278; }
+
+    /* cards light mode */
+    html.light-mode .tsa-card { background: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+    html.light-mode .tsa-card-title { color: #0d0b1a; border-bottom-color: #0000001a; }
+
+    /* tables light mode */
+    html.light-mode .tsa-table thead th { color: #5a5278; border-bottom-color: #0000001a; }
+    html.light-mode .tsa-table tbody tr { border-bottom-color: #0000000d; color: #0d0b1a; }
+    html.light-mode .tsa-table tbody tr:hover { background: #ede9ff; }
+    html.light-mode .tsa-table td { color: #0d0b1a; }
+    html.light-mode .tsa-table td.muted { color: #5a5278; }
+
+    /* forms light mode */
+    html.light-mode .form-control {
+      background: #f5f3ff;
+      border-color: #0000001a;
+      color: #0d0b1a;
+    }
+    html.light-mode .form-control:focus {
+      border-color: #7c3aed;
+      background: #fff;
+    }
+    html.light-mode .form-control::placeholder { color: #9990bc; }
+    html.light-mode .form-group label { color: #5a5278; }
+    html.light-mode select.form-control option { background: #fff; color: #0d0b1a; }
+
+    /* buttons light mode */
+    html.light-mode .btn-ghost {
+      background: #ede9ff;
+      color: #5a5278;
+    }
+    html.light-mode .btn-ghost:hover { background: #ddd8f8; }
+
+    /* nav btn light mode */
+    html.light-mode .nav-btn {
+      background: #fff;
+      border-color: #0000001a;
+      color: #5a5278;
+    }
+
+    /* badges light mode */
+    html.light-mode .badge-muted { background: #ede9ff; color: #5a5278; }
+    html.light-mode .badge-lime  { background: #f0ffd0; color: #5a7a00; }
+    html.light-mode .badge-teal  { background: #d0fff2; color: #0a6b50; }
+    html.light-mode .badge-red   { background: #ffe0e5; color: #c0002a; }
+
+    /* page text light mode */
+    html.light-mode h1,
+    html.light-mode h2,
+    html.light-mode h3,
+    html.light-mode h4,
+    html.light-mode h5,
+    html.light-mode p,
+    html.light-mode span,
+    html.light-mode div,
+    html.light-mode label,
+    html.light-mode td,
+    html.light-mode th { color: inherit; }
+
+    html.light-mode .page-content { color: #0d0b1a; }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 991px) {
