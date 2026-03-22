@@ -474,10 +474,10 @@
       @csrf
 
       <div class="form-group">
-        <label>Email Address</label>
+        <label for="email">Email Address</label>
         <div class="input-wrap">
           <i class="fas fa-envelope icon-left"></i>
-          <input type="email" name="email" value="{{ old('email') }}" placeholder="admin@example.com" required autofocus />
+          <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="admin@example.com" required autofocus />
         </div>
         @error('email')
           <span class="invalid-feedback">{{ $message }}</span>
@@ -485,11 +485,11 @@
       </div>
 
       <div class="form-group">
-        <label>Password</label>
+        <label for="password">Password</label>
         <div class="input-wrap">
           <i class="fas fa-lock icon-left"></i>
           <input type="password" name="password" id="password" placeholder="••••••••" required />
-          <button type="button" class="toggle-eye" onclick="togglePassword()">
+          <button type="button" class="toggle-eye" onclick="togglePassword()" aria-label="Toggle password visibility">
             <i class="fas fa-eye" id="eye-icon"></i>
           </button>
         </div>
