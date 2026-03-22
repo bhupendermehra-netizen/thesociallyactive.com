@@ -234,5 +234,12 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
         $query = Query::findOrFail($id)->delete();
         return redirect()->back();
     }
-
+    public function projects()
+    {
+        $projects = \App\Models\Project::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+        return view('projects', compact('projects'));
+    }
 }

@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('extra_images', function (Blueprint $table) {
-            $table->id();
-            $table->string("banner");
-            $table->string("page");
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('extra_images')) {
+            Schema::create('extra_images', function (Blueprint $table) {
+                $table->id();
+                $table->string("banner");
+                $table->string("page");
+                $table->timestamps();
+            });
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('service_banners');
+        Schema::dropIfExists('extra_images');
     }
 };
