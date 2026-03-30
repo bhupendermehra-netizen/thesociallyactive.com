@@ -50,6 +50,25 @@
         <label>Section</label>
         <input class="form-control" type="text" name="section" value="{{ $page->section }}" required />
       </div>
+      <div class="form-group" style="margin:0;">
+        <label>Meta Title</label>
+        <input class="form-control" type="text" name="meta_title" value="{{ $page->meta_title ?? '' }}" placeholder="SEO page title" />
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label>Meta Description</label>
+        <textarea class="form-control" name="meta_description" style="min-height:50px;" placeholder="SEO description">{{ $page->meta_description ?? '' }}</textarea>
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label>Meta Keywords</label>
+        <input class="form-control" type="text" name="meta_keywords" value="{{ $page->meta_keywords ?? '' }}" placeholder="keyword1, keyword2" />
+      </div>
+      <div class="form-group" style="margin:0;">
+        <label>Status</label>
+        <select class="form-control" name="status">
+          <option value="published" {{ ($page->status ?? 'published') == 'published' ? 'selected' : '' }}>Published</option>
+          <option value="draft" {{ ($page->status ?? '') == 'draft' ? 'selected' : '' }}>Draft</option>
+        </select>
+      </div>
     </div>
 
     {{-- Fields Table --}}

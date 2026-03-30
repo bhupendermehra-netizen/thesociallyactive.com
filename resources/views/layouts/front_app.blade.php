@@ -5,8 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{header_footer()['main_component'][1]->text}}</title>
+    @php
+      $defaultTitle = header_footer()['main_component'][1]->text;
+      $pageSeo = isset($seo) && is_array($seo) ? $seo : [];
+      $pageTitle = $pageSeo['title'] ?? $defaultTitle;
+    @endphp
+    <title>{{ $pageTitle }}</title>
     <link rel="icon" type="image/x-icon" href="{{(env('IMG_FETCH_URL').'uploaded_files/'.header_footer()['main_component'][0]->img)}}">
+    @if(count($pageSeo))
+      @foreach($pageSeo as $name => $content)
+        @continue($name === 'title')
+        @php
+          $low = strtolower($name);
+          $isProperty = strpos($low, 'og:') === 0 || strpos($low, 'twitter:') === 0;
+        @endphp
+        <meta {{ $isProperty ? 'property' : 'name' }}="{{ $name }}" content="{{ $content }}">
+      @endforeach
+    @endif
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">

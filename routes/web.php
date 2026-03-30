@@ -33,9 +33,14 @@ Route::get('/dashboard', [ManageController::class, 'dashboard'])->name('dashboar
     // Profile
     Route::get("profile",[ManageController::class,"profile"])->name("profile");
     Route::post("profile/update",[ManageController::class,"profileUpdate"])->name("profile.update");
+
+    // Page SEO
+    Route::get("page/seo/{page}",[ManageController::class,"seo"])->name("page.seo");
+    Route::post("page/seo/{page}",[ManageController::class,"seoUpdate"])->name("page.seo.update");
 	
 	// Profile
     Route::get("query",[ManageController::class,"query"])->name("query");
+
     Route::post("query/{id}/delete",[ManageController::class,"queryDelete"])->name("query.delete");
 	
 	//ExtraImage

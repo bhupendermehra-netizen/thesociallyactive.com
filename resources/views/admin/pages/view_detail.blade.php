@@ -11,17 +11,24 @@
 
 {{-- Page header info --}}
 <div class="tsa-card" style="margin-bottom:20px;padding:18px 24px;">
-  <div style="display:flex;align-items:center;gap:14px;">
-    <div style="width:44px;height:44px;border-radius:12px;background:rgba(223,248,17,0.1);border:1px solid rgba(223,248,17,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-      <i class="fas fa-file-lines" style="color:var(--lime);font-size:18px;"></i>
+  <div style="display:flex;align-items:center;gap:14px;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(223,248,17,0.1);border:1px solid rgba(223,248,17,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fas fa-file-lines" style="color:var(--lime);font-size:18px;"></i>
+      </div>
+      <div>
+        <div style="font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:var(--text);">
+          {{ $pages->first()->page ?? $page ?? 'Page' }}
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+          {{ count($pages) }} section(s)
+        </div>
+      </div>
     </div>
     <div>
-      <div style="font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:var(--text);">
-        {{ $pages->first()->page ?? $page ?? 'Page' }}
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px;">
-        {{ count($pages) }} section(s)
-      </div>
+      <a href="{{ route('admin.page.seo', $page) }}" class="btn btn-teal">
+        <i class="fas fa-search"></i> Manage SEO
+      </a>
     </div>
   </div>
 </div>

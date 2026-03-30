@@ -33,7 +33,8 @@ $pages["impact_section"] = json_decode(Page::wherePage("Home")->whereSection("im
 $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSection("testimonial_section")->first()->fields);
         
         
-        return view("index",compact("pages"));
+        $seo = page_seo('Home');
+        return view("index",compact("pages","seo"));
     }
     public function about(){
         $pages["about_heading"] = json_decode(Page::wherePage("About")->whereSection("about_heading")->first()->fields);
@@ -41,7 +42,8 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
         $pages["founder_section"] = json_decode(Page::wherePage("About")->whereSection("founder_section")->first()->fields);
         $pages["story_section"] = json_decode(Page::wherePage("About")->whereSection("story_section")->first()->fields);
 
-        return view("about",compact("pages"));
+        $seo = page_seo('About');
+        return view("about",compact("pages","seo"));
     }
 	public function extraPage($slug){
 		
@@ -59,10 +61,8 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
 		
         $pages["content"] = json_decode(Page::wherePage($page)->whereSection("Content")->first()->fields);
 		
-        
-        
-
-        return view("extra_page",compact('pages','page'));
+        $seo = page_seo($page);
+        return view("extra_page",compact('pages','page','seo'));
     }
 	public function service($slug){
 		
@@ -87,11 +87,10 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
         $pages["explore_section"] = json_decode(Page::wherePage($page)->whereSection("explore_section")->first()->fields);
         
 
-        return view("service_page",compact('pages','page'));
+        $seo = page_seo($page);
+        return view("service_page",compact('pages','page','seo'));
     }
 		public function contact(){
-        
-        
         return view("contact");
     }
 	
@@ -119,6 +118,53 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
 
         return view("admin.pages.view_detail",compact("pages","extraImage","page"));
     }
+
+    public function seo($page){
+        $seoRow = Page::wherePage($page)->whereSection('seo')->first();
+        $seoFields = $seoRow ? json_decode($seoRow->fields, true) : [];
+
+        return view('admin.pages.seo', compact('page', 'seoFields'));
+    }
+
+    public function seoUpdate(Request $request, $page){
+        $names = $request->input('name', []);
+        $contents = $request->input('content', []);
+        $seoData = [];
+
+        foreach($names as $idx => $name){
+            $name = trim($name);
+            $content = isset($contents[$idx]) ? trim($contents[$idx]) : '';
+            if($name === '' && $content === ''){
+                continue;
+            }
+
+            if($name === ''){
+                continue;
+            }
+
+            $seoData[] = [
+                'name' => $name,
+                'text' => $content,
+            ];
+        }
+
+        $existingSeo = Page::wherePage($page)->whereSection('seo')->first();
+
+        Page::updateOrCreate(
+            ['page' => $page, 'section' => 'seo'],
+            [
+                'title' => 'SEO Meta',
+                'fields' => json_encode($seoData),
+                'meta_title' => $existingSeo->meta_title ?? '',
+                'meta_description' => $existingSeo->meta_description ?? '',
+                'meta_keywords' => $existingSeo->meta_keywords ?? '',
+                'status' => $existingSeo->status ?? 'published',
+            ]
+        );
+
+        return redirect()->route('admin.page.view', $page)->with('success', 'SEO updated successfully.');
+    }
+
     public function pageAdd(){
         $pages = Page::select("page")->groupBy("page")->get();
 
@@ -156,6 +202,10 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
         $page->page = $request->page;
         $page->title = $request->title;
         $page->section = $request->section;
+        $page->meta_title = $request->meta_title;
+        $page->meta_description = $request->meta_description;
+        $page->meta_keywords = $request->meta_keywords;
+        $page->status = $request->status ?? 'published';
         $page->fields= json_encode($fields);
         $page->save();
         return redirect()->back();
@@ -207,6 +257,10 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
         $page->page = $request->page;
         $page->title = $request->title;
         $page->section = $request->section;
+        $page->meta_title = $request->meta_title;
+        $page->meta_description = $request->meta_description;
+        $page->meta_keywords = $request->meta_keywords;
+        $page->status = $request->status ?? 'published';
         $page->fields= json_encode($fields);
         $page->save();
         return redirect()->back();

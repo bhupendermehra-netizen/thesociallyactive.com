@@ -15,6 +15,43 @@ return $pages;
     }
 }
 
+if(!function_exists('page_seo')){
+    function page_seo($page){
+        $meta = [];
+
+        $basePage = Page::wherePage($page)->first();
+        if($basePage){
+            if(!empty($basePage->meta_title)){
+                $meta['title'] = $basePage->meta_title;
+            }
+            if(!empty($basePage->meta_description)){
+                $meta['description'] = $basePage->meta_description;
+            }
+            if(!empty($basePage->meta_keywords)){
+                $meta['keywords'] = $basePage->meta_keywords;
+            }
+        }
+
+        $seoPage = Page::wherePage($page)->whereSection('seo')->first();
+        if($seoPage){
+            $fields = json_decode($seoPage->fields, true);
+            if(is_array($fields)){
+                foreach($fields as $item){
+                    if(isset($item['name']) && isset($item['text'])){
+                        if ($item['name'] === 'title') {
+                            $meta['title'] = $item['text'];
+                        } else {
+                            $meta[$item['name']] = $item['text'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $meta;
+    }
+}
+
 if(!function_exists('extra_image')){
     function extra_image($page){
     
