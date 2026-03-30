@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
     @php
       $defaultTitle = header_footer()['main_component'][1]->text;
       $pageSeo = isset($seo) && is_array($seo) ? $seo : [];
       $pageTitle = $pageSeo['title'] ?? $defaultTitle;
     @endphp
     <title>{{ $pageTitle }}</title>
-    <link rel="icon" type="image/x-icon" href="{{(env('IMG_FETCH_URL').'uploaded_files/'.header_footer()['main_component'][0]->img)}}">
+    
     @if(count($pageSeo))
       @foreach($pageSeo as $name => $content)
         @continue($name === 'title')
@@ -22,12 +21,7 @@
         <meta {{ $isProperty ? 'property' : 'name' }}="{{ $name }}" content="{{ $content }}">
       @endforeach
     @endif
-=======
-    <title>{{header_footer()['main_component'][1]->text}}</title>
-    <link rel="icon" type="image/x-icon"
-        href="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][0]->img)}}">
->>>>>>> d1885518f83f432e4fc4b5e19eb608110c693ff5
-
+<link rel="icon" type="image/x-icon" href="{{(env('IMG_FETCH_URL').'uploaded_files/'.header_footer()['main_component'][0]->img)}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
