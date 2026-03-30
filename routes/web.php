@@ -34,15 +34,11 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function(){
     Route::get("profile",[ManageController::class,"profile"])->name("profile");
     Route::post("profile/update",[ManageController::class,"profileUpdate"])->name("profile.update");
 
-<<<<<<< HEAD
     // Page SEO
     Route::get("page/seo/{page}",[ManageController::class,"seo"])->name("page.seo");
     Route::post("page/seo/{page}",[ManageController::class,"seoUpdate"])->name("page.seo.update");
 	
 	// Profile
-=======
-    // Query
->>>>>>> d1885518f83f432e4fc4b5e19eb608110c693ff5
     Route::get("query",[ManageController::class,"query"])->name("query");
 
     Route::post("query/{id}/delete",[ManageController::class,"queryDelete"])->name("query.delete");
