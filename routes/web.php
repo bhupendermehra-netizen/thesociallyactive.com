@@ -4,12 +4,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManageController;
 use App\Http\Controllers\ExtraImageController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\BlogFrontController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get("/", [ManageController::class,"index"])->name("index");
 Route::get("/story", [ManageController::class,"about"])->name("about");
 Route::get("/contact", [ManageController::class,"contact"])->name("contact");
 Route::get("/projects", [ManageController::class,"projects"])->name("projects");
+// Route::get("/blog", [BlogFrontController::class,"index"])->name("blog");
+// Route::get("/blog/{slug}", [BlogFrontController::class,"show"])->name("blog.show");
+Route::get("/blog", [App\Http\Controllers\BlogFrontController::class, "index"])->name("blog");
+Route::get("/blog/{slug}", [App\Http\Controllers\BlogFrontController::class, "show"])->name("blog.show");
 
 Route::get("/service/{slug}", [ManageController::class,"service"])->name("service");
 Route::get("/page/{slug}", [ManageController::class,"extraPage"])->name("extra.page");
@@ -59,4 +65,30 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function(){
     Route::get("projects/{id}/edit",[ProjectController::class,"edit"])->name("projects.edit");
     Route::post("projects/{id}",[ProjectController::class,"update"])->name("projects.update");
     Route::post("projects/{id}/delete",[ProjectController::class,"destroy"])->name("projects.delete");
+
+    // // Blog (admin CRUD)
+    // Route::get("blog",[BlogController::class,"index"])->name("blog.index");
+    // Route::get("blog/create",[BlogController::class,"create"])->name("blog.create");
+    // Route::post("blog",[BlogController::class,"store"])->name("blog.store");
+    // Route::get("blog/{id}/edit",[BlogController::class,"edit"])->name("blog.edit");
+    // Route::post("blog/{id}",[BlogController::class,"update"])->name("blog.update");
+    // Route::post("blog/{id}/delete",[BlogController::class,"destroy"])->name("blog.destroy");
+    // Route::get("blog/categories",[BlogController::class,"categories"])->name("blog.categories");
+    // Route::post("blog/category",[BlogController::class,"categoryStore"])->name("blog.category.store");
+    // Route::post("blog/category/{id}",[BlogController::class,"categoryUpdate"])->name("blog.category.update");
+    // Route::post("blog/category/{id}/delete",[BlogController::class,"categoryDestroy"])->name("blog.category.destroy");
+
+    // Blog - Admin routes (admin prefix group )
+Route::get("blog", [App\Http\Controllers\Admin\BlogController::class, "index"])->name("blog.index");
+Route::get("blog/create", [App\Http\Controllers\Admin\BlogController::class, "create"])->name("blog.create");
+Route::post("blog", [App\Http\Controllers\Admin\BlogController::class, "store"])->name("blog.store");
+Route::get("blog/{id}/edit", [App\Http\Controllers\Admin\BlogController::class, "edit"])->name("blog.edit");
+Route::post("blog/{id}", [App\Http\Controllers\Admin\BlogController::class, "update"])->name("blog.update");
+Route::post("blog/{id}/delete", [App\Http\Controllers\Admin\BlogController::class, "destroy"])->name("blog.destroy");
+ 
+// Blog Categories
+Route::get("blog/categories", [App\Http\Controllers\Admin\BlogController::class, "categories"])->name("blog.categories");
+Route::post("blog/categories", [App\Http\Controllers\Admin\BlogController::class, "categoryStore"])->name("blog.category.store");
+Route::post("blog/categories/{id}/delete", [App\Http\Controllers\Admin\BlogController::class, "categoryDestroy"])->name("blog.category.destroy");
+ 
 });

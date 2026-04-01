@@ -106,6 +106,8 @@ $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSectio
     public function dashboard()
     {
         return view('admin.index');
+        $blogCount = \App\Models\Blog::where('is_published', true)->count();
+return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
     }
     public function page(){
         $pages = Page::select("page")->groupBy("page")->get();

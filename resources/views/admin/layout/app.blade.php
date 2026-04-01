@@ -445,6 +445,12 @@
     <span class="nav-icon"><i class="fas fa-briefcase"></i></span>
     Projects
   </a>
+ <a href="{{ route('admin.blog.index') }}"
+   class="nav-item {{ Request::is('admin/blog') ? 'active' : '' }}">
+  <span class="nav-icon"><i class="fas fa-newspaper"></i></span>
+  Blog
+</a>
+
     <a href="{{ route('admin.page.edit', 27) }}"
        class="nav-item {{ Request::is('admin/page/edit/27') ? 'active' : '' }}">
       <span class="nav-icon"><i class="fas fa-quote-left"></i></span>

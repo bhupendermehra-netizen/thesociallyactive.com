@@ -42,7 +42,17 @@
       <div style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:var(--text);line-height:1.3;margin-top:4px;">{{ Auth::user()->name ?? 'Administrator' }}</div>
     </div>
   </div>
-
+<div class="tsa-card" style="padding:20px; margin:0; display:flex; align-items:center; gap:16px;">
+  <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,107,129,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+    <i class="fas fa-newspaper" style="color:#ff6b81;font-size:20px;"></i>
+  </div>
+  <div>
+    <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Blog Posts</div>
+    <div style="font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1.1;">
+      {{ \App\Models\Blog::where('is_published', true)->count() }}
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- QUICK LINKS -->
