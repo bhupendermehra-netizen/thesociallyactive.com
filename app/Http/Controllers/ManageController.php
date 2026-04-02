@@ -9,7 +9,10 @@ use App\Models\Query;
 use App\Models\ExtraImage;
 
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\View;
+use Spatie\Analytics\Facades\Analytics;
+use Spatie\Analytics\Period;
+use Illuminate\View\View as ViewResponse;
 
 class ManageController extends Controller
 {
@@ -298,4 +301,26 @@ return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
                     ->get();
         return view('projects', compact('projects'));
     }
+public function analytics(): ViewResponse
+{
+    return $propertyId = config('analytics_id', env('ANALYTICS_ID'));
+
+    if (!$propertyId) {
+        return view('admin.dashboard', [
+            'visitorCount' => 0
+        ]);
+    }
+
+    // 1. Ask Google for visitors from the last 7 days
+    // This automatically uses the ANALYTICS_PROPERTY_ID from your config
+    $analyticsData = Analytics::fetchTotalVisitorsAndPageViews(Period::days(7));
+
+    // 2. Sum up the 'activeUsers' column from the returned collection
+    $totalVisitors = $analyticsData->sum('activeUsers');
+
+    // 3. Send that number to your dashboard view
+    return view('admin.dashboard', [
+        'visitorCount' => $totalVisitors
+    ]);
+}
 }

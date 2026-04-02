@@ -90,5 +90,6 @@ Route::post("blog/{id}/delete", [App\Http\Controllers\Admin\BlogController::clas
 Route::get("blog/categories", [App\Http\Controllers\Admin\BlogController::class, "categories"])->name("blog.categories");
 Route::post("blog/categories", [App\Http\Controllers\Admin\BlogController::class, "categoryStore"])->name("blog.category.store");
 Route::post("blog/categories/{id}/delete", [App\Http\Controllers\Admin\BlogController::class, "categoryDestroy"])->name("blog.category.destroy");
- 
+// Google Analytics ID
+Route::get("/analytics", [ManageController::class, "analytics"])->name("settings.analytics");
 });

@@ -6,15 +6,18 @@
   <title>TSA | Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
+  <!-- Google Tag (gtag.js) -->
+@if(app()->environment('production') && config('services.google.analytics_id'))
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
-    gtag('config', 'G-J8FS8NYVR4');
+    gtag('config', '{{ config('services.google.analytics_id') }}');
   </script>
+@else
+  <!-- Analytics disabled in {{ app()->environment() }} mode -->
+@endif
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
