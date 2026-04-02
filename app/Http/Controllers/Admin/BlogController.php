@@ -68,16 +68,25 @@ class BlogController extends Controller
     public function create()
     {
         $categories = BlogCategory::orderBy('name')->get();
-        return view('admin.blog.create', compact('categories'));
+        $users = \App\Models\User::orderBy('name')->get();
+        return view('admin.blog.create', compact('categories', 'users'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'title'       => 'required|string|max:255',
-            'category_id' => 'nullable|exists:blog_categories,id',
-            'description' => 'nullable|string',
-            'content'     => 'nullable|string',
+            'title'           => 'required|string|max:255',
+            'author_id'       => 'nullable|exists:users,id',
+            'category_id'     => 'nullable|exists:blog_categories,id',
+            'blog_date'       => 'nullable|date',
+            'cover_image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'description'     => 'nullable|string|max:160',
+            'content'         => 'nullable|string',
+            'seo_title'       => 'nullable|string|max:255',
+            'seo_description' => 'nullable|string|max:160',
+            'enable_comments' => 'boolean',
+            'is_published'    => 'boolean',
+            'sort_order'      => 'integer|min:0',
         ]);
 
         $imagePath = null;
@@ -91,29 +100,48 @@ class BlogController extends Controller
         Blog::create([
             'title'           => $request->title,
             'slug'            => Str::slug($request->title) . '-' . time(),
+            'author_id'       => $request->author_id ?? auth()->id(),
             'category_id'     => $request->category_id,
+            'blog_date'       => $request->blog_date ?? now()->toDateString(),
             'cover_image'     => $imagePath,
             'description'     => $request->description,
             'content'         => $request->content,
             'seo_title'       => $request->seo_title ?? $request->title,
             'seo_description' => $request->seo_description,
+            'enable_comments' => $request->has('enable_comments') ? 1 : 0,
             'is_published'    => $request->has('is_published') ? 1 : 0,
             'sort_order'      => $request->sort_order ?? 0,
         ]);
 
-        return redirect()->route('admin.blog.index')->with('success', 'Blog post created!');
+        return redirect()->route('admin.blog.index')->with('success', 'Blog post created successfully!');
     }
 
     public function edit($id)
     {
         $blog = Blog::findOrFail($id);
         $categories = BlogCategory::orderBy('name')->get();
-        return view('admin.blog.edit', compact('blog', 'categories'));
+        $users = \App\Models\User::orderBy('name')->get();
+        return view('admin.blog.edit', compact('blog', 'categories', 'users'));
     }
 
     public function update(Request $request, $id)
     {
         $blog = Blog::findOrFail($id);
+
+        $request->validate([
+            'title'           => 'required|string|max:255',
+            'author_id'       => 'nullable|exists:users,id',
+            'category_id'     => 'nullable|exists:blog_categories,id',
+            'blog_date'       => 'nullable|date',
+            'cover_image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'description'     => 'nullable|string|max:160',
+            'content'         => 'nullable|string',
+            'seo_title'       => 'nullable|string|max:255',
+            'seo_description' => 'nullable|string|max:160',
+            'enable_comments' => 'boolean',
+            'is_published'    => 'boolean',
+            'sort_order'      => 'integer|min:0',
+        ]);
 
         $imagePath = $blog->cover_image;
         if ($request->hasFile('cover_image')) {
@@ -128,17 +156,21 @@ class BlogController extends Controller
 
         $blog->update([
             'title'           => $request->title,
+            'slug'            => Str::slug($request->title) . '-' . time(),
+            'author_id'       => $request->author_id ?? $blog->getAuthorIdAttribute(),
             'category_id'     => $request->category_id,
+            'blog_date'       => $request->blog_date ?? $blog->getBlogDateAttribute(),
             'cover_image'     => $imagePath,
             'description'     => $request->description,
             'content'         => $request->content,
             'seo_title'       => $request->seo_title ?? $request->title,
             'seo_description' => $request->seo_description,
+            'enable_comments' => $request->has('enable_comments') ? 1 : 0,
             'is_published'    => $request->has('is_published') ? 1 : 0,
             'sort_order'      => $request->sort_order ?? 0,
         ]);
 
-        return redirect()->route('admin.blog.index')->with('success', 'Blog post updated!');
+        return redirect()->route('admin.blog.index')->with('success', 'Blog post updated successfully!');
     }
 
     public function destroy($id)

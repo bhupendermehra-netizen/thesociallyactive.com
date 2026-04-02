@@ -195,7 +195,7 @@
 			</div>
 			
 			
-			
+			<br><br>
 		<div class="bottom-div">
 			<img class="part1" src="{{asset('assets/images/who_we_are_icon.png')}}" data-selected="1">
 			<div class="part2"data-selected="0">

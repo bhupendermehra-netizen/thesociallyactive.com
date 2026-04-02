@@ -1101,6 +1101,10 @@ text-decoration: none;
     width: 100%;
 }
 
+.navbar-options .navbar-links p.links {
+
+	margin-bottom:0rem 
+}
 .navbar-options .navbar-links .item{
 	position:relative;
 	overflow:hidden;
@@ -1108,7 +1112,7 @@ text-decoration: none;
 }
 
 .navbar-options .navbar-links .links a{
-    font-size:56px;
+    font-size:43px;
     text-decoration: none;
     color: white;
 }
@@ -1276,8 +1280,8 @@ font-size:18px;
 }
 .who_we_help_section .bulb-effect{
 position:absolute;
-	height:400px;
-	width:400px;
+    height: 302px;
+    width: 339px;
 	top:0;
 	left:50px;
 	z-index:99
@@ -1293,7 +1297,7 @@ height:100%;
 }
 .who_we_help_section .bottom-div{
 position:absolute;
-	bottom:0px;
+	bottom:-16px;
 	display:flex;
 	align-items:center;
 	justify-content:center

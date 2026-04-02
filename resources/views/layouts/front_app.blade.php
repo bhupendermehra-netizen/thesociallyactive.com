@@ -4,6 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+<!-- Google Analytics GA4 Tracking -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J8FS8NYVR4');
+</script>
     @php
         $defaultTitle = header_footer()['main_component'][1]->text;
         $pageSeo = isset($seo) && is_array($seo) ? $seo : [];
@@ -30,14 +39,14 @@
     <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}">
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-J8FS8NYVR4');
-    </script>
+    </script> -->
     {{GOOGLESETNV()}}
 
     <style>

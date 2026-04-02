@@ -54,7 +54,97 @@
   </div>
 </div>
 </div>
+<!-- New thisgns  -->
 
+
+{{-- 
+  Admin Dashboard mein GA4 Embedded Report widget
+  resources/views/admin/index.blade.php mein
+  stat cards ke NEECHE add karo
+--}}
+
+{{-- GA4 Embedded Report Section --}}
+<div class="tsa-card" style="margin-top:24px;">
+  <div class="tsa-card-title">
+    <span>
+      <i class="fas fa-chart-line" style="color:var(--lime);margin-right:8px;"></i>
+      Website Traffic
+      <span class="badge badge-muted" style="margin-left:8px;font-size:10px;">Google Analytics</span>
+    </span>
+    <a href="https://analytics.google.com" target="_blank" class="btn btn-ghost" style="font-size:12px;">
+      <i class="fas fa-external-link-alt"></i> Open Analytics
+    </a>
+  </div>
+
+  {{-- GA Embedded Report iframe --}}
+  <div style="position:relative;width:100%;border-radius:12px;overflow:hidden;background:var(--hover);">
+    <iframe
+      src="https://lookerstudio.google.com/embed/reporting/create?c.reportId=&ds.connector=GOOGLE_ANALYTICS_4&ds.propertyId=14284518222"
+      style="display:none;"
+      id="ga-iframe">
+    </iframe>
+
+    {{-- Custom GA Stats Display --}}
+    <div id="ga-stats" style="padding:24px;">
+
+      {{-- Stats Row --}}
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;">
+        
+        <div style="background:var(--card);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Today's Visitors</div>
+          <div id="ga-today" style="font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;color:var(--lime);">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Real-time</div>
+        </div>
+
+        <div style="background:var(--card);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">This Month</div>
+          <div id="ga-month" style="font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;color:var(--teal);">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Sessions</div>
+        </div>
+
+        <div style="background:var(--card);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Bounce Rate</div>
+          <div id="ga-bounce" style="font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;color:#a78bfa;">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Average</div>
+        </div>
+
+        <div style="background:var(--card);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Page Views</div>
+          <div id="ga-pageviews" style="font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;color:var(--lime);">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Last 30 days</div>
+        </div>
+
+      </div>
+
+      {{-- Info message --}}
+      <div style="background:rgba(223,248,17,0.06);border:1px solid rgba(223,248,17,0.15);border-radius:10px;padding:16px;display:flex;align-items:flex-start;gap:12px;">
+        <i class="fas fa-circle-info" style="color:var(--lime);margin-top:2px;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;">GA4 API Setup Required</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;">
+            Live data dekhne ke liye GA4 API credentials configure karni hongi.
+            Abhi <a href="https://analytics.google.com/analytics/web/#/p14284518222/reports/intelligenthome" 
+            target="_blank" style="color:var(--lime);">Google Analytics Dashboard</a> pe seedha dekh sakte ho.
+            <br><br>
+            <strong style="color:var(--text);">Property ID:</strong> <code style="background:var(--hover);padding:2px 8px;border-radius:4px;font-size:11px;">14284518222</code> &nbsp;
+            <strong style="color:var(--text);">Measurement ID:</strong> <code style="background:var(--hover);padding:2px 8px;border-radius:4px;font-size:11px;">G-J8FS8NYVR4</code>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <a href="https://analytics.google.com/analytics/web/#/p14284518222/reports/intelligenthome" 
+               target="_blank" class="btn btn-lime" style="padding:8px 16px;font-size:12px;">
+              <i class="fas fa-chart-bar"></i> View Full Report
+            </a>
+            <a href="https://analytics.google.com/analytics/web/#/p14284518222/reports/realtimeoverview" 
+               target="_blank" class="btn btn-teal" style="padding:8px 16px;font-size:12px;">
+              <i class="fas fa-circle" style="color:#ff4040;font-size:8px;"></i> Real-time
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 <!-- QUICK LINKS -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
 
