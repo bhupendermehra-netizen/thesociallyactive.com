@@ -16,134 +16,146 @@ use Illuminate\View\View as ViewResponse;
 
 class ManageController extends Controller
 {
-    public function index(Request $request){
-        
-        
-        
-$pages["home_banner"] = json_decode(Page::wherePage("Home")->whereSection("home_banner")->first()->fields);
-$pages["about_section"] = json_decode(Page::wherePage("Home")->whereSection("about_section")->first()->fields);
-$pages["who_we_are"] = json_decode(Page::wherePage("Home")->whereSection("who_we_are")->first()->fields);
-$pages["who_we_help"] = json_decode(Page::wherePage("Home")->whereSection("who_we_help")->first()->fields);
-$pages["video_section"] = json_decode(Page::wherePage("Home")->whereSection("video_section")->first()->fields);
-$pages["expertise_section"] = json_decode(Page::wherePage("Home")->whereSection("expertise_section")->first()->fields);
-$pages["card_section_1"] = json_decode(Page::wherePage("Home")->whereSection("card_section_1")->first()->fields);
-$pages["card_section_2"] = json_decode(Page::wherePage("Home")->whereSection("card_section_2")->first()->fields);
-$pages["card_section_3"] = json_decode(Page::wherePage("Home")->whereSection("card_section_3")->first()->fields);
-$pages["card_section_4"] = json_decode(Page::wherePage("Home")->whereSection("card_section_4")->first()->fields);
-$pages["values_section"] = json_decode(Page::wherePage("Home")->whereSection("values_section")->first()->fields);
-$pages["brands_section"] = json_decode(Page::wherePage("Home")->whereSection("brands_section")->first()->fields);
-$pages["impact_section"] = json_decode(Page::wherePage("Home")->whereSection("impact_section")->first()->fields);
-$pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSection("testimonial_section")->first()->fields);
-        
-        
+    public function index(Request $request)
+    {
+
+
+
+        $pages["home_banner"] = json_decode(Page::wherePage("Home")->whereSection("home_banner")->first()->fields);
+        $pages["about_section"] = json_decode(Page::wherePage("Home")->whereSection("about_section")->first()->fields);
+        $pages["who_we_are"] = json_decode(Page::wherePage("Home")->whereSection("who_we_are")->first()->fields);
+        $pages["who_we_help"] = json_decode(Page::wherePage("Home")->whereSection("who_we_help")->first()->fields);
+        $pages["video_section"] = json_decode(Page::wherePage("Home")->whereSection("video_section")->first()->fields);
+        $pages["expertise_section"] = json_decode(Page::wherePage("Home")->whereSection("expertise_section")->first()->fields);
+        $pages["card_section_1"] = json_decode(Page::wherePage("Home")->whereSection("card_section_1")->first()->fields);
+        $pages["card_section_2"] = json_decode(Page::wherePage("Home")->whereSection("card_section_2")->first()->fields);
+        $pages["card_section_3"] = json_decode(Page::wherePage("Home")->whereSection("card_section_3")->first()->fields);
+        $pages["card_section_4"] = json_decode(Page::wherePage("Home")->whereSection("card_section_4")->first()->fields);
+        $pages["values_section"] = json_decode(Page::wherePage("Home")->whereSection("values_section")->first()->fields);
+        $pages["brands_section"] = json_decode(Page::wherePage("Home")->whereSection("brands_section")->first()->fields);
+        $pages["impact_section"] = json_decode(Page::wherePage("Home")->whereSection("impact_section")->first()->fields);
+        $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSection("testimonial_section")->first()->fields);
+
+
         $seo = page_seo('Home');
-        return view("index",compact("pages","seo"));
+        return view("index", compact("pages", "seo"));
     }
-    public function about(){
+    public function about()
+    {
         $pages["about_heading"] = json_decode(Page::wherePage("About")->whereSection("about_heading")->first()->fields);
         $pages["passion_section"] = json_decode(Page::wherePage("About")->whereSection("passion_section")->first()->fields);
         $pages["founder_section"] = json_decode(Page::wherePage("About")->whereSection("founder_section")->first()->fields);
         $pages["story_section"] = json_decode(Page::wherePage("About")->whereSection("story_section")->first()->fields);
 
         $seo = page_seo('About');
-        return view("about",compact("pages","seo"));
+        return view("about", compact("pages", "seo"));
     }
-	public function extraPage($slug){
-		
-		$pageSearch = Page::whereSection("Important-Page-Slug")->get();
-		$page = "";
-		foreach($pageSearch as $data){
-		if(isset(json_decode($data->fields)[0]) && json_decode($data->fields)[0]->link == $slug){
-			$page = $data->page;
-		}
-		}
-		
-		if($page == "" || empty($page)){
-		abort(404);
-		}
-		
+    public function extraPage($slug)
+    {
+
+        $pageSearch = Page::whereSection("Important-Page-Slug")->get();
+        $page = "";
+        foreach ($pageSearch as $data) {
+            if (isset(json_decode($data->fields)[0]) && json_decode($data->fields)[0]->link == $slug) {
+                $page = $data->page;
+            }
+        }
+
+        if ($page == "" || empty($page)) {
+            abort(404);
+        }
+
         $pages["content"] = json_decode(Page::wherePage($page)->whereSection("Content")->first()->fields);
-		
+
         $seo = page_seo($page);
-        return view("extra_page",compact('pages','page','seo'));
+        return view("extra_page", compact('pages', 'page', 'seo'));
     }
-	public function service($slug){
-		
-		$pageSearch = Page::whereSection("Service-Page-Slug")->get();
-		$page = "";
-		foreach($pageSearch as $data){
-		if(isset(json_decode($data->fields)[0]) && json_decode($data->fields)[0]->link == $slug){
-			$page = $data->page;
-		}
-		}
-		
-		if($page == "" || empty($page)){
-		abort(404);
-		}
-		
+    public function service($slug)
+    {
+
+        $pageSearch = Page::whereSection("Service-Page-Slug")->get();
+        $page = "";
+        foreach ($pageSearch as $data) {
+            if (isset(json_decode($data->fields)[0]) && json_decode($data->fields)[0]->link == $slug) {
+                $page = $data->page;
+            }
+        }
+
+        if ($page == "" || empty($page)) {
+            abort(404);
+        }
+
         $pages["banner"] = json_decode(Page::wherePage($page)->whereSection("banner")->first()->fields);
-		
+
         $pages["strip_1"] = json_decode(Page::wherePage($page)->whereSection("strip_1")->first()->fields);
         $pages["brand_service_section"] = json_decode(Page::wherePage($page)->whereSection("brand_service_section")->first()->fields);
         $pages["strip_2"] = json_decode(Page::wherePage($page)->whereSection("strip_2")->first()->fields);
         $pages["talk_section"] = json_decode(Page::wherePage($page)->whereSection("talk_section")->first()->fields);
         $pages["explore_section"] = json_decode(Page::wherePage($page)->whereSection("explore_section")->first()->fields);
-        
+
 
         $seo = page_seo($page);
-        return view("service_page",compact('pages','page','seo'));
+        return view("service_page", compact('pages', 'page', 'seo'));
     }
-		public function contact(){
+    public function contact()
+    {
         return view("contact");
     }
-	
-	
-	public function queryStore(Request $request){
+
+
+    public function queryStore(Request $request)
+    {
         $query = Query::create($request->all());
         return redirect()->route('thankyou');
     }
-	public function thankyou(){
+    public function thankyou()
+    {
         $pages["thankyou"] = json_decode(Page::wherePage("Thankyou")->whereSection("thanks")->first()->fields);
-        return view('thankyou',compact('pages'));
+        return view('thankyou', compact('pages'));
     }
     public function dashboard()
     {
-        return view('admin.index');
+        $pageCount = Page::count();
+        $queryCount = Query::count();
         $blogCount = \App\Models\Blog::where('is_published', true)->count();
-return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
+        return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
     }
-    public function page(){
+    public function page()
+    {
         $pages = Page::select("page")->groupBy("page")->get();
 
-        return view("admin.pages.index",compact("pages"));
+        return view("admin.pages.index", compact("pages"));
     }
-    public function pageView($page){
+    public function pageView($page)
+    {
         $pages = Page::wherePage($page)->get();
         $extraImage = ExtraImage::wherePage($page)->count();
 
-        return view("admin.pages.view_detail",compact("pages","extraImage","page"));
+        return view("admin.pages.view_detail", compact("pages", "extraImage", "page"));
     }
 
-    public function seo($page){
+    public function seo($page)
+    {
         $seoRow = Page::wherePage($page)->whereSection('seo')->first();
         $seoFields = $seoRow ? json_decode($seoRow->fields, true) : [];
 
         return view('admin.pages.seo', compact('page', 'seoFields'));
     }
 
-    public function seoUpdate(Request $request, $page){
+    public function seoUpdate(Request $request, $page)
+    {
         $names = $request->input('name', []);
         $contents = $request->input('content', []);
         $seoData = [];
 
-        foreach($names as $idx => $name){
+        foreach ($names as $idx => $name) {
             $name = trim($name);
             $content = isset($contents[$idx]) ? trim($contents[$idx]) : '';
-            if($name === '' && $content === ''){
+            if ($name === '' && $content === '') {
                 continue;
             }
 
-            if($name === ''){
+            if ($name === '') {
                 continue;
             }
 
@@ -170,39 +182,42 @@ return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
         return redirect()->route('admin.page.view', $page)->with('success', 'SEO updated successfully.');
     }
 
-    public function pageAdd(){
+    public function pageAdd()
+    {
         $pages = Page::select("page")->groupBy("page")->get();
 
-        return view("admin.pages.add",compact("pages"));
+        return view("admin.pages.add", compact("pages"));
     }
-    public function pageEdit($id){
+    public function pageEdit($id)
+    {
         $page = Page::findorfail($id);
 
-        return view("admin.pages.edit",compact("page"));
+        return view("admin.pages.edit", compact("page"));
     }
-    public function pageStore(Request $request){
+    public function pageStore(Request $request)
+    {
         $type = $request->type;
         $fields = [];
-        
-        foreach($type as $key => $data){
-            
+
+        foreach ($type as $key => $data) {
+
             $fields[$key]["name"] = $request->name[$key];
             $fields[$key]["type"] = $data;
-            if($data == "text"){
-            $fields[$key]["text"] = $request->text[$key];
+            if ($data == "text") {
+                $fields[$key]["text"] = $request->text[$key];
             }
-            if($data == "link"){
-            $fields[$key]["text"] = $request->text[$key];
-            $fields[$key]["link"] = $request->link[$key];
+            if ($data == "link") {
+                $fields[$key]["text"] = $request->text[$key];
+                $fields[$key]["link"] = $request->link[$key];
             }
-            if($data == "image"){
-            if(!empty($request->image[$key])){
-				$img = fileUpload($request->image[$key],"image");
-                $fields[$key]["img"] = $img;
-            }
+            if ($data == "image") {
+                if (!empty($request->image[$key])) {
+                    $img = fileUpload($request->image[$key], "image");
+                    $fields[$key]["img"] = $img;
+                }
             }
         }
-        
+
         $page = new Page();
         $page->page = $request->page;
         $page->title = $request->title;
@@ -211,54 +226,50 @@ return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
         $page->meta_description = $request->meta_description;
         $page->meta_keywords = $request->meta_keywords;
         $page->status = $request->status ?? 'published';
-        $page->fields= json_encode($fields);
+        $page->fields = json_encode($fields);
         $page->save();
         return redirect()->back();
-        
     }
-    public function pageUpdate(Request $request,$id){
+    public function pageUpdate(Request $request, $id)
+    {
         $type = $request->type;
         $fields = [];
         $page = Page::findorfail($id);
 
-        foreach($type as $key => $data){
-            
+        foreach ($type as $key => $data) {
+
             $fields[$key]["name"] = $request->name[$key];
             $fields[$key]["type"] = $data;
-            if($data == "text"){
-            $fields[$key]["text"] = $request->text[$key];
+            if ($data == "text") {
+                $fields[$key]["text"] = $request->text[$key];
             }
-            if($data == "link"){
-            $fields[$key]["text"] = $request->text[$key];
-            $fields[$key]["link"] = $request->link[$key];
+            if ($data == "link") {
+                $fields[$key]["text"] = $request->text[$key];
+                $fields[$key]["link"] = $request->link[$key];
             }
-            if($data == "image"){
-                
-            if(!empty($request->image[$key])){
-				
-				if(isset(json_decode($page->fields)[$key])&&json_decode($page->fields)[$key]->type =="image"){
-					
-                
-				
-                deleteImage(json_decode($page->fields)[$key]->img);
-                
-				}
-                $img = fileUpload($request->image[$key],"image");
+            if ($data == "image") {
 
-                    				
-				
-                $fields[$key]["img"] = $img;
-				
-				
-            }else{
-				
-                $fields[$key]["img"] = json_decode($page->fields)[$key]->img;
-				
-            }
+                if (!empty($request->image[$key])) {
+
+                    if (isset(json_decode($page->fields)[$key]) && json_decode($page->fields)[$key]->type == "image") {
+
+
+
+                        deleteImage(json_decode($page->fields)[$key]->img);
+                    }
+                    $img = fileUpload($request->image[$key], "image");
+
+
+
+                    $fields[$key]["img"] = $img;
+                } else {
+
+                    $fields[$key]["img"] = json_decode($page->fields)[$key]->img;
+                }
             }
         }
-        
-        
+
+
         $page->page = $request->page;
         $page->title = $request->title;
         $page->section = $request->section;
@@ -266,61 +277,63 @@ return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
         $page->meta_description = $request->meta_description;
         $page->meta_keywords = $request->meta_keywords;
         $page->status = $request->status ?? 'published';
-        $page->fields= json_encode($fields);
+        $page->fields = json_encode($fields);
         $page->save();
         return redirect()->back();
-        
     }
 
-    public function profile() {
+    public function profile()
+    {
         return view("admin.profile.index");
     }
-    public function profileUpdate(Request $req) {
+    public function profileUpdate(Request $req)
+    {
         $user = User::first();
         $user->email = $req->email;
-        if($req->password != ""){
-        $user->password = Hash::make($req->password);
+        if ($req->password != "") {
+            $user->password = Hash::make($req->password);
         }
         $user->save();
         return redirect()->back();
-
     }
-	public function query(Request $request){
+    public function query(Request $request)
+    {
         $query = Query::latest()->get();
-        return view('admin.query.index',compact('query'));
+        return view('admin.query.index', compact('query'));
     }
-	public function queryDelete($id){
+    public function queryDelete($id)
+    {
         $query = Query::findOrFail($id)->delete();
         return redirect()->back();
     }
     public function projects()
     {
         $projects = \App\Models\Project::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+            ->orderBy('sort_order')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('projects', compact('projects'));
     }
-public function analytics(): ViewResponse
-{
-    return $propertyId = config('analytics_id', env('ANALYTICS_ID'));
+    public function analytics(): ViewResponse
+    {
+        return $propertyId = config('analytics_id', env('ANALYTICS_ID'));
 
-    if (!$propertyId) {
+        if (!$propertyId) {
+            return view('admin.dashboard', [
+                'visitorCount' => 0
+            ]);
+        }
+
+        // 1. Ask Google for visitors from the last 7 days
+        // This automatically uses the ANALYTICS_PROPERTY_ID from your config
+        $analyticsData = Analytics::fetchTotalVisitorsAndPageViews(Period::days(7));
+
+        // 2. Sum up the 'activeUsers' column from the returned collection
+        $totalVisitors = $analyticsData->sum('activeUsers');
+
+        // 3. Send that number to your dashboard view
         return view('admin.dashboard', [
-            'visitorCount' => 0
+            'visitorCount' => $totalVisitors
         ]);
     }
-
-    // 1. Ask Google for visitors from the last 7 days
-    // This automatically uses the ANALYTICS_PROPERTY_ID from your config
-    $analyticsData = Analytics::fetchTotalVisitorsAndPageViews(Period::days(7));
-
-    // 2. Sum up the 'activeUsers' column from the returned collection
-    $totalVisitors = $analyticsData->sum('activeUsers');
-
-    // 3. Send that number to your dashboard view
-    return view('admin.dashboard', [
-        'visitorCount' => $totalVisitors
-    ]);
-}
 }

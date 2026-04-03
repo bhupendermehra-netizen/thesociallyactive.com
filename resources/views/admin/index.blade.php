@@ -145,6 +145,48 @@
     </div>
   </div>
 </div>
+
+<script>
+// Fetch and display analytics data
+async function loadAnalyticsData() {
+  try {
+    const response = await fetch('{{ route("admin.analytics.data") }}');
+    const data = await response.json();
+    
+    if (data.error) {
+      console.error('Analytics Error:', data.message);
+      return;
+    }
+    
+    // Update the dashboard with real data
+    document.getElementById('ga-today').textContent = data.today || '—';
+    document.getElementById('ga-month').textContent = data.month || '—';
+    document.getElementById('ga-bounce').textContent = data.bounce_rate || '—';
+    document.getElementById('ga-pageviews').textContent = data.pageviews || '—';
+    
+    // Update last updated time
+    const lastUpdated = document.createElement('div');
+    lastUpdated.style.cssText = 'font-size:10px;color:var(--muted);margin-top:8px;';
+    lastUpdated.textContent = `Last updated: ${data.last_updated || 'Never'}`;
+    
+    const existingLastUpdated = document.querySelector('#ga-stats .last-updated');
+    if (existingLastUpdated) {
+      existingLastUpdated.replaceWith(lastUpdated);
+    } else {
+      document.getElementById('ga-stats').appendChild(lastUpdated);
+    }
+    
+  } catch (error) {
+    console.error('Failed to load analytics data:', error);
+  }
+}
+
+// Load analytics data when page loads
+document.addEventListener('DOMContentLoaded', loadAnalyticsData);
+
+// Refresh data every 5 minutes
+setInterval(loadAnalyticsData, 5 * 60 * 1000);
+</script>
 <!-- QUICK LINKS -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
 

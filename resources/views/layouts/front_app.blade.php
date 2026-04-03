@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      
 <!-- Google Analytics GA4 Tracking -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EJHRFWZDFW"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-EJHRFWZDFW');
+  gtag('config', 'G-J8FS8NYVR4');
 </script>
     @php
         $defaultTitle = header_footer()['main_component'][1]->text;
