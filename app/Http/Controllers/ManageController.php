@@ -336,4 +336,7 @@ class ManageController extends Controller
             'visitorCount' => $totalVisitors
         ]);
     }
+    public function cardSection(){
+        return view('card-section');
+    }
 }
