@@ -46,7 +46,7 @@
         height: 100%;
         backface-visibility: hidden;
         border-radius: 16px;
-        overflow: hidden;S
+        overflow: hidden;
     }
 
     .card-front img, .card-back img {
@@ -95,7 +95,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         gsap.registerPlugin(ScrollTrigger);
 
-        // Initial setup: Stack all cards in center
         gsap.set(".gsap-card", {
             xPercent: -50,
             yPercent: -50,
@@ -103,41 +102,78 @@
             top: "50%"
         });
 
+        let infiniteBounce; 
+
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: '#gsap-card-section',
                 start: 'top top',
-                end: '+=3000', // Long scroll for smooth transition
+                end: '+=1500', 
                 scrub: 1,
                 pin: true,
-                anticipatePin: 1
+                anticipatePin: 1,
+                onUpdate: (self) => {
+                    // Start the bounce once the flip sequence begins (around 30% progress)
+                    // and kill it if we scroll back up before that point.
+                    if (self.progress > 0.3) {
+                        if (!infiniteBounce) {
+                            startFloating();
+                        }
+                    } else {
+                        stopFloating();
+                    }
+                },
+                // Hard reset when leaving the section backwards
+                onEnterBack: () => {
+                    if (tl.progress() < 0.3) stopFloating();
+                }
             }
         });
 
-        // 1. FAN OUT EFFECT
-        // Moving cards to their spread positions with slight rotation
+        // 1. FAN OUT
         tl.to('.gsap-card-1', { x: '-32vw', rotation: -8, ease: "power1.inOut" }, 0)
           .to('.gsap-card-2', { x: '-11vw', rotation: -3, ease: "power1.inOut" }, 0)
           .to('.gsap-card-3', { x: '11vw', rotation: 3, ease: "power1.inOut" }, 0)
           .to('.gsap-card-4', { x: '32vw', rotation: 8, ease: "power1.inOut" }, 0);
 
         // 2. 180 DEGREE FLIP
-        // We target '.card-inner' for the rotation
-        // Stagger makes them flip one after another like the video
         tl.to('.card-inner', {
             rotationY: 180,
             duration: 1.5,
-            stagger: 0.2, // This creates the sequential flip effect
-            ease: "back.out(1.2)" // Gives a slight "bounce" to the flip
-        }, "-=0.2"); // Starts slightly before the fan-out fully finishes
+            stagger: 0.2,
+            ease: "back.out(1.2)"
+        }, "-=0.2");
 
-        // 3. OPTIONAL: SCALE UP
-        // Slightly enlarge the cards as they flip to make them prominent
+        // 3. SCALE UP
         tl.to('.gsap-card', {
-            scale: 1.1,
+            scale: 1,
             duration: 1,
             stagger: 0.2
-        }, "<"); 
+        }, "<");
+
+        // --- BOUNCE CONTROL FUNCTIONS ---
+
+        function startFloating() {
+            // Move all to start position simultaneously
+            gsap.set(".gsap-card", { y: -30 });
+
+            infiniteBounce = gsap.to(".gsap-card", {
+                y: 30,
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        }
+
+        function stopFloating() {
+            if (infiniteBounce) {
+                infiniteBounce.kill();
+                infiniteBounce = null;
+                // Smoothly reset cards to their base Y position
+                gsap.to(".gsap-card", { y: 0, duration: 0.5, ease: "power2.out" });
+            }
+        }
     });
 </script>
 @endsection
