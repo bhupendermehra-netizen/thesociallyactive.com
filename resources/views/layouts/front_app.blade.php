@@ -60,6 +60,14 @@
 <body>
     @if(env("SITE_SETTING"))
 
+        <!-- PRELOADER - Shows TSA GIF until all content loads -->
+        <div class="loader">
+            <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][2]->img)}}" alt="Loading...">
+        </div>
+
+        <!-- PAGE CONTENT - Fades in after preloader -->
+        <div class="page-content">
+
         <div class="side_contact_button">
             <button class="mainButton" type="button">
                 <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['side_buttons'][0]->img)}}">
@@ -82,10 +90,6 @@
                     <i class="{{header_footer()['side_buttons'][4]->text}}"></i>
                 </button>
             </div>
-        </div>
-
-        <div class="loader">
-            <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][2]->img)}}">
         </div>
 
         <header class="navbar-top">
@@ -266,6 +270,12 @@
                                             <li><a
                                                     href="{{header_footer()['footer'][6]->link}}">{{header_footer()['footer'][6]->text}}</a>
                                             </li>
+                                            <li><a href="{{ route('projects') }}">Our Projects</a>
+                                            </li>
+                                            <li><a href="{{ route('blog') }}">Blog</a></a>
+                                            </li>
+                        
+
                                         </ul>
                                     </div>
                                 </div>
@@ -444,6 +454,8 @@
                 }
             }
         </script>
+
+        </div><!-- End .page-content -->
 
     @else
         {{abort(404)}}

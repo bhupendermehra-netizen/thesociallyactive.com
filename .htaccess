@@ -1,25 +1,37 @@
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
+RewriteEngine On
 
-    RewriteEngine On
+# Skip if already in /public
+RewriteCond %{REQUEST_URI} !^/public/
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+# Redirect all requests to /public
+RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>
 
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+<IfModule mod_expires.c>
+ExpiresActive On
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+# Images
+ExpiresByType image/jpg "access 1 year"
+ExpiresByType image/jpeg "access 1 year"
+ExpiresByType image/png "access 1 year"
+ExpiresByType image/gif "access 1 year"
+ExpiresByType image/webp "access 1 year"
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+# CSS & JS
+ExpiresByType text/css "access 1 year"
+ExpiresByType application/javascript "access 1 year"
+
+# Video & Audio
+ExpiresByType video/mp4 "access 1 year"
+ExpiresByType audio/mpeg "access 1 year"
+
+# Fonts
+ExpiresByType font/woff2 "access 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|css|js|mp4|mp3)$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
 </IfModule>

@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
@@ -16,6 +15,47 @@
 	background:black;
   border-radius: 1rem;
 }
+
+/* ========== PRELOADER - Full Page Loader ========== */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999999;
+    opacity: 1;
+    transition: opacity 0.8s ease-out, visibility 0s 0.8s;
+}
+
+.loader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader img {
+    max-width: 400px;
+    max-height: 400px;
+    width: 80vw;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Content fade-in after preloader */
+.page-content {
+    opacity: 0;
+    transition: opacity 1.2s ease-in 0.3s;
+}
+
+.page-content.show {
+    opacity: 1;
+}
+/* ========== End Preloader Styles ========== */
+
 .page-section{
 opacity:0;
 	  transition: opacity 0.5s ease-in-out; 
@@ -180,6 +220,18 @@ font-size:25px;
 	 z-index:999;
 	 transform:translate(0,-40vh)
 }
+
+/* Video black screen prevent */
+.video_frame video {
+    background: #000;
+    object-fit: cover;
+    transition: height 0.3s ease, width 0.3s ease, transform 0.3s ease;
+}
+
+/* Smooth scroll animation */
+.video_frame {
+    transition: opacity 0.4s ease;
+}
 .main_video_frame{	
 height:100%;
 	background:black;
@@ -340,6 +392,7 @@ height:600px;
 	width:350px;
 	position:relative
 }
+
 .whoweare_section_video video{
 	height:100%;
 	width:100%;
@@ -1496,19 +1549,20 @@ animation:animate1 4s
 }
 
 .brand_strategy_section{
-	opacity:1;
-	background:#000;
-	position:sticky;
-	padding:10px 0;
-		top:0;
-	height:100%;
-	z-index:99999;
-	display:flex;
-	align-items:center;
-	justify-content:center;
-	border-top:1px solid white;
-	border-style: dotted;
-	
+    opacity:1;
+    background:#000;
+    position:sticky;
+    padding:10px 0;
+    top:0;
+    height:100%;
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-top:1px solid white;
+    border-style: dotted;
+    transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: top;
 }
 .brand_strategy_section .visuals{
 position:relative;
@@ -1538,14 +1592,27 @@ height:80%;
 position:relative
 }
 .brand_strategy_section .visuals img{
-height:300px;
-	width:200px;
-	border-radius:1rem;
-	position:absolute;
-	display:none
+    height:90%;
+    width:65%;
+    border-radius:1rem;
+    position:absolute;
+    opacity:0;
+    transition: opacity 0.35s ease;
+    pointer-events:none;
+    display:none;
 }
 .brand_strategy_section .visuals img[data-selected="1"]{
-display:block
+    opacity:1;
+    pointer-events:auto;
+    display:block;
+}
+.brand_strategy_section .visuals:hover img.main-image{
+    opacity:0;
+    display:none;
+}
+.brand_strategy_section .visuals:hover img.main-image_2{
+    opacity:1;
+    display:block;
 }
 
 .brand_strategy_section .content{
@@ -3152,4 +3219,62 @@ height:100vh
 	.expertise_section .heading{
 	font-size:20px
 	}
+}
+/* ========== OUR STORY SECTION - SCROLL ANIMATION FIX ========== */
+
+/* scrollF() se opacity:0 na ho - our_story_section hamesha visible rahe */
+.our_story_section {
+    opacity: 1 !important;
+}
+
+/* Animated elements GPU acceleration ke liye */
+.our_story_section .content1 .img1,
+.our_story_section .content1 .content1_inner,
+.our_story_section .content1 .img2,
+.our_story_section .content3 .text,
+.our_story_section .content3 .img1,
+.our_story_section .content4 .text,
+.our_story_section .content4 .img1,
+.our_story_section .content_4_upper .img3,
+.our_story_section .content5 .text,
+.our_story_section .content5 .img2,
+.our_story_section .content6 .img2,
+.our_story_section .content6 .text,
+.our_story_section .content7 .inner,
+.our_story_section .content7 .img2,
+.our_story_section .content8 .img2,
+.our_story_section .content8 .inner {
+    will-change: transform, opacity;
+}
+
+/* Polaroid images shadow enhancement */
+.our_story_section .content5 .img2,
+.our_story_section .content6 .img2,
+.our_story_section .content7 .img2,
+.our_story_section .content8 .img2 {
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+}
+
+/* moving_animate override taaki JS transform ke sath conflict na ho (after animate-in) */
+.our_story_section .moving_animate {
+    animation: 4s moving_animate infinite;
+}
+
+/* ========== END OUR STORY SECTION ANIMATION FIX ========== */
+
+/* testimonial */
+.testimonial_section .review {
+    transform-style: preserve-3d;
+    will-change: transform;
+    cursor: pointer;
+}
+
+/* video section */
+/* Video section smooth transition */
+.video_section .video_div {
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.video_section .video_div[data-selected="-1"] {
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

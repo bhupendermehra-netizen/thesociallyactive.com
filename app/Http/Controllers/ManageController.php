@@ -16,43 +16,68 @@ use Illuminate\View\View as ViewResponse;
 
 class ManageController extends Controller
 {
+    // ===================== HELPER =====================
+    private function uploadFile($file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $videoExtensions = ['mp4', 'mov', 'avi', 'webm', 'mkv'];
+        $folder = in_array(strtolower($extension), $videoExtensions) ? 'video' : 'image';
+        $uniqueName = uniqid() . '.' . $extension;
+
+        // Seedha public/uploaded_files/ mein save karo
+        $destinationPath = public_path('uploaded_files/' . $folder);
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        $file->move($destinationPath, $uniqueName);
+
+        return $folder . '/' . $uniqueName;
+    }
+
+    private function deleteOldFile($imgPath)
+    {
+        if (!empty($imgPath)) {
+            $fullPath = public_path('uploaded_files/' . $imgPath);
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
+            }
+        }
+    }
+
+    // ===================== FRONTEND =====================
     public function index(Request $request)
     {
+        $sections = [
+            "home_banner", "about_section", "who_we_are", "who_we_help",
+            "video_section", "expertise_section", "card_section_1", "card_section_2",
+            "card_section_3", "card_section_4", "values_section", "brands_section",
+            "impact_section", "testimonial_section"
+        ];
 
-
-
-        $pages["home_banner"] = json_decode(Page::wherePage("Home")->whereSection("home_banner")->first()->fields);
-        $pages["about_section"] = json_decode(Page::wherePage("Home")->whereSection("about_section")->first()->fields);
-        $pages["who_we_are"] = json_decode(Page::wherePage("Home")->whereSection("who_we_are")->first()->fields);
-        $pages["who_we_help"] = json_decode(Page::wherePage("Home")->whereSection("who_we_help")->first()->fields);
-        $pages["video_section"] = json_decode(Page::wherePage("Home")->whereSection("video_section")->first()->fields);
-        $pages["expertise_section"] = json_decode(Page::wherePage("Home")->whereSection("expertise_section")->first()->fields);
-        $pages["card_section_1"] = json_decode(Page::wherePage("Home")->whereSection("card_section_1")->first()->fields);
-        $pages["card_section_2"] = json_decode(Page::wherePage("Home")->whereSection("card_section_2")->first()->fields);
-        $pages["card_section_3"] = json_decode(Page::wherePage("Home")->whereSection("card_section_3")->first()->fields);
-        $pages["card_section_4"] = json_decode(Page::wherePage("Home")->whereSection("card_section_4")->first()->fields);
-        $pages["values_section"] = json_decode(Page::wherePage("Home")->whereSection("values_section")->first()->fields);
-        $pages["brands_section"] = json_decode(Page::wherePage("Home")->whereSection("brands_section")->first()->fields);
-        $pages["impact_section"] = json_decode(Page::wherePage("Home")->whereSection("impact_section")->first()->fields);
-        $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSection("testimonial_section")->first()->fields);
-
+        foreach ($sections as $section) {
+            $record = Page::wherePage("Home")->whereSection($section)->first();
+            $pages[$section] = $record ? json_decode($record->fields) : [];
+        }
 
         $seo = page_seo('Home');
         return view("index", compact("pages", "seo"));
     }
+
     public function about()
     {
-        $pages["about_heading"] = json_decode(Page::wherePage("About")->whereSection("about_heading")->first()->fields);
-        $pages["passion_section"] = json_decode(Page::wherePage("About")->whereSection("passion_section")->first()->fields);
-        $pages["founder_section"] = json_decode(Page::wherePage("About")->whereSection("founder_section")->first()->fields);
-        $pages["story_section"] = json_decode(Page::wherePage("About")->whereSection("story_section")->first()->fields);
+        $sections = ["about_heading", "passion_section", "founder_section", "story_section"];
+
+        foreach ($sections as $section) {
+            $record = Page::wherePage("About")->whereSection($section)->first();
+            $pages[$section] = $record ? json_decode($record->fields) : [];
+        }
 
         $seo = page_seo('About');
         return view("about", compact("pages", "seo"));
     }
+
     public function extraPage($slug)
     {
-
         $pageSearch = Page::whereSection("Important-Page-Slug")->get();
         $page = "";
         foreach ($pageSearch as $data) {
@@ -65,14 +90,15 @@ class ManageController extends Controller
             abort(404);
         }
 
-        $pages["content"] = json_decode(Page::wherePage($page)->whereSection("Content")->first()->fields);
+        $record = Page::wherePage($page)->whereSection("Content")->first();
+        $pages["content"] = $record ? json_decode($record->fields) : [];
 
         $seo = page_seo($page);
         return view("extra_page", compact('pages', 'page', 'seo'));
     }
+
     public function service($slug)
     {
-
         $pageSearch = Page::whereSection("Service-Page-Slug")->get();
         $page = "";
         foreach ($pageSearch as $data) {
@@ -85,34 +111,35 @@ class ManageController extends Controller
             abort(404);
         }
 
-        $pages["banner"] = json_decode(Page::wherePage($page)->whereSection("banner")->first()->fields);
-
-        $pages["strip_1"] = json_decode(Page::wherePage($page)->whereSection("strip_1")->first()->fields);
-        $pages["brand_service_section"] = json_decode(Page::wherePage($page)->whereSection("brand_service_section")->first()->fields);
-        $pages["strip_2"] = json_decode(Page::wherePage($page)->whereSection("strip_2")->first()->fields);
-        $pages["talk_section"] = json_decode(Page::wherePage($page)->whereSection("talk_section")->first()->fields);
-        $pages["explore_section"] = json_decode(Page::wherePage($page)->whereSection("explore_section")->first()->fields);
-
+        $sections = ["banner", "strip_1", "brand_service_section", "strip_2", "talk_section", "explore_section"];
+        foreach ($sections as $section) {
+            $record = Page::wherePage($page)->whereSection($section)->first();
+            $pages[$section] = $record ? json_decode($record->fields) : [];
+        }
 
         $seo = page_seo($page);
         return view("service_page", compact('pages', 'page', 'seo'));
     }
+
     public function contact()
     {
         return view("contact");
     }
-
 
     public function queryStore(Request $request)
     {
         $query = Query::create($request->all());
         return redirect()->route('thankyou');
     }
+
     public function thankyou()
     {
-        $pages["thankyou"] = json_decode(Page::wherePage("Thankyou")->whereSection("thanks")->first()->fields);
+        $record = Page::wherePage("Thankyou")->whereSection("thanks")->first();
+        $pages["thankyou"] = $record ? json_decode($record->fields) : [];
         return view('thankyou', compact('pages'));
     }
+
+    // ===================== ADMIN =====================
     public function dashboard()
     {
         $pageCount = Page::count();
@@ -120,17 +147,22 @@ class ManageController extends Controller
         $blogCount = \App\Models\Blog::where('is_published', true)->count();
         return view('admin.index', compact('pageCount', 'queryCount', 'blogCount'));
     }
+
     public function page()
     {
         $pages = Page::select("page")->groupBy("page")->get();
-
         return view("admin.pages.index", compact("pages"));
     }
+
     public function pageView($page)
     {
         $pages = Page::wherePage($page)->get();
-        $extraImage = ExtraImage::wherePage($page)->count();
 
+        if ($pages->isEmpty()) {
+            return redirect()->route('admin.page')->with('error', 'Page not found!');
+        }
+
+        $extraImage = ExtraImage::wherePage($page)->count();
         return view("admin.pages.view_detail", compact("pages", "extraImage", "page"));
     }
 
@@ -138,7 +170,6 @@ class ManageController extends Controller
     {
         $seoRow = Page::wherePage($page)->whereSection('seo')->first();
         $seoFields = $seoRow ? json_decode($seoRow->fields, true) : [];
-
         return view('admin.pages.seo', compact('page', 'seoFields'));
     }
 
@@ -151,13 +182,8 @@ class ManageController extends Controller
         foreach ($names as $idx => $name) {
             $name = trim($name);
             $content = isset($contents[$idx]) ? trim($contents[$idx]) : '';
-            if ($name === '' && $content === '') {
-                continue;
-            }
-
-            if ($name === '') {
-                continue;
-            }
+            if ($name === '' && $content === '') continue;
+            if ($name === '') continue;
 
             $seoData[] = [
                 'name' => $name,
@@ -185,24 +211,30 @@ class ManageController extends Controller
     public function pageAdd()
     {
         $pages = Page::select("page")->groupBy("page")->get();
-
         return view("admin.pages.add", compact("pages"));
     }
+
     public function pageEdit($id)
     {
         $page = Page::findorfail($id);
 
+        if (empty($page->fields) || $page->fields === 'null') {
+            $page->fields = '[]';
+            $page->save();
+        }
+
         return view("admin.pages.edit", compact("page"));
     }
+
     public function pageStore(Request $request)
     {
         $type = $request->type;
         $fields = [];
 
         foreach ($type as $key => $data) {
-
             $fields[$key]["name"] = $request->name[$key];
             $fields[$key]["type"] = $data;
+
             if ($data == "text") {
                 $fields[$key]["text"] = $request->text[$key];
             }
@@ -211,9 +243,10 @@ class ManageController extends Controller
                 $fields[$key]["link"] = $request->link[$key];
             }
             if ($data == "image") {
-                if (!empty($request->image[$key])) {
-                    $img = fileUpload($request->image[$key], "image");
-                    $fields[$key]["img"] = $img;
+                if (!empty($request->image[$key]) && $request->image[$key]->isValid()) {
+                    $fields[$key]["img"] = $this->uploadFile($request->image[$key]);
+                } else {
+                    $fields[$key]["img"] = '';
                 }
             }
         }
@@ -228,18 +261,21 @@ class ManageController extends Controller
         $page->status = $request->status ?? 'published';
         $page->fields = json_encode($fields);
         $page->save();
+
         return redirect()->back();
     }
+
     public function pageUpdate(Request $request, $id)
     {
         $type = $request->type;
         $fields = [];
         $page = Page::findorfail($id);
+        $oldFields = json_decode($page->fields) ?? [];
 
         foreach ($type as $key => $data) {
-
             $fields[$key]["name"] = $request->name[$key];
             $fields[$key]["type"] = $data;
+
             if ($data == "text") {
                 $fields[$key]["text"] = $request->text[$key];
             }
@@ -248,27 +284,19 @@ class ManageController extends Controller
                 $fields[$key]["link"] = $request->link[$key];
             }
             if ($data == "image") {
-
-                if (!empty($request->image[$key])) {
-
-                    if (isset(json_decode($page->fields)[$key]) && json_decode($page->fields)[$key]->type == "image") {
-
-
-
-                        deleteImage(json_decode($page->fields)[$key]->img);
+                if (!empty($request->image[$key]) && $request->image[$key]->isValid()) {
+                    // Purani file delete karo
+                    if (isset($oldFields[$key]->img)) {
+                        $this->deleteOldFile($oldFields[$key]->img);
                     }
-                    $img = fileUpload($request->image[$key], "image");
-
-
-
-                    $fields[$key]["img"] = $img;
+                    // Nayi file save karo
+                    $fields[$key]["img"] = $this->uploadFile($request->image[$key]);
                 } else {
-
-                    $fields[$key]["img"] = json_decode($page->fields)[$key]->img;
+                    // Purana path rakho
+                    $fields[$key]["img"] = isset($oldFields[$key]->img) ? $oldFields[$key]->img : '';
                 }
             }
         }
-
 
         $page->page = $request->page;
         $page->title = $request->title;
@@ -279,6 +307,7 @@ class ManageController extends Controller
         $page->status = $request->status ?? 'published';
         $page->fields = json_encode($fields);
         $page->save();
+
         return redirect()->back();
     }
 
@@ -286,6 +315,7 @@ class ManageController extends Controller
     {
         return view("admin.profile.index");
     }
+
     public function profileUpdate(Request $req)
     {
         $user = User::first();
@@ -296,16 +326,19 @@ class ManageController extends Controller
         $user->save();
         return redirect()->back();
     }
+
     public function query(Request $request)
     {
         $query = Query::latest()->get();
         return view('admin.query.index', compact('query'));
     }
+
     public function queryDelete($id)
     {
         $query = Query::findOrFail($id)->delete();
         return redirect()->back();
     }
+
     public function projects()
     {
         $projects = \App\Models\Project::where('is_active', true)
@@ -314,9 +347,10 @@ class ManageController extends Controller
             ->get();
         return view('projects', compact('projects'));
     }
+
     public function analytics(): ViewResponse
     {
-        return $propertyId = config('analytics_id', env('ANALYTICS_ID'));
+        $propertyId = config('analytics_id', env('ANALYTICS_ID'));
 
         if (!$propertyId) {
             return view('admin.dashboard', [
@@ -324,14 +358,9 @@ class ManageController extends Controller
             ]);
         }
 
-        // 1. Ask Google for visitors from the last 7 days
-        // This automatically uses the ANALYTICS_PROPERTY_ID from your config
         $analyticsData = Analytics::fetchTotalVisitorsAndPageViews(Period::days(7));
-
-        // 2. Sum up the 'activeUsers' column from the returned collection
         $totalVisitors = $analyticsData->sum('activeUsers');
 
-        // 3. Send that number to your dashboard view
         return view('admin.dashboard', [
             'visitorCount' => $totalVisitors
         ]);

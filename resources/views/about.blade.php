@@ -92,9 +92,9 @@
 	<center>
 	<div class="col-lg-10">
 		<div class="col-8 content1">
-			<img class="img1" src="{{asset('assets/images/story/Group 1000001799.png')}}">
+			<img class="img1" src="{{asset ('assets/images/story/Group_1000001799.png')}}">
 			<div class="content1_inner">
-			<p class="text">Two sds.Different paths. Same itch.</p>
+			<p class="text">Two minds.Different paths. Same itch.</p>
 			<img class="img2 moving_animate" src="{{asset('assets/images/story/Groups-2.png')}}">	
 			</div>
 		</div>
@@ -103,8 +103,8 @@
 		</div>
 		<div class="content_upper">
 		<div class="col-8 content3">
-			<p class="text">I want to do something big</p>
-			<img class="img1" src="{{asset('assets/images/story/Group 1000001800.png')}}">
+			<p class="text">The kind spreadsheets and small talk could never scratch.</p>
+			<img class="img1" src="{{asset('assets/images/story/Group 1000001802.png')}}">
 			
 			
 		</div>
@@ -112,14 +112,12 @@
 		<div class="content_4_upper">
 		<div class="col-8 content4">
 			<center>
-			<p class="text">The kind that spreadsheets, small
-talk, and endless email threads
- just couldn't scratch.</p>
+			<p class="text">Different worlds.  Same feeling stuck in loops of calendar invites, polite chatter, and work that felt… hollow.</p>
 			<div class="inner">
 			<img class="img1" src="{{asset('assets/images/story/Groups-1.png')}}">
-			<img class="img2 moving_animate" src="{{asset('assets/images/story/Groups.png')}}">
+			<!--<img class="img2 moving_animate" src="{{asset('assets/images/story/Groups.png')}}">-->
 			</div>
-			<p class="text2">I am tired of working for someone else</p>
+			<!--<p class="text2">I am tired of working for someone else</p>-->
 			
 			</center>
 			
@@ -135,7 +133,7 @@ talk, and endless email threads
 	<div class="col-lg-10">
 		<center>
 		<div class="col-10 content5">
-			<p class="text"> We came from different worlds, but we found  ourselves in the same place</p>
+			<p class="text">Then came the moment.  Not loud.  Not dramatic.</p>
 			<img class="img1" src="{{asset('assets/images/story/Vector-3.png')}}">
 			
 			
@@ -147,10 +145,9 @@ talk, and endless email threads
 			
 			
 			
-			<img class="img2" src="{{asset('assets/images/story/Group 1000001802.png')}}">	
+			<img class="img2" src="{{asset('assets/images/story/Group 1000001804.png')}}">	
 				<img class="img1 moving_animate" src="{{asset('assets/images/story/Vector-2.png')}}">
-				<p class="text">Caught up in a
-loop of calendar invites, polite small talk, and work that felt…hollow</p>
+				<p class="text">Just a late night,  a lukewarm coffee,  and a quiet thought:</p>
 			
 		</div>
 		
@@ -162,21 +159,21 @@ loop of calendar invites, polite small talk, and work that felt…hollow</p>
 	<center>
 	<div class="col-lg-10">
 		<center>
-		<div class="col-10 content7">
-			<div class="inner">
-			<p class="text">Then came the moment. 
-Not loud, not dramatic. Just a
-quiet realization during a late
-night and a lukewarm cup of
-coffee</p>
-				<img class="img1 moving_animate" src="{{asset('assets/images/story/Groups-5.png')}}">
-			</div>
+<!--		<div class="col-10 content7">-->
+<!--			<div class="inner">-->
+<!--			<p class="text">Then came the moment. -->
+<!--Not loud, not dramatic. Just a-->
+<!--quiet realization during a late-->
+<!--night and a lukewarm cup of-->
+<!--coffee</p>-->
+<!--				<img class="img1 moving_animate" src="{{asset('assets/images/story/Groups-5.png')}}">-->
+<!--			</div>-->
 			
 			
 			
-			<img class="img2" src="{{asset('assets/images/story/Group 1000001804.png')}}">	
+<!--			<img class="img2" src="{{asset('assets/images/story/Group 1000001804.png')}}">	-->
 			
-		</div>
+<!--		</div>-->
 			<div class="col-10 content8">
 				<img class="img2" src="{{asset('assets/images/story/Group 1000001805.png')}}">	
 			<div class="inner">
@@ -199,7 +196,7 @@ ourselves?”</p>
 	</div>
 	</center>
 </div>
-<div class="our_story_section page-section">
+<div class="our_story_section page-section" style="opacity: 1 !important; zoom: 71.1111%;">
 	<center>
 	<div class="col-lg-10">
 		<center>
@@ -218,11 +215,9 @@ begin.</p>
 			
 			
 			
-			<img class="img2" src="{{asset('assets/images/story/Group 1000001802.png')}}">	
+			<img class="img2" src="{{asset('assets/images/story/Group 1000001825.png')}}">	
 				<img class="img1 moving_animate" src="{{asset('assets/images/story/Vector-2.png')}}">
-				<p class="text">And so,
-The Socially Active
-came to life.</p>
+				<p class="text">And so, The Socially Active was born.  Not as a business plan   but as a promise.</p>
 			
 		</div>
 		
@@ -230,19 +225,19 @@ came to life.</p>
 	</div>
 	</center>
 </div>
-<div class="our_story_section page-section">
+<div class="our_story_section page-section" style="opacity: 1 !important; zoom: 71.1111%;">
 	<center>
 	<div class="col-lg-10">
 		<center>
 		<div class="col-10 content7">
 			<div class="inner">
-			<p class="text">Not just as a business plan, but as a promise To create space for brave brands, bold ideas, and the kind of work that makes people feel something.</p>
+			<p class="text">A promise to create space for brave brands.  Bold ideas.  Work that makes people feel.</p>
 				<img class="img1 moving_animate" src="{{asset('assets/images/story/Groups-5.png')}}">
 			</div>
 			
 			
 			
-			<img class="img2" src="{{asset('assets/images/story/Group 1000001804.png')}}">	
+			<img class="img2" src="{{asset('assets/images/story/Group 1000001824.png')}}">	
 			
 		</div>
 			<div class="col-10 content8">

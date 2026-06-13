@@ -114,7 +114,7 @@
                         <div class="col-2 m-2">
                             <div class="badge">
                                 <div class="inner">
-                                        <img src="{{(env('IMG_FETCH_URL').'uploaded_files/'.$pages["explore_section"][4]->img)}}">
+                                        <img src="{{(env('IMG_FETCH_URL').'uploaded_files/'.$pages["explore_section"][4]->img)}}" class="brand_service_section_img-1">
                                 </div>
                             </div>
                         </div>

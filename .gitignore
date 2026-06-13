@@ -29,3 +29,6 @@ vendor/
 image/public/uploaded_files/
 *.mp4
 *.zip
+/public/uploaded_files
+.htaccess2
+/index2.html
