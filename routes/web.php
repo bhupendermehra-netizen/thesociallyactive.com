@@ -96,4 +96,7 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
 
     // Analytics API
     Route::get("/analytics/data", [AnalyticsController::class, "getAnalyticsData"])->name("analytics.data");
+   
 });
+ // Card Section
+    Route::get('/cards',[ManageController::class,'cardSection'])->name('card.section');
