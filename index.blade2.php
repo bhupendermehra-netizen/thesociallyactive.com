@@ -178,11 +178,11 @@
 
 							<div class="inner">
 								<button type="button" class="video_section_previous"><img
-										src="{{asset('uploaded_files/image/main_files2/paginate/prev_arrow.svg')}}"></button>
+										src="{{asset('public/uploaded_files/image/main_files2/paginate/prev_arrow.svg')}}"></button>
 										
 
 								<button type="button" class="video_section_next"><img
-										src="{{asset('uploaded_files/image/main_files2/paginate/next_arrow.svg')}}"></button>
+										src="{{asset('public/uploaded_files/image/main_files2/paginate/next_arrow.svg')}}"></button>
 
 							</div>
 							<div class="inner0">
