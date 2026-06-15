@@ -1403,86 +1403,75 @@ $(document).ready(function () {
         $(".part2", this).attr("data-selected", "1");
         $(".content_heading", this).attr("data-selected", "1");
     });
-    // Original central video sources — saved on first hover for mouseleave restore
-    var valuesOriginalSrc = null;
+    // Hover effect — swap only center box part1 with effect image/video
     var valuesHoverTimeout = null;
+    var valuesCenterOriginal = null;
+    var valuesEnterTimeout = null;
 
-    $(".values_section .part1").mouseenter(function () {
-        $(".values_section .part1").attr("data-selected", "1");
-        $(".values_section .part2").attr("data-selected", "0");
-        $(".values_section .part2Text").attr("data-selected", "0");
-        var img = $(this).attr("data-img-change");
+    $(".values_section .content_div").mouseenter(function () {
+        var $part1 = $(this).find(".part1").first();
+        var img = $part1.attr("data-img-change");
+        if (!img) return;
 
-        if (img) {
-            clearTimeout(valuesHoverTimeout);
+        clearTimeout(valuesHoverTimeout);
+        clearTimeout(valuesEnterTimeout);
 
-            var $target = $(".values_section .part24 .part1");
-            if ($target.is("video")) {
-                var $source = $target.find("source");
+        valuesEnterTimeout = setTimeout(function () {
+            // Reset ALL side boxes to default first
+            $(".values_section .content_div .part1").attr("data-selected", "1");
+            $(".values_section .content_div .part2").attr("data-selected", "0");
+            $(".values_section .content_div .part2Text").attr("data-selected", "0");
 
-                // Save original central video source on first hover
-                if (valuesOriginalSrc === null) {
-                    valuesOriginalSrc = [];
-                    $source.each(function () {
-                        valuesOriginalSrc.push($(this).attr("src") || $(this).data("src") || "");
-                    });
-                }
+            // Toggle THIS side box to selected
+            $part1.attr("data-selected", "0");
+            $part1.siblings(".part2").attr("data-selected", "1");
+            $part1.siblings(".part2Text").attr("data-selected", "1");
 
-                var relativeImg = img;
-                if (img.indexOf('uploaded_files/') !== -1) {
-                    relativeImg = img.substring(img.indexOf('uploaded_files/'));
-                }
-                if ($source.length) {
-                    $source.attr("src", relativeImg);
-                } else {
-                    $target.attr("src", relativeImg);
-                }
-                $target[0].load();
+            var $center = $(".values_section .part24 .part1");
 
-                $target.off("loadeddata").one("loadeddata", function () {
-                    var playPromise = this.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(function (e) {
-                            // Ignore abort/autoplay exceptions
-                        });
-                    }
-                });
-            } else {
-                $target.attr("src", img);
+            // Save original center part1 HTML on first hover ever
+            if (valuesCenterOriginal === null) {
+                valuesCenterOriginal = $center.length ? $center[0].outerHTML : '';
             }
-        }
 
-        $(this).attr("data-selected", "0");
-        $(this).siblings(".part2").attr("data-selected", "1");
-        $(this).siblings(".part2Text").attr("data-selected", "1");
+            // Replace center box content with effect media
+            if (img.match(/\.(mp4|webm|mov)$/i)) {
+                var videoType = 'video/mp4';
+                if (img.match(/\.webm$/i)) videoType = 'video/webm';
+                else if (img.match(/\.mov$/i)) videoType = 'video/quicktime';
+                var $video = $('<video class="part1" muted autoplay loop playsinline style="max-width:100%;height:auto"><source src="' + img + '" type="' + videoType + '"></video>');
+                $center.replaceWith($video);
+                $video[0].load();
+            } else {
+                var $img = $('<img class="part1" src="' + img + '" style="max-width:100%;height:auto">');
+                $center.replaceWith($img);
+            }
+        }, 50);
     });
 
-    $(".values_section .part1").mouseleave(function () {
-        var img = $(this).attr("data-img-change");
-        if (!img || !valuesOriginalSrc) return;
+    $(".values_section .content_div").mouseleave(function () {
+        clearTimeout(valuesEnterTimeout);
+        clearTimeout(valuesHoverTimeout);
 
-        // Delay to avoid flicker when moving between boxes
         valuesHoverTimeout = setTimeout(function () {
-            var $hovered = $(".values_section .part1").filter(function () {
-                return $(this).attr("data-img-change") && $(this).is(":hover");
-            });
-            if ($hovered.length > 0) return; // User moved to another box
+            // If user moved to another box, don't restore yet
+            if ($(".values_section .content_div").filter(function () {
+                return $(this).is(":hover");
+            }).length > 0) return;
 
-            var $target = $(".values_section .part24 .part1");
-            if ($target.is("video")) {
-                var $source = $target.find("source");
-                $source.each(function (i) {
-                    if (valuesOriginalSrc[i]) {
-                        $(this).attr("src", valuesOriginalSrc[i]);
-                    }
-                });
-                $target[0].load();
-                $target.off("loadeddata").one("loadeddata", function () {
-                    var playPromise = this.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(function (e) {});
-                    }
-                });
+            // Reset all side boxes to default
+            $(".values_section .content_div .part1").attr("data-selected", "1");
+            $(".values_section .content_div .part2").attr("data-selected", "0");
+            $(".values_section .content_div .part2Text").attr("data-selected", "0");
+
+            // Restore center box to original
+            if (valuesCenterOriginal !== null) {
+                var $center = $(".values_section .part24 .part1");
+                var $newEl = $(valuesCenterOriginal);
+                $center.replaceWith($newEl);
+                if ($newEl.is("video")) {
+                    $newEl[0].load();
+                }
             }
         }, 150);
     });

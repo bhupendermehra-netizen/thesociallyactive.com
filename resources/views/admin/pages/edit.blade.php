@@ -51,6 +51,11 @@
         <input class="form-control" type="text" name="section" value="{{ $page->section }}" required />
       </div>
       <div class="form-group" style="margin:0;">
+        <label>URL Slug <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+        <input class="form-control" type="text" name="slug" value="{{ old('slug', $page->slug) }}" placeholder="my-page-url" />
+        <small style="font-size:11px;color:var(--muted);display:block;margin-top:4px;">yoursite.com/page/<strong style="color:var(--teal);">this-value</strong></small>
+      </div>
+      <div class="form-group" style="margin:0;">
         <label>Meta Title</label>
         <input class="form-control" type="text" name="meta_title" value="{{ $page->meta_title ?? '' }}" placeholder="SEO page title" />
       </div>
@@ -78,6 +83,7 @@
           <tr>
             <th style="width:40px;">Id</th>
             <th style="width:160px;">Name</th>
+            <th style="width:100px;">Tag</th>
             <th>Text</th>
             <th style="width:160px;">Link</th>
             <th style="width:180px;">Image</th>
@@ -94,6 +100,19 @@
               <input class="form-control" type="text" name="name[]"
                 value="{{ $data->name }}" readonly
                 style="background:rgba(255,255,255,0.04);cursor:not-allowed;opacity:0.7;" />
+            </td>
+
+            <td>
+              @if($data->type == 'text' || $data->type == 'link')
+                <select class="form-control" name="heading_tag[]" style="font-size:12px;padding:4px 6px;">
+                  <option value="">Default</option>
+                  @foreach(['h1','h2','h3','h4','h5','h6'] as $tag)
+                    <option value="{{ $tag }}" {{ (isset($data->heading_tag) && $data->heading_tag == $tag) ? 'selected' : '' }}>{{ strtoupper($tag) }}</option>
+                  @endforeach
+                </select>
+              @else
+                <span class="muted" style="font-size:12px;">—</span>
+              @endif
             </td>
 
             <td>
@@ -120,9 +139,9 @@
             <td>
               @if($data->type == 'image')
                 @if(isset($data->img))
-                  @if(str_contains($data->img, '.mp4'))
+                  @if(preg_match('/\.(mp4|webm|mov|avi|mkv)$/i', $data->img))
                     <video style="height:80px;width:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block;" muted autoplay loop>
-                      <source src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$data->img }}" type="video/mp4">
+                      <source src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$data->img }}" type="video/{{ pathinfo($data->img, PATHINFO_EXTENSION) == 'mp4' ? 'mp4' : 'webm' }}">
                     </video>
                   @elseif(str_contains($data->img, '.mp3'))
                     <audio controls style="margin-bottom:8px;display:block;width:140px;">

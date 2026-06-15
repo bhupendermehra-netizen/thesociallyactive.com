@@ -45,6 +45,10 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
     Route::get("page/seo/{page}", [ManageController::class, "seo"])->name("page.seo");
     Route::post("page/seo/{page}", [ManageController::class, "seoUpdate"])->name("page.seo.update");
 
+    // Site-wide Custom Scripts
+    Route::get("scripts", [ManageController::class, "scripts"])->name("scripts");
+    Route::post("scripts/update", [ManageController::class, "scriptsUpdate"])->name("scripts.update");
+
     // Profile
     Route::get("query", [ManageController::class, "query"])->name("query");
 
@@ -96,7 +100,26 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
 
     // Analytics API
     Route::get("/analytics/data", [AnalyticsController::class, "getAnalyticsData"])->name("analytics.data");
-   
+
+    // Authors
+    Route::resource("authors", App\Http\Controllers\Admin\AuthorController::class)->names([
+        'index' => 'authors.index',
+        'create' => 'authors.create',
+        'store' => 'authors.store',
+        'edit' => 'authors.edit',
+        'update' => 'authors.update',
+        'destroy' => 'authors.destroy',
+    ]);
+
+    // Page FAQs
+    Route::get("page/faqs/{page}", [ManageController::class, "pageFaqs"])->name("page.faqs");
+    Route::post("page/faqs/{page}", [ManageController::class, "pageFaqsSave"])->name("page.faqs.save");
+
+    // Media Manager
+    Route::get("media", [App\Http\Controllers\MediaController::class, "index"])->name("media.index");
+    Route::post("media/delete", [App\Http\Controllers\MediaController::class, "delete"])->name("media.delete");
+    Route::post("media/delete-force", [App\Http\Controllers\MediaController::class, "deleteForce"])->name("media.delete-force");
+
 });
  // Card Section
     Route::get('/cards',[ManageController::class,'cardSection'])->name('card.section');

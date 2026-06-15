@@ -302,7 +302,7 @@
         </div>
         <div class="blog-card-body">
           <div class="blog-card-date">{{ $blog->created_at->format('d M Y') }}</div>
-          <h3 class="blog-card-title">{{ $blog->title }}</h3>
+          <{{ $blog->title_tag ?? 'h3' }} class="blog-card-title">{{ $blog->title }}</{{ $blog->title_tag ?? 'h3' }}>
           <p class="blog-card-desc">{{ strip_tags($blog->description ?? $blog->excerpt) }}</p>
         </div>
         <div class="blog-card-footer">

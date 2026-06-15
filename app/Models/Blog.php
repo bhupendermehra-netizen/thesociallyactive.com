@@ -8,9 +8,10 @@ use Illuminate\Support\Str;
 class Blog extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'category_id', 'author_id', 'cover_image',
-        'blog_date', 'description', 'content', 'seo_title',
-        'seo_description', 'is_published', 'enable_comments', 'sort_order'
+        'title', 'slug', 'title_tag', 'category_id', 'author_id', 'cover_image',
+        'content', 'description', 'seo_title', 'seo_description', 'custom_meta_tags',
+        'head_script', 'body_script',
+        'alt_description', 'blog_date', 'is_published', 'sort_order', 'enable_comments',
     ];
 
     public function getAuthorIdAttribute()
@@ -32,6 +33,16 @@ class Blog extends Model
     public function category()
     {
         return $this->belongsTo(BlogCategory::class, 'category_id');
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class, 'author_id');
+    }
+
+    public function faqs()
+    {
+        return $this->morphMany(Faq::class, 'faqable')->orderBy('sort_order');
     }
 
     protected static function boot()

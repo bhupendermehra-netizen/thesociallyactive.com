@@ -67,7 +67,7 @@
     .gsap-card-4 { z-index: 1; }
 
     @media (max-width: 768px) {
-        .gsap-card { width: 180px; height: 260px; }
+        .gsap-card { width: 90px; height: 135px; }
     }
 </style>
 

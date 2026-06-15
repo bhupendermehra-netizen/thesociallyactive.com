@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Page;
+use App\Models\Faq;
+use App\Models\SiteSetting;
 use App\Models\User;
 use App\Models\Query;
 use App\Models\ExtraImage;
@@ -59,8 +61,9 @@ class ManageController extends Controller
             $pages[$section] = $record ? json_decode($record->fields) : [];
         }
 
+        $faqs = \App\Models\Faq::where('page_slug', 'Home')->orderBy('sort_order')->get();
         $seo = page_seo('Home');
-        return view("index", compact("pages", "seo"));
+        return view("index", compact("pages", "seo", "faqs"));
     }
 
     public function about()
@@ -72,12 +75,25 @@ class ManageController extends Controller
             $pages[$section] = $record ? json_decode($record->fields) : [];
         }
 
+        $faqs = \App\Models\Faq::where('page_slug', 'About')->orderBy('sort_order')->get();
         $seo = page_seo('About');
-        return view("about", compact("pages", "seo"));
+        return view("about", compact("pages", "seo", "faqs"));
     }
 
     public function extraPage($slug)
     {
+        // First try: look up by the new slug column on any row
+        $slugRow = Page::where('slug', $slug)->first();
+        if ($slugRow) {
+            $page = $slugRow->page;
+            $record = Page::wherePage($page)->whereSection("Content")->first();
+            $pages["content"] = $record ? json_decode($record->fields) : [];
+            $faqs = \App\Models\Faq::where('page_slug', $page)->orderBy('sort_order')->get();
+            $seo = page_seo($page);
+            return view("extra_page", compact('pages', 'page', 'seo', 'faqs'));
+        }
+
+        // Fallback: old JSON-based lookup for legacy data
         $pageSearch = Page::whereSection("Important-Page-Slug")->get();
         $page = "";
         foreach ($pageSearch as $data) {
@@ -93,12 +109,28 @@ class ManageController extends Controller
         $record = Page::wherePage($page)->whereSection("Content")->first();
         $pages["content"] = $record ? json_decode($record->fields) : [];
 
+        $faqs = Faq::where('page_slug', $page)->orderBy('sort_order')->get();
         $seo = page_seo($page);
-        return view("extra_page", compact('pages', 'page', 'seo'));
+        return view("extra_page", compact('pages', 'page', 'seo', 'faqs'));
     }
 
     public function service($slug)
     {
+        // First try: look up by the new slug column on any row
+        $slugRow = Page::where('slug', $slug)->first();
+        if ($slugRow) {
+            $page = $slugRow->page;
+            $sections = ["banner", "strip_1", "brand_service_section", "strip_2", "talk_section", "explore_section"];
+            foreach ($sections as $section) {
+                $record = Page::wherePage($page)->whereSection($section)->first();
+                $pages[$section] = $record ? json_decode($record->fields) : [];
+            }
+            $faqs = \App\Models\Faq::where('page_slug', $page)->orderBy('sort_order')->get();
+            $seo = page_seo($page);
+            return view("service_page", compact('pages', 'page', 'seo', 'faqs'));
+        }
+
+        // Fallback: old JSON-based lookup for legacy data
         $pageSearch = Page::whereSection("Service-Page-Slug")->get();
         $page = "";
         foreach ($pageSearch as $data) {
@@ -117,8 +149,9 @@ class ManageController extends Controller
             $pages[$section] = $record ? json_decode($record->fields) : [];
         }
 
+        $faqs = Faq::where('page_slug', $page)->orderBy('sort_order')->get();
         $seo = page_seo($page);
-        return view("service_page", compact('pages', 'page', 'seo'));
+        return view("service_page", compact('pages', 'page', 'seo', 'faqs'));
     }
 
     public function contact()
@@ -170,7 +203,10 @@ class ManageController extends Controller
     {
         $seoRow = Page::wherePage($page)->whereSection('seo')->first();
         $seoFields = $seoRow ? json_decode($seoRow->fields, true) : [];
-        return view('admin.pages.seo', compact('page', 'seoFields'));
+        $customMetaTags = $seoRow?->custom_meta_tags ?? '';
+        $headScript = $seoRow?->head_script ?? '';
+        $bodyScript = $seoRow?->body_script ?? '';
+        return view('admin.pages.seo', compact('page', 'seoFields', 'customMetaTags', 'headScript', 'bodyScript'));
     }
 
     public function seoUpdate(Request $request, $page)
@@ -201,11 +237,14 @@ class ManageController extends Controller
                 'meta_title' => $existingSeo->meta_title ?? '',
                 'meta_description' => $existingSeo->meta_description ?? '',
                 'meta_keywords' => $existingSeo->meta_keywords ?? '',
+                'custom_meta_tags' => $request->custom_meta_tags ?? '',
+                'head_script' => $request->head_script ?? '',
+                'body_script' => $request->body_script ?? '',
                 'status' => $existingSeo->status ?? 'published',
             ]
         );
 
-        return redirect()->route('admin.page.view', $page)->with('success', 'SEO updated successfully.');
+        return redirect()->back()->with('success', 'SEO meta tags updated successfully!');
     }
 
     public function pageAdd()
@@ -237,10 +276,16 @@ class ManageController extends Controller
 
             if ($data == "text") {
                 $fields[$key]["text"] = $request->text[$key];
+                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
+                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                }
             }
             if ($data == "link") {
                 $fields[$key]["text"] = $request->text[$key];
                 $fields[$key]["link"] = $request->link[$key];
+                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
+                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                }
             }
             if ($data == "image") {
                 if (!empty($request->image[$key]) && $request->image[$key]->isValid()) {
@@ -255,6 +300,7 @@ class ManageController extends Controller
         $page->page = $request->page;
         $page->title = $request->title;
         $page->section = $request->section;
+        $page->slug = $request->slug;
         $page->meta_title = $request->meta_title;
         $page->meta_description = $request->meta_description;
         $page->meta_keywords = $request->meta_keywords;
@@ -278,10 +324,16 @@ class ManageController extends Controller
 
             if ($data == "text") {
                 $fields[$key]["text"] = $request->text[$key];
+                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
+                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                }
             }
             if ($data == "link") {
                 $fields[$key]["text"] = $request->text[$key];
                 $fields[$key]["link"] = $request->link[$key];
+                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
+                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                }
             }
             if ($data == "image") {
                 if (!empty($request->image[$key]) && $request->image[$key]->isValid()) {
@@ -301,6 +353,7 @@ class ManageController extends Controller
         $page->page = $request->page;
         $page->title = $request->title;
         $page->section = $request->section;
+        $page->slug = $request->slug;
         $page->meta_title = $request->meta_title;
         $page->meta_description = $request->meta_description;
         $page->meta_keywords = $request->meta_keywords;
@@ -367,5 +420,50 @@ class ManageController extends Controller
     }
     public function cardSection(){
         return view('card-section');
+    }
+
+    public function scripts()
+    {
+        $settings = SiteSetting::first();
+        return view('admin.scripts', compact('settings'));
+    }
+
+    public function scriptsUpdate(Request $request)
+    {
+        SiteSetting::first()->update([
+            'global_head_script' => $request->global_head_script ?? '',
+            'global_body_script' => $request->global_body_script ?? '',
+        ]);
+
+        return redirect()->back()->with('success', 'Site-wide scripts updated successfully!');
+    }
+
+    public function pageFaqs($pageSlug)
+    {
+        $faqs = Faq::where('page_slug', $pageSlug)->orderBy('sort_order')->get();
+        $pageName = $pageSlug;
+        return view('admin.pages.faq', compact('faqs', 'pageName', 'pageSlug'));
+    }
+
+    public function pageFaqsSave(Request $request, $pageSlug)
+    {
+        // Delete existing page FAQs
+        Faq::where('page_slug', $pageSlug)->delete();
+
+        // Re-insert from form
+        if ($request->has('faq_question')) {
+            foreach ($request->faq_question as $i => $question) {
+                if (!empty(trim($question)) && isset($request->faq_answer[$i]) && !empty(trim($request->faq_answer[$i]))) {
+                    Faq::create([
+                        'page_slug'  => $pageSlug,
+                        'question'   => $question,
+                        'answer'     => $request->faq_answer[$i],
+                        'sort_order' => $i,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.page.faqs', $pageSlug)->with('success', 'FAQs saved successfully!');
     }
 }

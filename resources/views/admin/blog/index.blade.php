@@ -61,6 +61,7 @@
           <th>#</th>
           <th>Cover</th>
           <th>Title</th>
+          <th>Slug</th>
           <th>Category</th>
           <th>Status</th>
           <th>Date</th>
@@ -87,6 +88,9 @@
           <td>
             <div style="font-weight:600;max-width:280px;">{{ Str::limit($blog->title, 50) }}</div>
             <div style="font-size:11px;color:var(--muted);margin-top:2px;">{{ Str::limit(strip_tags($blog->description), 60) }}</div>
+          </td>
+          <td>
+            <code style="font-size:11px;color:var(--teal);background:rgba(103,252,198,0.08);padding:3px 8px;border-radius:4px;word-break:break-all;">{{ $blog->slug }}</code>
           </td>
           <td>
             @if($blog->category)
@@ -120,7 +124,7 @@
 
         @if($blogs->isEmpty())
         <tr>
-          <td colspan="7" style="text-align:center;padding:48px;">
+          <td colspan="8" style="text-align:center;padding:48px;">
             <i class="fas fa-newspaper" style="font-size:32px;color:var(--muted);opacity:0.4;display:block;margin-bottom:12px;"></i>
             <span style="color:var(--muted);">No posts yet</span>
           </td>

@@ -620,13 +620,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][20]) ? $pages['values_section'][20]->img : ''))}}"
 											data-selected="1" style="top:330px;left:-5px">
-											<img style="height:110px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][4]) ? $pages['values_section'][4]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:150px;left:-30px">
+																						{!! render_media(($pages['values_section'][4]->img ?? ''), 'style="height:110px;width:230px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:150px;left:-30px">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][5]) ? $pages['values_section'][5]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][5]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -642,13 +640,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][21]) ? $pages['values_section'][21]->img : ''))}}"
 											data-selected="1" style="top:130px;left:-10px">
-											<img style="height:110px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][8]) ? $pages['values_section'][8]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-30px;left:-30px;">
+																						{!! render_media(($pages['values_section'][8]->img ?? ''), 'style="height:110px;width:230px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-30px;left:-30px;">
 
-											<img style="height:270px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][9]) ? $pages['values_section'][9]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][9]->img ?? ''), 'style="height:270px;width:230px;"') !!}
 
 										</div>
 									</div>
@@ -658,10 +654,8 @@
 								<div class="main_content_upper_div">
 									<div class="main_content_div">
 										<div class="part24">
-											<img class="part1"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][18]) ? $pages['values_section'][18]->img : ''))}}">
-											<img class="part2"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][19]) ? $pages['values_section'][19]->img : ''))}}">
+											{!! render_media(($pages['values_section'][18]->img ?? ''), 'class="part1"') !!}
+											{!! render_media(($pages['values_section'][19]->img ?? ''), 'class="part2"') !!}
 										</div>
 
 									</div>
@@ -681,13 +675,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][22]) ? $pages['values_section'][22]->img : ''))}}"
 											data-selected="1" style="top:125px;right:-20px">
-											<img style="height:110px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][12]) ? $pages['values_section'][12]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-50px;right:-50px;">
+																						{!! render_media(($pages['values_section'][12]->img ?? ''), 'style="height:110px;width:230px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-50px;right:-50px;">
 
-											<img style="height:295px;width:280px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][13]) ? $pages['values_section'][13]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][13]->img ?? ''), 'style="height:295px;width:280px;"') !!}
 
 										</div>
 									</div>
@@ -703,13 +695,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][23]) ? $pages['values_section'][23]->img : ''))}}"
 											data-selected="1" style="top:30px;right:-15px">
-											<img style="height:105px;width:200px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][16]) ? $pages['values_section'][16]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-130px;right:-40px">
+																						{!! render_media(($pages['values_section'][16]->img ?? ''), 'style="height:105px;width:200px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-130px;right:-40px">
 
-											<img style="height:285px;width:245px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][17]) ? $pages['values_section'][17]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][17]->img ?? ''), 'style="height:285px;width:245px;"') !!}
 
 										</div>
 									</div>
@@ -741,10 +731,8 @@
 							<div class="main_content_upper_div">
 								<div class="main_content_div">
 									<div class="part24">
-										<img class="part1"
-											src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][18]) ? $pages['values_section'][18]->img : ''))}}">
-										<img class="part2"
-											src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][19]) ? $pages['values_section'][19]->img : ''))}}">
+										{!! render_media(($pages['values_section'][18]->img ?? ''), 'class="part1"') !!}
+										{!! render_media(($pages['values_section'][19]->img ?? ''), 'class="part2"') !!}
 									</div>
 
 								</div>
@@ -763,13 +751,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][20]) ? $pages['values_section'][20]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][4]) ? $pages['values_section'][4]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][4]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][5]) ? $pages['values_section'][5]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][5]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -784,13 +770,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][21]) ? $pages['values_section'][21]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][8]) ? $pages['values_section'][8]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][8]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][9]) ? $pages['values_section'][9]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][9]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -810,13 +794,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][22]) ? $pages['values_section'][22]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][12]) ? $pages['values_section'][12]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][12]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][13]) ? $pages['values_section'][13]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][13]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -831,13 +813,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][23]) ? $pages['values_section'][23]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][16]) ? $pages['values_section'][16]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][16]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][17]) ? $pages['values_section'][17]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][17]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -886,12 +866,21 @@
 					</div>
 					<div class="col-lg-4">
 						<div class="waving_div">
-
-							<img class="lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['impact_section'][2]) ? $pages['impact_section'][2]->img : ''))}}">
-
-
+							@php
+								$impactMedia = isset($pages['impact_section'][2]) ? $pages['impact_section'][2]->img : '';
+								$isVideoFile = preg_match('/\.(mp4|webm|mov|avi|mkv)$/i', $impactMedia);
+							@endphp
+							@if($isVideoFile)
+								<video class="lazy-load" playsinline muted loop autoplay
+									style="width:100%;height:auto;object-fit:cover;border-radius:12px;">
+									<source src="{{ env('IMG_FETCH_URL') . 'uploaded_files/' . $impactMedia }}" type="video/{{ pathinfo($impactMedia, PATHINFO_EXTENSION) == 'mp4' ? 'mp4' : 'webm' }}">
+								</video>
+							@else
+								<img class="lazy-load"
+									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . $impactMedia)}}">
+							@endif
 						</div>
+					</div>
 					</div>
 				</div>
 			</div>
