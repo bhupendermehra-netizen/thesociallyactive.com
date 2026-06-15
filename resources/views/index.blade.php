@@ -284,14 +284,13 @@
 
 		</div>
 	</div>
-	{{-- Old expertise section removed - replaced with cinematic scroll section --}}
+	{{-- OUR EXPERTISE & SERVICES --}}
 	<div class="expertise_section page-section" data-change="0">
 		<div style="width:100%;">
 			<h1 class="heading">{{(isset($pages['expertise_section'][0]) ? $pages['expertise_section'][0]->text : '')}}</h1>
 			<div style="display:flex;justify-content:center;width:100%">
 
 				<div class="width_div">
-
 
 					<div class="width_div23" style="display:flex;justify-content:center">
 						<div class="service_section">
@@ -328,10 +327,6 @@
 								data-selected="0">
 						</div>
 					</div>
-
-
-
-
 
 
 				</div>

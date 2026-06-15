@@ -159,14 +159,20 @@ $(document).ready(function () {
                                 }
                             });
                             if (hasNewSrc) {
-                                media.load();
-                                // Re-trigger autoplay after load if attribute present
+                                // Add canplay listener BEFORE load() to avoid race condition
                                 if (media.hasAttribute('autoplay')) {
                                     media.addEventListener('canplay', function onCanPlay() {
                                         media.removeEventListener('canplay', onCanPlay);
                                         media.play().catch(function() {});
                                     });
+                                    // Fallback: retry play after 500ms if canplay already fired
+                                    setTimeout(function() {
+                                        if (media.paused) {
+                                            media.play().catch(function() {});
+                                        }
+                                    }, 500);
                                 }
+                                media.load();
                             }
                         }
 
@@ -1081,15 +1087,26 @@ function scrollF() {
                         $vid.attr("data-cursor", "1");
                         $vid.prop("currentTime", 0);
 
-                        var playPromise = vid.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(function () {
-                                // Browser ne autoplay block kiya — muted fallback
-                                $vid.prop("muted", true);
-                                $vid.attr("data-cursor", "2");
-                                vid.play();
-                            });
+                        // Wait for video to be ready before playing
+                        function tryPlayVideo() {
+                            if (vid.readyState >= 2) {
+                                var playPromise = vid.play();
+                                if (playPromise !== undefined) {
+                                    playPromise.catch(function () {
+                                        // Browser ne autoplay block kiya — muted fallback
+                                        $vid.prop("muted", true);
+                                        $vid.attr("data-cursor", "2");
+                                        vid.play().catch(function() {});
+                                    });
+                                }
+                            } else {
+                                vid.addEventListener('canplay', function onCanPlay() {
+                                    vid.removeEventListener('canplay', onCanPlay);
+                                    vid.play().catch(function() {});
+                                }, { once: true });
+                            }
                         }
+                        tryPlayVideo();
 
                         // Jab video khatam ho — last frame pe freeze karo
                         $vid.off("ended.videofix").on(
@@ -1256,13 +1273,21 @@ function scrollF() {
                     if (playedOnce == "0") {
                         $vid.prop("muted", true); // Ensure muted for autoplay to work
                         $vid.prop("currentTime", 0);
-                        var pp = vid.play();
-                        if (pp !== undefined) {
-                            pp.catch(function (err) {
-                                console.warn("Video play blocked:", err);
-                                $vid.prop("muted", true);
-                                vid.play();
-                            });
+                        // Wait for video to be ready before playing
+                        if (vid.readyState >= 2) {
+                            var pp = vid.play();
+                            if (pp !== undefined) {
+                                pp.catch(function (err) {
+                                    console.warn("Video play blocked:", err);
+                                    $vid.prop("muted", true);
+                                    vid.play().catch(function() {});
+                                });
+                            }
+                        } else {
+                            vid.addEventListener('canplay', function onCanPlay() {
+                                vid.removeEventListener('canplay', onCanPlay);
+                                vid.play().catch(function() {});
+                            }, { once: true });
                         }
                         $vid.off("ended.videofix_m").on(
                             "ended.videofix_m",
