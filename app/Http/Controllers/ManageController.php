@@ -16,40 +16,35 @@ use Illuminate\View\View as ViewResponse;
 
 class ManageController extends Controller
 {
-    public function index(Request $request)
-    {
+  public function index(Request $request)
+{
+    $sections = [
+        "home_banner", "about_section", "who_we_are", "who_we_help",
+        "video_section", "expertise_section", "card_section_1", "card_section_2",
+        "card_section_3", "card_section_4", "values_section", "brands_section",
+        "impact_section", "testimonial_section"
+    ];
 
-
-
-        $pages["home_banner"] = json_decode(Page::wherePage("Home")->whereSection("home_banner")->first()->fields);
-        $pages["about_section"] = json_decode(Page::wherePage("Home")->whereSection("about_section")->first()->fields);
-        $pages["who_we_are"] = json_decode(Page::wherePage("Home")->whereSection("who_we_are")->first()->fields);
-        $pages["who_we_help"] = json_decode(Page::wherePage("Home")->whereSection("who_we_help")->first()->fields);
-        $pages["video_section"] = json_decode(Page::wherePage("Home")->whereSection("video_section")->first()->fields);
-        $pages["expertise_section"] = json_decode(Page::wherePage("Home")->whereSection("expertise_section")->first()->fields);
-        $pages["card_section_1"] = json_decode(Page::wherePage("Home")->whereSection("card_section_1")->first()->fields);
-        $pages["card_section_2"] = json_decode(Page::wherePage("Home")->whereSection("card_section_2")->first()->fields);
-        $pages["card_section_3"] = json_decode(Page::wherePage("Home")->whereSection("card_section_3")->first()->fields);
-        $pages["card_section_4"] = json_decode(Page::wherePage("Home")->whereSection("card_section_4")->first()->fields);
-        $pages["values_section"] = json_decode(Page::wherePage("Home")->whereSection("values_section")->first()->fields);
-        $pages["brands_section"] = json_decode(Page::wherePage("Home")->whereSection("brands_section")->first()->fields);
-        $pages["impact_section"] = json_decode(Page::wherePage("Home")->whereSection("impact_section")->first()->fields);
-        $pages["testimonial_section"] = json_decode(Page::wherePage("Home")->whereSection("testimonial_section")->first()->fields);
-
-
-        $seo = page_seo('Home');
-        return view("index", compact("pages", "seo"));
+    foreach ($sections as $section) {
+        $record = Page::wherePage("Home")->whereSection($section)->first();
+        $pages[$section] = $record ? json_decode($record->fields) : [];
     }
-    public function about()
-    {
-        $pages["about_heading"] = json_decode(Page::wherePage("About")->whereSection("about_heading")->first()->fields);
-        $pages["passion_section"] = json_decode(Page::wherePage("About")->whereSection("passion_section")->first()->fields);
-        $pages["founder_section"] = json_decode(Page::wherePage("About")->whereSection("founder_section")->first()->fields);
-        $pages["story_section"] = json_decode(Page::wherePage("About")->whereSection("story_section")->first()->fields);
 
-        $seo = page_seo('About');
-        return view("about", compact("pages", "seo"));
+    $seo = page_seo('Home');
+    return view("index", compact("pages", "seo"));
+}
+public function about()
+{
+    $sections = ["about_heading", "passion_section", "founder_section", "story_section"];
+
+    foreach ($sections as $section) {
+        $record = Page::wherePage("About")->whereSection($section)->first();
+        $pages[$section] = $record ? json_decode($record->fields) : [];
     }
+
+    $seo = page_seo('About');
+    return view("about", compact("pages", "seo"));
+}
     public function extraPage($slug)
     {
 
@@ -110,8 +105,8 @@ class ManageController extends Controller
     }
     public function thankyou()
     {
-        $pages["thankyou"] = json_decode(Page::wherePage("Thankyou")->whereSection("thanks")->first()->fields);
-        return view('thankyou', compact('pages'));
+       $record = Page::wherePage("Thankyou")->whereSection("thanks")->first();
+$pages["thankyou"] = $record ? json_decode($record->fields) : [];
     }
     public function dashboard()
     {
@@ -126,13 +121,18 @@ class ManageController extends Controller
 
         return view("admin.pages.index", compact("pages"));
     }
-    public function pageView($page)
-    {
-        $pages = Page::wherePage($page)->get();
-        $extraImage = ExtraImage::wherePage($page)->count();
-
-        return view("admin.pages.view_detail", compact("pages", "extraImage", "page"));
+   public function pageView($page)
+{
+    $pages = Page::wherePage($page)->get();
+    
+    if ($pages->isEmpty()) {
+        return redirect()->route('admin.page')->with('error', 'Page not found!');
     }
+    
+    $extraImage = ExtraImage::wherePage($page)->count();
+
+    return view("admin.pages.view_detail", compact("pages", "extraImage", "page"));
+}
 
     public function seo($page)
     {
@@ -188,12 +188,18 @@ class ManageController extends Controller
 
         return view("admin.pages.add", compact("pages"));
     }
-    public function pageEdit($id)
-    {
-        $page = Page::findorfail($id);
-
-        return view("admin.pages.edit", compact("page"));
+public function pageEdit($id)
+{
+    $page = Page::findorfail($id);
+    
+    // Agar fields null ya empty hai toh empty array set karo
+    if (empty($page->fields) || $page->fields === 'null') {
+        $page->fields = '[]';
+        $page->save();
     }
+    
+    return view("admin.pages.edit", compact("page"));
+}
     public function pageStore(Request $request)
     {
         $type = $request->type;
@@ -210,12 +216,15 @@ class ManageController extends Controller
                 $fields[$key]["text"] = $request->text[$key];
                 $fields[$key]["link"] = $request->link[$key];
             }
-            if ($data == "image") {
-                if (!empty($request->image[$key])) {
-                    $img = fileUpload($request->image[$key], "image");
-                    $fields[$key]["img"] = $img;
-                }
-            }
+    if ($data == "image") {
+    if (!empty($request->image[$key]) && $request->image[$key]->isValid()) {
+        $file = $request->image[$key];
+        $extension = $file->getClientOriginalExtension();
+        $filename = 'image/' . uniqid() . '.' . $extension;
+        $file->storeAs('uploaded_files', $filename, 'public');
+        $fields[$key]["img"] = $filename;
+    }
+}
         }
 
         $page = new Page();
@@ -247,26 +256,28 @@ class ManageController extends Controller
                 $fields[$key]["text"] = $request->text[$key];
                 $fields[$key]["link"] = $request->link[$key];
             }
-            if ($data == "image") {
+           if ($data == "image") {
+    if (!empty($request->image[$key]) && $request->image[$key]->isValid()) {
+        // Sirf valid uploaded file process karo
+        $file = $request->image[$key];
+        $extension = $file->getClientOriginalExtension();
+        $filename = 'image/' . uniqid() . '.' . $extension;
+        $file->storeAs('uploaded_files', $filename, 'public');
 
-                if (!empty($request->image[$key])) {
-
-                    if (isset(json_decode($page->fields)[$key]) && json_decode($page->fields)[$key]->type == "image") {
-
-
-
-                        deleteImage(json_decode($page->fields)[$key]->img);
-                    }
-                    $img = fileUpload($request->image[$key], "image");
-
-
-
-                    $fields[$key]["img"] = $img;
-                } else {
-
-                    $fields[$key]["img"] = json_decode($page->fields)[$key]->img;
-                }
+        // Purani file delete karo
+        if (isset(json_decode($page->fields)[$key]) && json_decode($page->fields)[$key]->type == "image") {
+            $oldImg = json_decode($page->fields)[$key]->img ?? null;
+            if ($oldImg && file_exists(storage_path('app/public/uploaded_files/' . $oldImg))) {
+                @unlink(storage_path('app/public/uploaded_files/' . $oldImg));
             }
+        }
+
+        $fields[$key]["img"] = $filename;
+    } else {
+        // Naya file nahi aaya — purana hi rakho
+        $fields[$key]["img"] = json_decode($page->fields)[$key]->img ?? '';
+    }
+}
         }
 
 

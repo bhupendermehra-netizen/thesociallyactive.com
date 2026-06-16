@@ -1,132 +1,12 @@
-// ========== COMPLETE PAGE PRELOADER - Wait for ALL content to load ==========
+// Lazy Loading Implementation - Hide preloader after first section loads
 $(document).ready(function () {
-    // Track loading status
-    let imagesLoaded = false;
-    let videosLoaded = false;
-    let documentReady = false;
+    // Hide preloader once banner section is ready
+    setTimeout(function () {
+        $(".loader").fadeOut(300);
+        $("body").css("overflow-y", "visible");
+    }, 500);
 
-    // Function to hide preloader when everything is ready
-    function hidePreloader() {
-        if (imagesLoaded && videosLoaded && documentReady) {
-            console.log('✅ All content loaded - hiding preloader');
-            
-            // Fade out preloader
-            $(".loader").addClass("fade-out");
-            
-            // Show page content with fade-in
-            setTimeout(function() {
-                $(".page-content").addClass("show");
-                $("body").css("overflow-y", "visible");
-            }, 300);
-        }
-    }
-
-    // 1. Check all images are loaded
-    function checkImagesLoaded() {
-        const images = document.querySelectorAll('img');
-        let loadedCount = 0;
-        const totalImages = images.length;
-
-        if (totalImages === 0) {
-            imagesLoaded = true;
-            console.log('📸 No images to load');
-            hidePreloader();
-            return;
-        }
-
-        images.forEach(function(img) {
-            if (img.complete) {
-                loadedCount++;
-            } else {
-                img.addEventListener('load', function() {
-                    loadedCount++;
-                    if (loadedCount === totalImages) {
-                        imagesLoaded = true;
-                        console.log(`📸 All ${totalImages} images loaded`);
-                        hidePreloader();
-                    }
-                });
-                img.addEventListener('error', function() {
-                    loadedCount++;
-                    if (loadedCount === totalImages) {
-                        imagesLoaded = true;
-                        console.log(`📸 Images processed (${totalImages})`);
-                        hidePreloader();
-                    }
-                });
-            }
-        });
-
-        if (loadedCount === totalImages) {
-            imagesLoaded = true;
-            console.log(`📸 All ${totalImages} images already loaded`);
-            hidePreloader();
-        }
-    }
-
-    // 2. Check all videos are ready
-    function checkVideosLoaded() {
-        const videos = document.querySelectorAll('video');
-        let readyCount = 0;
-        const totalVideos = videos.length;
-
-        if (totalVideos === 0) {
-            videosLoaded = true;
-            console.log('🎥 No videos to load');
-            hidePreloader();
-            return;
-        }
-
-        videos.forEach(function(video) {
-            // Check if video is already ready
-            if (video.readyState >= 3) { // HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
-                readyCount++;
-            } else {
-                video.addEventListener('canplay', function() {
-                    readyCount++;
-                    if (readyCount === totalVideos) {
-                        videosLoaded = true;
-                        console.log(`🎥 All ${totalVideos} videos ready`);
-                        hidePreloader();
-                    }
-                });
-                video.addEventListener('error', function() {
-                    readyCount++;
-                    if (readyCount === totalVideos) {
-                        videosLoaded = true;
-                        console.log(`🎥 Videos processed (${totalVideos})`);
-                        hidePreloader();
-                    }
-                });
-            }
-        });
-
-        if (readyCount === totalVideos) {
-            videosLoaded = true;
-            console.log(`🎥 All ${totalVideos} videos already ready`);
-            hidePreloader();
-        }
-    }
-
-    // 3. Mark document as ready
-    documentReady = true;
-    console.log('📄 Document ready');
-
-    // Start checking
-    checkImagesLoaded();
-    checkVideosLoaded();
-
-    // Fallback timeout - hide preloader after 10 seconds max
-    setTimeout(function() {
-        if (!$(".loader").hasClass("fade-out")) {
-            console.log('⏰ Timeout reached - hiding preloader');
-            imagesLoaded = true;
-            videosLoaded = true;
-            hidePreloader();
-        }
-    }, 10000);
-
-    // Lazy Loading Implementation for other images/videos that appear later
+    // Lazy load videos and images
     if ("IntersectionObserver" in window) {
         const lazyMediaObserver = new IntersectionObserver(
             function (entries, observer) {
@@ -177,8 +57,6 @@ $(document).ready(function () {
         });
     }
 });
-// ========== End Preloader Logic ==========
-
 
 $(window).on("load", function () {
     if ($(".main_contact_popup_form").length) {
