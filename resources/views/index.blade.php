@@ -284,60 +284,364 @@
 
 		</div>
 	</div>
-	{{-- OUR EXPERTISE & SERVICES --}}
-	<div class="expertise_section page-section" data-change="0">
-		<div style="width:100%;">
-			<h1 class="heading">{{(isset($pages['expertise_section'][0]) ? $pages['expertise_section'][0]->text : '')}}</h1>
-			<div style="display:flex;justify-content:center;width:100%">
+	{{-- OUR EXPERTISE & SERVICES (replaced with GSAP card stack) --}}
+	{{-- <div id="gsap-card-section" class="page-section" style="padding:60px 0;">
+		<style>
+			#gsap-card-section { position: relative; width: 100%; height: 100vh; background: #aaf103; overflow: hidden; display: flex; align-items: center; justify-content: center;  }
+			.gsap-card-stack { position: relative; width: 100%; max-width: 1200px; height: 500px; display: flex; align-items: center; justify-content: center; }
+			.gsap-card { position: absolute; width: 280px; height: 400px; cursor: pointer; }
+			.card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
+			.card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 16px; overflow: hidden; }
+			.card-front img, .card-back img { width: 100%; height: 100%; object-fit: cover; }
+			.card-back { transform: rotateY(180deg); }
+			.gsap-card-1 { z-index: 4; }
+			.gsap-card-2 { z-index: 3; }
+			.gsap-card-3 { z-index: 2; }
+			.gsap-card-4 { z-index: 1; }
+			@media (max-width: 768px) { .gsap-card { width: 90px; height: 135px; } }
+		</style>
 
-				<div class="width_div">
-
-					<div class="width_div23" style="display:flex;justify-content:center">
-						<div class="service_section">
-							<img class="service_img lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][1]) ? $pages['expertise_section'][1]->img : ''))}}"
-								data-selected="1">
-							<img class="service_img_2 lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][2]) ? $pages['expertise_section'][2]->img : ''))}}"
-								data-selected="0">
-						</div>
-
-						<div class="service_section ">
-							<img class="service_img lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][3]) ? $pages['expertise_section'][3]->img : ''))}}"
-								data-selected="1">
-							<img class="service_img_2 lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][4]) ? $pages['expertise_section'][4]->img : ''))}}"
-								data-selected="0">
-						</div>
-						<div class="service_section ">
-							<img class="service_img lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][5]) ? $pages['expertise_section'][5]->img : ''))}}"
-								data-selected="1">
-							<img class="service_img_2 lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][6]) ? $pages['expertise_section'][6]->img : ''))}}"
-								data-selected="0">
-						</div>
-						<div class="service_section ">
-							<img class="service_img lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][7]) ? $pages['expertise_section'][7]->img : ''))}}"
-								data-selected="1">
-							<img class="service_img_2 lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['expertise_section'][8]) ? $pages['expertise_section'][8]->img : ''))}}"
-								data-selected="0">
-						</div>
+		<div class="gsap-card-stack">
+			@foreach([1,2,3,4] as $i)
+			<div class="gsap-card gsap-card-{{ $i }}">
+				<div class="card-inner">
+					<div class="card-front">
+						<img src="{{ asset('admin/assets/img/card/card'.$i.'front.webp') }}" alt="Front {{ $i }}">
 					</div>
-
-
+					<div class="card-back">
+						<img src="{{ asset('admin/assets/img/card/card'.$i.'back.webp') }}" alt="Back {{ $i }}">
+					</div>
 				</div>
 			</div>
+			@endforeach
 		</div>
-	</div>
 
-	<div class="invisible_page desktop-view page-section">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				if (typeof gsap === 'undefined') return;
+				gsap.registerPlugin(ScrollTrigger);
+
+				gsap.set(".gsap-card", { xPercent: -50, yPercent: -50, left: "50%", top: "50%" });
+
+				let infiniteBounce;
+
+				const tl = gsap.timeline({
+					scrollTrigger: {
+						trigger: '#gsap-card-section', start: 'top top', end: '+=1500', scrub: 1, pin: true, anticipatePin: 1,
+						onUpdate: (self) => {
+							if (self.progress > 0.3) { if (!infiniteBounce) startFloating(); } else { stopFloating(); }
+						},
+						onEnterBack: () => { if (tl.progress() < 0.3) stopFloating(); }
+					}
+				});
+
+				tl.to('.gsap-card-1', { x: '-32vw', rotation: -8, ease: "power1.inOut" }, 0)
+				  .to('.gsap-card-2', { x: '-11vw', rotation: -3, ease: "power1.inOut" }, 0)
+				  .to('.gsap-card-3', { x: '11vw', rotation: 3, ease: "power1.inOut" }, 0)
+				  .to('.gsap-card-4', { x: '32vw', rotation: 8, ease: "power1.inOut" }, 0);
+
+				tl.to('.card-inner', { rotationY: 180, duration: 1.5, stagger: 0.2, ease: "back.out(1.2)" }, "-=0.2");
+				tl.to('.gsap-card', { scale: 1, duration: 1, stagger: 0.2 }, "<");
+
+				function startFloating() { gsap.set(".gsap-card", { y: -30 }); infiniteBounce = gsap.to(".gsap-card", { y: 30, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut" }); }
+				function stopFloating() { if (infiniteBounce) { infiniteBounce.kill(); infiniteBounce = null; gsap.to(".gsap-card", { y: 0, duration: 0.5, ease: "power2.out" }); } }
+			});
+		</script>
+	</div> --}}
+{{-- OUR EXPERTISE & SERVICES --}}
+<div id="gsap-card-section" class="page-section">
+    <style>
+        /* The wrapper must have NO height of its own — ScrollTrigger pin handles it */
+        #gsap-card-section {
+            position: relative;
+            width: 100%;
+        }
+
+        /* This is the element that gets pinned — it must be 100vh */
+        #gsap-card-inner {
+            position: relative;
+            width: 100%;
+            height: 120vh;
+            background:  #DAF301;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── Heading ── */
+        .gsap-heading {
+            text-align: center;
+            user-select: none;
+        }
+        .gsap-heading .sub-label {
+            display: block;
+            font-size: 13px;
+            letter-spacing: 0.18em;
+            color: #444;
+            margin-bottom: 10px;
+            opacity: 0;
+        }
+        .gsap-heading .main-title {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gsap-heading .word {
+            display: inline-flex;
+            overflow: hidden;
+        }
+        .gsap-heading .char {
+            display: inline-block;
+            font-size: clamp(28px, 5vw, 60px);
+            font-weight: 800;
+            color: #111;
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        /* ── Cards ── */
+        .gsap-card-stack {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gsap-card {
+            position: absolute;
+            width: 260px;
+            height: 380px;
+            cursor: pointer;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .card-front img, .card-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+        .card-back  { transform: rotateY(180deg); }
+        .gsap-card-1 { z-index: 4; }
+        .gsap-card-2 { z-index: 3; }
+        .gsap-card-3 { z-index: 2; }
+        .gsap-card-4 { z-index: 1; }
+
+        @media (max-width: 768px) {
+            .gsap-card      { width: 90px; height: 135px; }
+            .gsap-card-stack { height: 200px; }
+        }
+    </style>
+<style>
+    .gsap-heading {
+        text-align: center;
+        user-select: none;
+    }
+    .gsap-heading .sub-label {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        color: #333;
+        margin-bottom: 14px;
+        font-weight: 600;
+    }
+    .sweep-heading {
+        position: relative;
+        display: inline-block;
+        font-size: clamp(28px, 5.5vw, 72px);
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 2;
+    }
+    .sweep-heading .text-base {
+        position: relative;
+        z-index: 1;
+        white-space: nowrap;
+    }
+    /* White fill layer — clip-path driven by scroll */
+    .sweep-heading .fill-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        color: #000000;
+        overflow: hidden;
+        clip-path: inset(0 100% 0 0); /* fully hidden at start */
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .sweep-heading { font-size: clamp(22px, 7vw, 40px); }
+    }
+</style>
+    {{-- THIS is the pinned element (not the outer wrapper) --}}
+    <div id="gsap-card-inner">
+
+        <div class="gsap-heading">
+			<div class="sweep-heading" id="sweepHeading">
+				<span class="text-base">OUR EXPERTISE &amp; SERVICES</span>
+				<span class="fill-layer" id="sweepFillLayer">OUR EXPERTISE &amp; SERVICES</span>
+			</div>
+		</div>
+
+        <div class="gsap-card-stack">
+            @foreach([1,2,3,4] as $i)
+            <div class="gsap-card gsap-card-{{ $i }}">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="{{ asset('admin/assets/img/card/card'.$i.'front.webp') }}" alt="Front {{ $i }}">
+                    </div>
+                    <div class="card-back">
+                        <img src="{{ asset('admin/assets/img/card/card'.$i.'back.webp') }}" alt="Back {{ $i }}">
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+    </div>{{-- /#gsap-card-inner --}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof gsap === 'undefined') return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        /* Stack all cards on top of each other at center */
+        gsap.set('.gsap-card', {
+            xPercent: -50,
+            yPercent: -50,
+            left: '50%',
+            top: '50%'
+        });
+
+        /* ── Heading animation — fires once when section enters viewport ── */
+        const headingST = {
+            trigger: '#gsap-card-inner',
+            start: 'top 80%',
+            once: true
+        };
+        gsap.to('.gsap-heading .sub-label', {
+            opacity: 1, duration: 0.7, ease: 'power2.out',
+            scrollTrigger: headingST
+        });
+        gsap.to('.gsap-heading .char', {
+            opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+            stagger: 0.04,
+            scrollTrigger: headingST
+        });
+
+        /* ── Float helpers ── */
+        let floatAnim = null;
+
+        function startFloating() {
+            if (floatAnim) return;
+            floatAnim = gsap.to('.gsap-card', {
+                y: 16, duration: 2, repeat: -1, yoyo: true,
+                ease: 'sine.inOut',
+                stagger: { each: 0.2, from: 'start' }
+            });
+        }
+        function stopFloating() {
+            if (!floatAnim) return;
+            floatAnim.kill();
+            floatAnim = null;
+            gsap.to('.gsap-card', { y: 0, duration: 0.4, ease: 'power2.out' });
+        }
+
+        /* ── Main pinned scroll timeline ── */
+        /*
+         *  pin: '#gsap-card-inner'  ← pins only the inner div, NOT the wrapper.
+         *    This is why the section was appearing twice before —
+         *    pinning a child of the trigger avoids ScrollTrigger creating
+         *    a spacer that duplicates the wrapper height.
+         *
+         *  start: 'top top'         ← pin kicks in when top of section hits top of viewport
+         *  end: '+=1200'            ← 1200px of scroll: ~40% spread, ~45% flip, 15% buffer then release
+         *  scrub: 1.5               ← smooth 1.5s lag behind scroll for satisfying feel
+        */
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#gsap-card-section',
+                start: 'top top',
+                end: '+=1200',
+                scrub: 1.5,
+                pin: '#gsap-card-inner',
+                anticipatePin: 1,
+                onUpdate(self) {
+                    /* Floating starts after cards have spread (progress > 0.45) */
+                    if (self.progress > 0.45) startFloating();
+                    else stopFloating();
+                },
+                onLeaveBack() { stopFloating(); }
+            }
+        });
+
+        /* Phase 1 (0–40%): spread cards out */
+        tl.to('.gsap-card-1', { x: '-32vw', rotation: -8, ease: 'power1.inOut' }, 0)
+          .to('.gsap-card-2', { x: '-11vw', rotation: -3, ease: 'power1.inOut' }, 0)
+          .to('.gsap-card-3', { x:  '11vw', rotation:  3, ease: 'power1.inOut' }, 0)
+          .to('.gsap-card-4', { x:  '32vw', rotation:  8, ease: 'power1.inOut' }, 0);
+
+        /* Phase 2 (40–85%): flip each card to its back face */
+        tl.to('.card-inner', {
+            rotationY: 180,
+            duration: 1,
+            stagger: 0.18,
+            ease: 'back.out(1.2)'
+        }, '>-0.1');   /* starts just after spread phase completes */
+
+        /* Phase 3 (85–100%): small breathing room, then ScrollTrigger releases the pin */
+    });
+    </script>
+	<script>
+(function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    const fillLayer = document.getElementById('sweepFillLayer');
+    if (!fillLayer) return;
+
+    /* progress: 0 → 1, maps to clip-path right inset: 100% → 0% */
+    gsap.to({}, {
+        scrollTrigger: {
+            trigger: '#gsap-card-section',  /* same trigger as your card section */
+            start: 'top 80%',              
+        // Ends when the top of the section reaches 20% from the top of the viewport
+        end: 'top 20%',                   /* fully filled after 400px of scroll */
+            scrub: 0.8,                    /* smooth tie to scroll, slight lag */
+            onUpdate(self) {
+                const p    = self.progress;           /* 0 → 1 */
+                const right = (1 - p) * 100;          /* 100% → 0% */
+                fillLayer.style.clipPath = `inset(0 ${right.toFixed(2)}% 0 0)`;
+            }
+        }
+    });
+})();
+</script>
+</div>
+	<div class="invisible_page desktop-view page-section" style="height: 0vh">
 	</div>
-	<div class="invisible_page desktop-view page-section">
-	</div>
+	{{-- <div class="invisible_page desktop-view page-section">
+	</div> --}}
 
 	<div class="brand_strategy_section page-section" data-id="1" style="top:31%;opacity:1;">
 

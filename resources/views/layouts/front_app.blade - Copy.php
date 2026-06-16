@@ -24,7 +24,6 @@
     @if(count($pageSeo))
         @foreach($pageSeo as $name => $content)
             @continue($name === 'title')
-            @continue(in_array($name, ['custom_meta_tags', 'head_script', 'body_script']))
             @php
                 $low = strtolower($name);
                 $isProperty = strpos($low, 'og:') === 0 || strpos($low, 'twitter:') === 0;
@@ -32,16 +31,12 @@
             <meta {{ $isProperty ? 'property' : 'name' }}="{{ $name }}" content="{{ $content }}">
         @endforeach
     @endif
-    {!! $pageSeo['custom_meta_tags'] ?? '' !!}
-    @php $__globalScripts = \App\Models\SiteSetting::first(); @endphp
-    {!! $__globalScripts?->global_head_script ?? '' !!}
-    {!! $pageSeo['head_script'] ?? '' !!}
     <link rel="icon" type="image/x-icon"
         href="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][0]->img)}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}">
     <!-- Google tag (gtag.js) -->
@@ -63,17 +58,7 @@
 </head>
 
 <body>
-    {!! $__globalScripts?->global_body_script ?? '' !!}
-    {!! $pageSeo['body_script'] ?? '' !!}
     @if(env("SITE_SETTING"))
-
-        <!-- PRELOADER - Shows TSA GIF until all content loads -->
-        <div class="loader">
-            <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][2]->img)}}" alt="TSA Loading">
-        </div>
-
-        <!-- PAGE CONTENT - Fades in after preloader -->
-        <div class="page-content">
 
         <div class="side_contact_button">
             <button class="mainButton" type="button">
@@ -97,6 +82,10 @@
                     <i class="{{header_footer()['side_buttons'][4]->text}}"></i>
                 </button>
             </div>
+        </div>
+
+        <div class="loader">
+            <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][2]->img)}}">
         </div>
 
         <header class="navbar-top">
@@ -135,7 +124,7 @@
             <div class="navbar-top-2">
                 <div class="navbar">
                     <div class="logo">
-                        <img loading="lazy" src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][0]->img)}}">
+                        <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][0]->img)}}">
                     </div>
                     <div class="link">
                         <div class="button">
@@ -156,32 +145,32 @@
                     <div class="inner">
 
                         {{-- Home --}}
-                        @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][2]->link, '/'))
+                        @if($_SERVER['REQUEST_URI'] != "/" . str_replace("/", "", header_footer()['navbar'][2]->link))
                             <p class="links">
                                 <a href="{{header_footer()['navbar'][2]->link}}">{{header_footer()['navbar'][2]->text}}</a>
                             </p>
                         @endif
 
                         {{-- Our Projects --}}
-                        @if(!request()->is('projects'))
+                        @if($_SERVER['REQUEST_URI'] != '/projects')
                         <p class="links">
                             <a href="{{ route('projects') }}">Our Projects</a>
                         </p>
                         @endif
                         
                         {{-- Our BLog --}}
-                        @if(!request()->is('blog*'))
+                        @if(!str_starts_with($_SERVER['REQUEST_URI'], '/blog'))
                             <p class="links"><a href="{{ route('blog') }}">Blog</a></p>
                         @endif
                         {{-- Our Story --}}
-                        @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][3]->link, '/'))
+                        @if($_SERVER['REQUEST_URI'] != "/" . str_replace("/", "", header_footer()['navbar'][3]->link))
                             <p class="links">
                                 <a href="{{header_footer()['navbar'][3]->link}}">{{header_footer()['navbar'][3]->text}}</a>
                             </p>
                         @endif
 
                         {{-- Contact --}}
-                        @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][4]->link, '/'))
+                        @if($_SERVER['REQUEST_URI'] != "/" . str_replace("/", "", header_footer()['navbar'][4]->link))
                             <p class="links">
                                 <a href="{{header_footer()['navbar'][4]->link}}">{{header_footer()['navbar'][4]->text}}</a>
                             </p>
@@ -195,28 +184,28 @@
 
                         <div class="service_drop" style="display:none">
                             <div class="row">
-                                @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][6]->link, '/'))
+                                @if(str_replace("/", "", $_SERVER['REQUEST_URI']) != str_replace("/", "", header_footer()['navbar'][6]->link))
                                     <div class="col-lg-3 col-12">
                                         <p class="links2"><a
                                                 href="{{header_footer()['navbar'][6]->link}}">{{header_footer()['navbar'][6]->text}}</a>
                                         </p>
                                     </div>
                                 @endif
-                                @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][7]->link, '/'))
+                                @if(str_replace("/", "", $_SERVER['REQUEST_URI']) != str_replace("/", "", header_footer()['navbar'][7]->link))
                                     <div class="col-lg-3 col-12">
                                         <p class="links2"><a
                                                 href="{{header_footer()['navbar'][7]->link}}">{{header_footer()['navbar'][7]->text}}</a>
                                         </p>
                                     </div>
                                 @endif
-                                @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][8]->link, '/'))
+                                @if(str_replace("/", "", $_SERVER['REQUEST_URI']) != str_replace("/", "", header_footer()['navbar'][8]->link))
                                     <div class="col-lg-3 col-12">
                                         <p class="links2"><a
                                                 href="{{header_footer()['navbar'][8]->link}}">{{header_footer()['navbar'][8]->text}}</a>
                                         </p>
                                     </div>
                                 @endif
-                                @if(trim(request()->path(), '/') != trim(header_footer()['navbar'][9]->link, '/'))
+                                @if(str_replace("/", "", $_SERVER['REQUEST_URI']) != str_replace("/", "", header_footer()['navbar'][9]->link))
                                     <div class="col-lg-3 col-12">
                                         <p class="links2"><a
                                                 href="{{header_footer()['navbar'][9]->link}}">{{header_footer()['navbar'][9]->text}}</a>
@@ -246,7 +235,9 @@
         @yield('content')
 
         <div class="footer_upper">
-
+            <div class="pebbles_upper">
+                <div id="footer_pebble_canvas"></div>
+            </div>
             <div class="inner">
                 <footer>
                     <div class="footer">
@@ -254,7 +245,7 @@
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 col-sm-4 col-12">
                                     <div class="logo">
-                                        <img loading="lazy"
+                                        <img
                                             src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['footer'][0]->img)}}">
                                         <p class="sub">{{header_footer()['footer'][1]->text}}</p>
                                         <p class="content">{{header_footer()['footer'][2]->text}}</p>
@@ -337,8 +328,11 @@
             crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="{{ asset('assets/owl-carousel/owl.carousel.min.js') }}"></script>
-        <script src="{{ asset('assets/js/script.js') }}?v={{ filemtime(public_path('assets/js/script.js')) }}"></script>
+        <script src="{{ asset('assets/js/script.js') }}"></script>
         <script src="{{ asset('assets/js/background_script.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -355,9 +349,107 @@
                     }
                 });
             });
-        </script>
 
-        </div><!-- End .page-content -->
+            const Engine = Matter.Engine;
+            const World = Matter.World;
+            const Bodies = Matter.Bodies;
+            const Body = Matter.Body;
+
+            var pebbles_Data = [
+                "Identity", "Positioning", "Vision", "Legacy", "Influence", "Authority", "Signature", "Alignment", "Authenticity", "Differentiation", "Perception", "Purpose", "Trust", "Consistency", "Transformation", "Engagement", "Viral", "Reach", "Trend", "Relevance", "Community", "Aesthetic", "Stories", "UGC (User Generated Content)", "Real-time", "Relatable", "Impact", "Collab (Collaboration)", "Creator", "Credibility", "Micro influencer", "Resonance", "Partnership", "Audience", "Niche", "Campaign", "Retention", "ROI (Return on Investment)", "Funnels", "Conversions", "Awareness", "Visibility", "Disruption", "Innovation", "Metrics", "Bold", "Elevate", "Magnetic", "Loud", "Unforgettable",
+            ];
+
+            let engine;
+            let items = [];
+            let ground, wallLeft, wallRight, roof;
+            let words = [];
+
+            class Word {
+                constructor(x, y, word) {
+                    if (window.screen.width > 500) {
+                        this.body = Bodies.rectangle(x, y, word.length * 5, 20);
+                    } else {
+                        this.body = Bodies.rectangle(x, y, word.length * 2, 20);
+                    }
+                    this.word = word;
+                    World.add(engine.world, this.body);
+                }
+                show() {
+                    let pos = this.body.position;
+                    let angle = this.body.angle;
+                    push();
+                    translate(pos.x, pos.y);
+                    rotate(angle);
+                    rectMode(CENTER);
+                    fill("#000");
+                    stroke("#DAF301");
+                    strokeWeight(3);
+                    if (window.screen.width > 500) {
+                        rect(0, 0, this.word.length * 20 + 30, 30, 20);
+                    } else {
+                        rect(0, 0, this.word.length * 7 + 15, 15, 20);
+                    }
+                    noStroke();
+                    fill("#fff");
+                    if (window.screen.width > 500) {
+                        textSize(20);
+                    } else {
+                        textSize(13);
+                    }
+                    textAlign(CENTER, CENTER);
+                    text(this.word, 0, 0);
+                    pop();
+                }
+            }
+
+            function setup() {
+                if (window.screen.height > 500) {
+                    var canvas = createCanvas(window.screen.width, 300);
+                } else {
+                    var canvas = createCanvas(window.screen.width, 50);
+                }
+                canvas.parent("footer_pebble_canvas");
+                engine = Engine.create();
+                roof = Bodies.rectangle(width / 2, height, width, 30, { isStatic: true });
+                ground = Bodies.rectangle(width / 2, height - 20, width, 10, { isStatic: true });
+                wallLeft = Bodies.rectangle(0, height / 2, 10, height, { isStatic: true });
+                wallRight = Bodies.rectangle(width, height / 2, 10, height, { isStatic: true });
+                World.add(engine.world, [ground, wallLeft, wallRight, roof]);
+                for (let i = 0; i < pebbles_Data.length; i++) {
+                    words.push(new Word(random(width), -200, pebbles_Data[i]));
+                }
+            }
+
+            function draw() {
+                background("#000");
+                Engine.update(engine);
+                for (let word of words) {
+                    word.show();
+                }
+            }
+
+            $("#footer_pebble_canvas").on("touchstart", function () {
+                for (let word of words) {
+                    if (dist(mouseX, mouseY, word.body.position.x, word.body.position.y) < 50) {
+                        Body.applyForce(word.body,
+                            { x: word.body.position.x, y: word.body.position.y },
+                            { x: random(-0.01, 0.01), y: random(-0.01, 0.01) }
+                        );
+                    }
+                }
+            });
+
+            function mouseMoved() {
+                for (let word of words) {
+                    if (dist(mouseX, mouseY, word.body.position.x, word.body.position.y) < 50) {
+                        Body.applyForce(word.body,
+                            { x: word.body.position.x, y: word.body.position.y },
+                            { x: random(-0.02, 0.02), y: random(-0.02, 0.02) }
+                        );
+                    }
+                }
+            }
+        </script>
 
     @else
         {{abort(404)}}
