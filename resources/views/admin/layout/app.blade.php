@@ -463,7 +463,13 @@
   Blog
 </a>
 
-    <a href="{{ route('admin.page.edit', 27) }}"
+<a href="{{ route('admin.authors.index') }}"
+   class="nav-item {{ Request::is('admin/authors*') ? 'active' : '' }}">
+  <span class="nav-icon"><i class="fas fa-user-pen" style="font-size:13px;"></i></span>
+  Authors
+</a>
+
+  <a href="{{ route('admin.page.edit', 27) }}"
        class="nav-item {{ Request::is('admin/page/edit/27') ? 'active' : '' }}">
       <span class="nav-icon"><i class="fas fa-quote-left"></i></span>
       Testimonials
@@ -475,7 +481,21 @@
       Brands
     </a>
 
+    <div class="nav-label">Media</div>
+
+    <a href="{{ route('admin.media.index') }}"
+       class="nav-item {{ Request::is('admin/media*') ? 'active' : '' }}">
+      <span class="nav-icon"><i class="fas fa-photo-film"></i></span>
+      Media Manager
+    </a>
+
     <div class="nav-label">System</div>
+
+    <a href="{{ route('admin.scripts') }}"
+       class="nav-item {{ Request::is('admin/scripts*') ? 'active' : '' }}">
+      <span class="nav-icon"><i class="fas fa-code"></i></span>
+      Custom Scripts
+    </a>
 
     <a href="{{ route('admin.query') }}"
        class="nav-item {{ Request::is('admin/query*') ? 'active' : '' }}">

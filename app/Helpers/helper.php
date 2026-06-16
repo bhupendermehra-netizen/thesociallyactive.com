@@ -5,13 +5,18 @@ use App\Models\ExtraImage;
 
 if(!function_exists('header_footer')){
     function header_footer(){
-    $pages["navbar"] = json_decode(Page::wherePage("Header")->whereSection("navbar")->first()->fields??"");
+        static $cachedPages = null;
+        if ($cachedPages !== null) {
+            return $cachedPages;
+        }
 
-    $pages["footer"] = json_decode(Page::wherePage("footer")->whereSection("footer")->first()->fields??"");
-    $pages["side_buttons"] = json_decode(Page::wherePage("Header")->whereSection("side_buttons")->first()->fields??"");
-    $pages["main_component"] = json_decode(Page::wherePage("Header")->whereSection("main_component")->first()->fields??"");
+        $pages["navbar"] = json_decode(Page::wherePage("Header")->whereSection("navbar")->first()->fields??"");
+        $pages["footer"] = json_decode(Page::wherePage("footer")->whereSection("footer")->first()->fields??"");
+        $pages["side_buttons"] = json_decode(Page::wherePage("Header")->whereSection("side_buttons")->first()->fields??"");
+        $pages["main_component"] = json_decode(Page::wherePage("Header")->whereSection("main_component")->first()->fields??"");
 
-return $pages;
+        $cachedPages = $pages;
+        return $pages;
     }
 }
 
@@ -34,6 +39,15 @@ if(!function_exists('page_seo')){
 
         $seoPage = Page::wherePage($page)->whereSection('seo')->first();
         if($seoPage){
+            if(!empty($seoPage->custom_meta_tags)){
+                $meta['custom_meta_tags'] = $seoPage->custom_meta_tags;
+            }
+            if(!empty($seoPage->head_script)){
+                $meta['head_script'] = $seoPage->head_script;
+            }
+            if(!empty($seoPage->body_script)){
+                $meta['body_script'] = $seoPage->body_script;
+            }
             $fields = json_decode($seoPage->fields, true);
             if(is_array($fields)){
                 foreach($fields as $item){
@@ -49,6 +63,58 @@ if(!function_exists('page_seo')){
         }
 
         return $meta;
+    }
+}
+
+if(!function_exists('webp_url')){
+    function webp_url($path){
+        if (empty($path)) {
+            return $path;
+        }
+        $webpPath = preg_replace('/\.(png|jpg|jpeg)$/i', '.webp', $path);
+        
+        $localPath = '';
+        if (preg_match('/uploaded_files\/(.+)/i', $path, $matches)) {
+            $localPath = public_path('uploaded_files/' . preg_replace('/\.(png|jpg|jpeg)$/i', '.webp', $matches[1]));
+        } elseif (preg_match('/assets\/(.+)/i', $path, $matches)) {
+            $localPath = public_path('assets/' . preg_replace('/\.(png|jpg|jpeg)$/i', '.webp', $matches[1]));
+        }
+        
+        if (!empty($localPath) && file_exists($localPath)) {
+            return $webpPath;
+        }
+        return $path;
+    }
+}
+
+if (!function_exists('render_media')) {
+    function render_media($imgPath, $attrs = '') {
+        if (empty($imgPath)) return '';
+        $url = env('IMG_FETCH_URL') . 'uploaded_files/' . $imgPath;
+        $isVideo = preg_match('/\.(mp4|webm|mov|avi|mkv)$/i', $imgPath);
+
+        if ($isVideo) {
+            return '<video ' . $attrs . ' muted autoplay loop playsinline style="max-width:100%;height:auto">
+                <source src="' . e($url) . '" type="video/mp4">
+            </video>';
+        }
+
+        return '<img src="' . e($url) . '" ' . $attrs . '>';
+    }
+}
+
+if(!function_exists('webp_picture')){
+    function webp_picture($img_url, $attrs = ''){
+        if(empty($img_url)) return '';
+        $webp_url = webp_url($img_url);
+        if ($webp_url === $img_url) {
+            return '<img src="' . e($img_url) . '" ' . $attrs . '>';
+        }
+        $out = '<picture>';
+        $out .= '<source srcset="' . e($webp_url) . '" type="image/webp">';
+        $out .= '<img src="' . e($img_url) . '" ' . $attrs . '>';
+        $out .= '</picture>';
+        return $out;
     }
 }
 

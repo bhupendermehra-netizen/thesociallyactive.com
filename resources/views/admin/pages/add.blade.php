@@ -30,6 +30,11 @@
         </datalist>
       </div>
       <div class="form-group" style="margin:0;">
+        <label>URL Slug <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+        <input class="form-control" type="text" name="slug" placeholder="my-page-url" />
+        <small style="font-size:11px;color:var(--muted);display:block;margin-top:4px;">yoursite.com/page/<strong style="color:var(--teal);">this-value</strong></small>
+      </div>
+      <div class="form-group" style="margin:0;">
         <label>Title</label>
         <input class="form-control" type="text" name="title" placeholder="Section title" required />
       </div>
@@ -73,6 +78,7 @@
         <thead>
           <tr>
             <th>Name</th>
+            <th style="width:100px;">Tag</th>
             <th>Text</th>
             <th>Link</th>
             <th>Image</th>
@@ -116,6 +122,17 @@ $(document).ready(function() {
     $('.field_div').append(`
       <tr style="background:var(--card);">
         <td><input class="form-control" type="text" name="name[]" placeholder="Field name" /></td>
+        <td>
+          <select class="form-control" name="heading_tag[]" style="font-size:12px;padding:4px 6px;">
+            <option value="">Default</option>
+            <option value="h1">H1</option>
+            <option value="h2">H2</option>
+            <option value="h3">H3</option>
+            <option value="h4">H4</option>
+            <option value="h5">H5</option>
+            <option value="h6">H6</option>
+          </select>
+        </td>
         <td><textarea class="form-control" name="text[]" style="min-height:60px;" placeholder="Content..."></textarea></td>
         <td><input class="form-control" type="text" name="link[]" placeholder="https://" /></td>
         <td><input class="form-control" type="file" name="image[]" style="font-size:12px;padding:6px 10px;" /></td>

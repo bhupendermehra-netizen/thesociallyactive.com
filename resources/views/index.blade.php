@@ -140,14 +140,16 @@
 						<div class="video_div" data-selected="-1" data-id="0">
 							<video playsinline autoplay loop muted class="lazy-load">
 								<source
-									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][2]) ? $pages['who_we_are'][2]->img : ''))}}"
+								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][2]) ? $pages['who_we_are'][2]->img : ''))}}"
+
 									type="video/mp4">
 							</video>
 						</div>
 						<div class="video_div" data-selected="0" data-id="1">
 							<video playsinline autoplay loop muted class="lazy-load">
 								<source
-									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][3]) ? $pages['who_we_are'][3]->img : ''))}}"
+								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][3]) ? $pages['who_we_are'][3]->img : ''))}}"
+
 									type="video/mp4">
 							</video>
 						</div>
@@ -161,14 +163,14 @@
 						<div class="video_div" data-selected="2" data-id="3">
 							<video playsinline autoplay loop muted class="lazy-load">
 								<source
-									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][5]) ? $pages['who_we_are'][5]->img : ''))}}"
+								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][5]) ? $pages['who_we_are'][5]->img : ''))}}"
 									type="video/mp4">
 							</video>
 						</div>
 						<div class="video_div" data-selected="3" data-id="4">
 							<video playsinline autoplay loop muted class="lazy-load">
 								<source
-									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][6]) ? $pages['who_we_are'][6]->img : ''))}}"
+								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_are'][6]) ? $pages['who_we_are'][6]->img : ''))}}"
 									type="video/mp4">
 							</video>
 						</div>
@@ -176,10 +178,11 @@
 
 							<div class="inner">
 								<button type="button" class="video_section_previous"><img
-										src="{{asset('assets/images/main_files2/paginate/prev_arrow.svg')}}"></button>
+										src="{{asset('uploaded_files/image/main_files2/paginate/prev_arrow.svg')}}"></button>
+										
 
 								<button type="button" class="video_section_next"><img
-										src="{{asset('assets/images/main_files2/paginate/next_arrow.svg')}}"></button>
+										src="{{asset('uploaded_files/image/main_files2/paginate/next_arrow.svg')}}"></button>
 
 							</div>
 							<div class="inner0">
@@ -281,14 +284,13 @@
 
 		</div>
 	</div>
-	{{-- Old expertise section removed - replaced with cinematic scroll section --}}
+	{{-- OUR EXPERTISE & SERVICES --}}
 	<div class="expertise_section page-section" data-change="0">
 		<div style="width:100%;">
 			<h1 class="heading">{{(isset($pages['expertise_section'][0]) ? $pages['expertise_section'][0]->text : '')}}</h1>
 			<div style="display:flex;justify-content:center;width:100%">
 
 				<div class="width_div">
-
 
 					<div class="width_div23" style="display:flex;justify-content:center">
 						<div class="service_section">
@@ -325,10 +327,6 @@
 								data-selected="0">
 						</div>
 					</div>
-
-
-
-
 
 
 				</div>
@@ -617,13 +615,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][20]) ? $pages['values_section'][20]->img : ''))}}"
 											data-selected="1" style="top:330px;left:-5px">
-											<img style="height:110px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][4]) ? $pages['values_section'][4]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:150px;left:-30px">
+																						{!! render_media(($pages['values_section'][4]->img ?? ''), 'style="height:110px;width:230px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:150px;left:-30px">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][5]) ? $pages['values_section'][5]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][5]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -639,13 +635,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][21]) ? $pages['values_section'][21]->img : ''))}}"
 											data-selected="1" style="top:130px;left:-10px">
-											<img style="height:110px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][8]) ? $pages['values_section'][8]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-30px;left:-30px;">
+																						{!! render_media(($pages['values_section'][8]->img ?? ''), 'style="height:110px;width:230px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-30px;left:-30px;">
 
-											<img style="height:270px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][9]) ? $pages['values_section'][9]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][9]->img ?? ''), 'style="height:270px;width:230px;"') !!}
 
 										</div>
 									</div>
@@ -655,10 +649,8 @@
 								<div class="main_content_upper_div">
 									<div class="main_content_div">
 										<div class="part24">
-											<img class="part1"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][18]) ? $pages['values_section'][18]->img : ''))}}">
-											<img class="part2"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][19]) ? $pages['values_section'][19]->img : ''))}}">
+											{!! render_media(($pages['values_section'][18]->img ?? ''), 'class="part1"') !!}
+											{!! render_media(($pages['values_section'][19]->img ?? ''), 'class="part2"') !!}
 										</div>
 
 									</div>
@@ -678,13 +670,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][22]) ? $pages['values_section'][22]->img : ''))}}"
 											data-selected="1" style="top:125px;right:-20px">
-											<img style="height:110px;width:230px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][12]) ? $pages['values_section'][12]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-50px;right:-50px;">
+																						{!! render_media(($pages['values_section'][12]->img ?? ''), 'style="height:110px;width:230px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-50px;right:-50px;">
 
-											<img style="height:295px;width:280px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][13]) ? $pages['values_section'][13]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][13]->img ?? ''), 'style="height:295px;width:280px;"') !!}
 
 										</div>
 									</div>
@@ -700,13 +690,11 @@
 										<div class="part1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][23]) ? $pages['values_section'][23]->img : ''))}}"
 											data-selected="1" style="top:30px;right:-15px">
-											<img style="height:105px;width:200px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][16]) ? $pages['values_section'][16]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-130px;right:-40px">
+																						{!! render_media(($pages['values_section'][16]->img ?? ''), 'style="height:105px;width:200px;"') !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-130px;right:-40px">
 
-											<img style="height:285px;width:245px;"
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][17]) ? $pages['values_section'][17]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][17]->img ?? ''), 'style="height:285px;width:245px;"') !!}
 
 										</div>
 									</div>
@@ -738,10 +726,8 @@
 							<div class="main_content_upper_div">
 								<div class="main_content_div">
 									<div class="part24">
-										<img class="part1"
-											src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][18]) ? $pages['values_section'][18]->img : ''))}}">
-										<img class="part2"
-											src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][19]) ? $pages['values_section'][19]->img : ''))}}">
+										{!! render_media(($pages['values_section'][18]->img ?? ''), 'class="part1"') !!}
+										{!! render_media(($pages['values_section'][19]->img ?? ''), 'class="part2"') !!}
 									</div>
 
 								</div>
@@ -760,13 +746,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][20]) ? $pages['values_section'][20]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][4]) ? $pages['values_section'][4]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][4]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][5]) ? $pages['values_section'][5]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][5]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -781,13 +765,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][21]) ? $pages['values_section'][21]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][8]) ? $pages['values_section'][8]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][8]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-40px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][9]) ? $pages['values_section'][9]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][9]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -807,13 +789,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][22]) ? $pages['values_section'][22]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][12]) ? $pages['values_section'][12]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][12]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][13]) ? $pages['values_section'][13]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][13]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -828,13 +808,11 @@
 										</div>
 										<div class="part1" data-selected="1"
 											data-img-change="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][23]) ? $pages['values_section'][23]->img : ''))}}">
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][16]) ? $pages['values_section'][16]->img : ''))}}">
-										</div>
-										<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
+																					{!! render_media(($pages['values_section'][16]->img ?? '')) !!}
+																					</div>
+																					<div class="part2" data-selected="0" style="top:-20px;right:0;left:0">
 
-											<img
-												src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['values_section'][17]) ? $pages['values_section'][17]->img : ''))}}">
+																						{!! render_media(($pages['values_section'][17]->img ?? '')) !!}
 
 										</div>
 									</div>
@@ -883,12 +861,21 @@
 					</div>
 					<div class="col-lg-4">
 						<div class="waving_div">
-
-							<img class="lazy-load"
-								data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['impact_section'][2]) ? $pages['impact_section'][2]->img : ''))}}">
-
-
+							@php
+								$impactMedia = isset($pages['impact_section'][2]) ? $pages['impact_section'][2]->img : '';
+								$isVideoFile = preg_match('/\.(mp4|webm|mov|avi|mkv)$/i', $impactMedia);
+							@endphp
+							@if($isVideoFile)
+								<video class="lazy-load" playsinline muted loop autoplay
+									style="width:100%;height:auto;object-fit:cover;border-radius:12px;">
+									<source src="{{ env('IMG_FETCH_URL') . 'uploaded_files/' . $impactMedia }}" type="video/{{ pathinfo($impactMedia, PATHINFO_EXTENSION) == 'mp4' ? 'mp4' : 'webm' }}">
+								</video>
+							@else
+								<img class="lazy-load"
+									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . $impactMedia)}}">
+							@endif
 						</div>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -903,219 +890,153 @@
 
 
 	</div>
-	<div class="testimonial_section page-section"
-		style="background:url('{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages["testimonial_section"][27]) ? $pages["testimonial_section"][27]->img : ''))}}');background-size:cover;background-attachment:fixed;background-position:bottom;background-repeat:no-repeat">
-		<div class="upper">
-			<div class="inner">
-				<center>
-					<div class="col-lg-6 col-10">
-						<h1 class="heading">
-							{{(isset($pages["testimonial_section"][0]) ? $pages["testimonial_section"][0]->text : '')}}</h1>
-						<p class="content">
-							{{(isset($pages["testimonial_section"][1]) ? $pages["testimonial_section"][1]->text : '')}}</p>
-					</div>
+<div class="testimonial_section page-section"
+style="background:url('{{ isset($pages["testimonial_section"][27]->img) ? env('IMG_FETCH_URL').'uploaded_files/'.$pages["testimonial_section"][27]->img : '' }}');background-size:cover;background-attachment:fixed;background-position:bottom;background-repeat:no-repeat">
 
+<div class="upper">														   
+<div class="inner">
+<center>
 
-					<div class="col-lg-8 col-11">
-						<div class="owl-carousel">
-							<div class="item">
-								<div class="review">
+<div class="col-lg-6 col-10">
+    <h1 class="heading">{{ $pages["testimonial_section"][0]->text ?? '' }}</h1>
+    <p class="content">{{ $pages["testimonial_section"][1]->text ?? '' }}</p>
+</div>
 
-									<div class="effect_layer">
-										<p class="review_content">
-											{{(isset($pages["testimonial_section"][2]) ? $pages["testimonial_section"][2]->text : '')}}
-										</p>
-										<div class="stars">
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][3]) ? $pages["testimonial_section"][3]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][3]) ? $pages["testimonial_section"][3]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][3]) ? $pages["testimonial_section"][3]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][3]) ? $pages["testimonial_section"][3]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][3]) ? $pages["testimonial_section"][3]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-										</div>
-										<div class="customer">
-											<img class="lazy-load"
-												data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages["testimonial_section"][4]) ? $pages["testimonial_section"][4]->img : ''))}}">
-											<p class="name">
-												{{(isset($pages["testimonial_section"][5]) ? $pages["testimonial_section"][5]->text : '')}}
-											</p>
-											<p class="type">
-												{{(isset($pages["testimonial_section"][6]) ? $pages["testimonial_section"][6]->text : '')}}
-											</p>
-										</div>
-									</div>
-									<div class="effect" data-clip="1" data-effect="0">
-									</div>
-									<div class="hover">
-									</div>
-								</div>
+<div class="col-lg-8 col-11">
+<div class="owl-carousel">
 
-							</div>
-							<div class="item">
-								<div class="review">
+{{-- Testimonial 1 --}}
+<div class="item">
+<div class="review">
+<div class="effect_layer">
 
-									<div class="effect_layer">
-										<p class="review_content">
-											{{(isset($pages["testimonial_section"][7]) ? $pages["testimonial_section"][7]->text : '')}}
-										</p>
-										<div class="stars">
+<p class="review_content">{{ $pages["testimonial_section"][2]->text ?? '' }}</p>   
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][8]) ? $pages["testimonial_section"][8]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
+<div class="stars">
+@for($i=1;$i<=5;$i++)
+<i class="fa {{ (int)($pages["testimonial_section"][3]->text ?? 0) >= $i ? 'fa-star' : 'fa-star-o' }}"></i>
+@endfor
+</div>
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][8]) ? $pages["testimonial_section"][8]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][8]) ? $pages["testimonial_section"][8]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][8]) ? $pages["testimonial_section"][8]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][8]) ? $pages["testimonial_section"][8]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-										</div>
-										<div class="customer">
-											<img class="lazy-load"
-												data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages["testimonial_section"][9]) ? $pages["testimonial_section"][9]->img : ''))}}">
-											<p class="name">
-												{{(isset($pages["testimonial_section"][10]) ? $pages["testimonial_section"][10]->text : '')}}
-											</p>
-											<p class="type">
-												{{(isset($pages["testimonial_section"][11]) ? $pages["testimonial_section"][11]->text : '')}}
-											</p>
-										</div>
-									</div>
-									<div class="effect" data-clip="1" data-effect="0">
-									</div>
-									<div class="hover">
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="review">
+<div class="customer">
+@if(isset($pages["testimonial_section"][4]->img))
+<img class="lazy-load" data-src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$pages["testimonial_section"][4]->img }}">
+@endif
+<p class="name">{{ $pages["testimonial_section"][5]->text ?? '' }}</p>
+<p class="type">{{ $pages["testimonial_section"][6]->text ?? '' }}</p>
+</div>
 
-									<div class="effect_layer">
-										<p class="review_content">
-											{{(isset($pages["testimonial_section"][12]) ? $pages["testimonial_section"][12]->text : '')}}
-										</p>
-										<div class="stars">
+</div>
+</div>
+</div>
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][13]) ? $pages["testimonial_section"][13]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
+{{-- Testimonial 2 --}}
+<div class="item">
+<div class="review">
+<div class="effect_layer">
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][13]) ? $pages["testimonial_section"][13]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][13]) ? $pages["testimonial_section"][13]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][13]) ? $pages["testimonial_section"][13]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][13]) ? $pages["testimonial_section"][13]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-										</div>
-										<div class="customer">
-											<img class="lazy-load"
-												data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages["testimonial_section"][14]) ? $pages["testimonial_section"][14]->img : ''))}}">
-											<p class="name">
-												{{(isset($pages["testimonial_section"][15]) ? $pages["testimonial_section"][15]->text : '')}}
-											</p>
-											<p class="type">
-												{{(isset($pages["testimonial_section"][16]) ? $pages["testimonial_section"][16]->text : '')}}
-											</p>
-										</div>
-									</div>
-									<div class="effect" data-clip="2" data-effect="0">
-									</div>
-									<div class="hover">
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="review">
+<p class="review_content">{{ $pages["testimonial_section"][7]->text ?? '' }}</p>   
 
-									<div class="effect_layer">
-										<p class="review_content">
-											{{(isset($pages["testimonial_section"][17]) ? $pages["testimonial_section"][17]->text : '')}}
-										</p>
-										<div class="stars">
+<div class="stars">
+@for($i=1;$i<=5;$i++)
+<i class="fa {{ (int)($pages["testimonial_section"][8]->text ?? 0) >= $i ? 'fa-star' : 'fa-star-o' }}"></i>
+@endfor
+</div>
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][18]) ? $pages["testimonial_section"][18]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
+<div class="customer">
+@if(isset($pages["testimonial_section"][9]->img))
+<img class="lazy-load" data-src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$pages["testimonial_section"][9]->img }}">
+@endif
+<p class="name">{{ $pages["testimonial_section"][10]->text ?? '' }}</p>
+<p class="type">{{ $pages["testimonial_section"][11]->text ?? '' }}</p>
+</div>
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][18]) ? $pages["testimonial_section"][18]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][18]) ? $pages["testimonial_section"][18]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][18]) ? $pages["testimonial_section"][18]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][18]) ? $pages["testimonial_section"][18]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-										</div>
-										<div class="customer">
-											<img class="lazy-load"
-												data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages["testimonial_section"][19]) ? $pages["testimonial_section"][19]->img : ''))}}">
-											<p class="name">
-												{{(isset($pages["testimonial_section"][20]) ? $pages["testimonial_section"][20]->text : '')}}
-											</p>
-											<p class="type">
-												{{(isset($pages["testimonial_section"][21]) ? $pages["testimonial_section"][21]->text : '')}}
-											</p>
-										</div>
-									</div>
-									<div class="effect" data-clip="1" data-effect="0">
-									</div>
-									<div class="hover">
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="review">
+</div>
+</div>
+</div>
 
-									<div class="effect_layer">
-										<p class="review_content">
-											{{(isset($pages["testimonial_section"][22]) ? $pages["testimonial_section"][22]->text : '')}}
-										</p>
-										<div class="stars">
+{{-- Testimonial 3 --}}
+<div class="item">
+<div class="review">
+<div class="effect_layer">
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][23]) ? $pages["testimonial_section"][23]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
+<p class="review_content">{{ $pages["testimonial_section"][12]->text ?? '' }}</p>   
 
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][23]) ? $pages["testimonial_section"][23]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][23]) ? $pages["testimonial_section"][23]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][23]) ? $pages["testimonial_section"][23]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-											<i
-												class="fa @if((int) (isset($pages["testimonial_section"][23]) ? $pages["testimonial_section"][23]->text : '') >= 1) fa-star @else fa-star-o @endif"></i>
-										</div>
-										<div class="customer">
-											<img class="lazy-load"
-												data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages["testimonial_section"][24]) ? $pages["testimonial_section"][24]->img : ''))}}">
-											<p class="name">
-												{{(isset($pages["testimonial_section"][25]) ? $pages["testimonial_section"][25]->text : '')}}
-											</p>
-											<p class="type">
-												{{(isset($pages["testimonial_section"][26]) ? $pages["testimonial_section"][26]->text : '')}}
-											</p>
-										</div>
-									</div>
-									<div class="effect" data-clip="2" data-effect="0">
-									</div>
-									<div class="hover">
-									</div>
-								</div>
-							</div>
+<div class="stars">
+@for($i=1;$i<=5;$i++)
+<i class="fa {{ (int)($pages["testimonial_section"][13]->text ?? 0) >= $i ? 'fa-star' : 'fa-star-o' }}"></i>
+@endfor
+</div>
 
+<div class="customer">
+@if(isset($pages["testimonial_section"][14]->img))
+<img class="lazy-load" data-src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$pages["testimonial_section"][14]->img }}">
+@endif
+<p class="name">{{ $pages["testimonial_section"][15]->text ?? '' }}</p>
+<p class="type">{{ $pages["testimonial_section"][16]->text ?? '' }}</p>
+</div>
 
-						</div>
+</div>
+</div>
+</div>
 
-					</div>
-				</center>
-			</div>
-		</div>
-	</div>
+{{-- Testimonial 4 --}}
+<div class="item">
+<div class="review">
+<div class="effect_layer">
+
+<p class="review_content">{{ $pages["testimonial_section"][17]->text ?? '' }}</p>   
+
+<div class="stars">
+@for($i=1;$i<=5;$i++)
+<i class="fa {{ (int)($pages["testimonial_section"][18]->text ?? 0) >= $i ? 'fa-star' : 'fa-star-o' }}"></i>
+@endfor
+</div>
+
+<div class="customer">
+@if(isset($pages["testimonial_section"][19]->img))
+<img class="lazy-load" data-src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$pages["testimonial_section"][19]->img }}">
+@endif
+<p class="name">{{ $pages["testimonial_section"][20]->text ?? '' }}</p>
+<p class="type">{{ $pages["testimonial_section"][21]->text ?? '' }}</p>
+</div>
+
+</div>
+</div>
+</div>
+
+{{-- Testimonial 5 --}}
+<div class="item">
+<div class="review">
+<div class="effect_layer">
+
+<p class="review_content">{{ $pages["testimonial_section"][22]->text ?? '' }}</p>   
+
+<div class="stars">
+@for($i=1;$i<=5;$i++)
+<i class="fa {{ (int)($pages["testimonial_section"][23]->text ?? 0) >= $i ? 'fa-star' : 'fa-star-o' }}"></i>
+@endfor
+</div>
+
+<div class="customer">
+@if(isset($pages["testimonial_section"][24]->img))
+<img class="lazy-load" data-src="{{ env('IMG_FETCH_URL').'uploaded_files/'.$pages["testimonial_section"][24]->img }}">
+@endif
+<p class="name">{{ $pages["testimonial_section"][25]->text ?? '' }}</p>
+<p class="type">{{ $pages["testimonial_section"][26]->text ?? '' }}</p>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</center>
+</div>
+</div>
+</div>
 
 
 @endsection

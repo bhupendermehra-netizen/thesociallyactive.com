@@ -55,6 +55,42 @@
       </table>
     </div>
 
+    <div style="margin-bottom:16px;">
+      <label style="font-size:14px;font-weight:600;color:var(--text);display:block;margin-bottom:8px;">
+        <i class="fas fa-code" style="color:var(--teal);margin-right:8px;"></i>Custom Meta Tags (raw HTML)
+      </label>
+      <textarea class="form-control" name="custom_meta_tags" style="min-height:150px;font-family:monospace;font-size:13px;line-height:1.6;" placeholder="&lt;link rel=&quot;canonical&quot; href=&quot;https://...&quot;&gt;&#10;&lt;meta property=&quot;og:title&quot; content=&quot;...&quot;&gt;&#10;&lt;meta property=&quot;og:description&quot; content=&quot;...&quot;&gt;&#10;&lt;script type=&quot;application/ld+json&quot;&gt;{...}&lt;/script&gt;">{{ $customMetaTags ?? '' }}</textarea>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">
+        Paste raw &lt;meta&gt;, &lt;link&gt;, &lt;script&gt; tags here — they will be output verbatim inside &lt;head&gt;.
+        Only logged-in admins can set this (XSS-safe).
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;padding-top:8px;border-top:1px solid var(--border);">
+      <div style="font-size:14px;font-weight:600;color:var(--text);display:block;margin-bottom:12px;">
+        <i class="fas fa-code" style="color:var(--lime);margin-right:8px;"></i>Page-Specific Scripts
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">
+        These scripts are output <strong>after</strong> any global scripts set in <strong>System → Custom Scripts</strong>.
+      </div>
+
+      <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">
+        Head Script (inside &lt;head&gt;)
+      </label>
+      <textarea class="form-control" name="head_script" style="min-height:100px;font-family:monospace;font-size:13px;line-height:1.6;" placeholder="&lt;script&gt;console.log('page-specific head');&lt;/script&gt;">{{ $headScript ?? '' }}</textarea>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;margin-bottom:14px;">
+        Output before &lt;/head&gt; — only on this page.
+      </div>
+
+      <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;">
+        Body Script (after &lt;body&gt;)
+      </label>
+      <textarea class="form-control" name="body_script" style="min-height:100px;font-family:monospace;font-size:13px;line-height:1.6;" placeholder="&lt;noscript&gt;&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;&lt;/noscript&gt;">{{ $bodyScript ?? '' }}</textarea>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">
+        Output right after &lt;body&gt; opens — only on this page.
+      </div>
+    </div>
+
     <button type="submit" class="btn btn-lime" style="padding:12px 32px;font-size:14px;">
       <i class="fas fa-floppy-disk"></i> Save SEO Tags
     </button>

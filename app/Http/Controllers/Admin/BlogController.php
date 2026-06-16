@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -76,7 +77,7 @@ class BlogController extends Controller
     {
         $request->validate([
             'title'           => 'required|string|max:255',
-            'author_id'       => 'nullable|exists:users,id',
+            'author_id'       => 'nullable|exists:authors,id',
             'category_id'     => 'nullable|exists:blog_categories,id',
             'blog_date'       => 'nullable|date',
             'cover_image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -87,6 +88,8 @@ class BlogController extends Controller
             'enable_comments' => 'boolean',
             'is_published'    => 'boolean',
             'sort_order'      => 'integer|min:0',
+            'slug'            => 'nullable|string|max:255|unique:blogs,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            'title_tag'       => 'nullable|string|in:h1,h2,h3,h4,h5,h6',
         ]);
 
         $imagePath = null;
@@ -97,10 +100,11 @@ class BlogController extends Controller
             $imagePath = 'images/blogs/' . $filename;
         }
 
-        Blog::create([
+        $blog = Blog::create([
             'title'           => $request->title,
-            'slug'            => Str::slug($request->title) . '-' . time(),
-            'author_id'       => $request->author_id ?? auth()->id(),
+            'slug'            => $request->slug ? Str::slug($request->slug) : (Str::slug($request->title) . '-' . time()),
+            'title_tag'       => $request->title_tag ?? 'h1',
+            'author_id'       => $request->author_id,
             'category_id'     => $request->category_id,
             'blog_date'       => $request->blog_date ?? now()->toDateString(),
             'cover_image'     => $imagePath,
@@ -108,10 +112,27 @@ class BlogController extends Controller
             'content'         => $request->content,
             'seo_title'       => $request->seo_title ?? $request->title,
             'seo_description' => $request->seo_description,
+            'custom_meta_tags' => $request->custom_meta_tags,
             'enable_comments' => $request->has('enable_comments') ? 1 : 0,
             'is_published'    => $request->has('is_published') ? 1 : 0,
             'sort_order'      => $request->sort_order ?? 0,
         ]);
+
+        // Save FAQs
+        $blog->faqs()->delete();
+        if ($request->has('faq_question')) {
+            foreach ($request->faq_question as $i => $question) {
+                if (!empty(trim($question)) && isset($request->faq_answer[$i]) && !empty(trim($request->faq_answer[$i]))) {
+                    Faq::create([
+                        'faqable_id'   => $blog->id,
+                        'faqable_type' => 'App\Models\Blog',
+                        'question'     => $question,
+                        'answer'       => $request->faq_answer[$i],
+                        'sort_order'   => $i,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.blog.index')->with('success', 'Blog post created successfully!');
     }
@@ -130,7 +151,7 @@ class BlogController extends Controller
 
         $request->validate([
             'title'           => 'required|string|max:255',
-            'author_id'       => 'nullable|exists:users,id',
+            'author_id'       => 'nullable|exists:authors,id',
             'category_id'     => 'nullable|exists:blog_categories,id',
             'blog_date'       => 'nullable|date',
             'cover_image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -141,6 +162,8 @@ class BlogController extends Controller
             'enable_comments' => 'boolean',
             'is_published'    => 'boolean',
             'sort_order'      => 'integer|min:0',
+            'slug'            => 'nullable|string|max:255|unique:blogs,slug,' . $id . '|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            'title_tag'       => 'nullable|string|in:h1,h2,h3,h4,h5,h6',
         ]);
 
         $imagePath = $blog->cover_image;
@@ -156,19 +179,37 @@ class BlogController extends Controller
 
         $blog->update([
             'title'           => $request->title,
-            'slug'            => Str::slug($request->title) . '-' . time(),
+            'slug'            => $request->slug ? Str::slug($request->slug) : $blog->slug,
+            'title_tag'       => $request->title_tag ?? $blog->title_tag ?? 'h1',
             'author_id'       => $request->author_id ?? $blog->getAuthorIdAttribute(),
             'category_id'     => $request->category_id,
-            'blog_date'       => $request->blog_date ?? $blog->getBlogDateAttribute(),
+            'blog_date'       => $request->blog_date ?? $blog->blog_date,
             'cover_image'     => $imagePath,
             'description'     => $request->description,
             'content'         => $request->content,
-            'seo_title'       => $request->seo_title ?? $request->title,
+            'seo_title'       => $request->seo_title ?? $blog->seo_title ?? $blog->title,
             'seo_description' => $request->seo_description,
+            'custom_meta_tags' => $request->custom_meta_tags,
             'enable_comments' => $request->has('enable_comments') ? 1 : 0,
             'is_published'    => $request->has('is_published') ? 1 : 0,
-            'sort_order'      => $request->sort_order ?? 0,
+            'sort_order'      => $request->sort_order ?? $blog->sort_order ?? 0,
         ]);
+
+        // Sync FAQs
+        $blog->faqs()->delete();
+        if ($request->has('faq_question')) {
+            foreach ($request->faq_question as $i => $question) {
+                if (!empty(trim($question)) && isset($request->faq_answer[$i]) && !empty(trim($request->faq_answer[$i]))) {
+                    Faq::create([
+                        'faqable_id'   => $blog->id,
+                        'faqable_type' => 'App\Models\Blog',
+                        'question'     => $question,
+                        'answer'       => $request->faq_answer[$i],
+                        'sort_order'   => $i,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.blog.index')->with('success', 'Blog post updated successfully!');
     }

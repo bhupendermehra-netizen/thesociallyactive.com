@@ -23,7 +23,12 @@ $(document).ready(function () {
 
     // 1. Check all images are loaded
     function checkImagesLoaded() {
-        const images = document.querySelectorAll('img');
+        const images = Array.from(document.querySelectorAll('img')).filter(function(img) {
+            if (img.classList.contains('lazy-load')) return false;
+            if (img.getAttribute('loading') === 'lazy') return false;
+            if (img.dataset.src) return false;
+            return true;
+        });
         let loadedCount = 0;
         const totalImages = images.length;
 
@@ -66,13 +71,22 @@ $(document).ready(function () {
 
     // 2. Check all videos are ready
     function checkVideosLoaded() {
-        const videos = document.querySelectorAll('video');
+        const videos = Array.from(document.querySelectorAll('video')).filter(function(video) {
+            // Exclude lazy loaded videos (which won't load until scroll)
+            if (video.classList.contains('lazy-load')) return false;
+            // Exclude videos without a source (e.g. dynamic modal videos)
+            const source = video.querySelector('source');
+            const hasSrc = video.hasAttribute('src') || (source && source.hasAttribute('src'));
+            if (!hasSrc) return false;
+            return true;
+        });
+
         let readyCount = 0;
         const totalVideos = videos.length;
 
         if (totalVideos === 0) {
             videosLoaded = true;
-            console.log('🎥 No videos to load');
+            console.log('🎥 No eager videos to load');
             hidePreloader();
             return;
         }
@@ -116,7 +130,7 @@ $(document).ready(function () {
     checkImagesLoaded();
     checkVideosLoaded();
 
-    // Fallback timeout - hide preloader after 10 seconds max
+    // Fallback timeout - hide preloader after 3 seconds max
     setTimeout(function() {
         if (!$(".loader").hasClass("fade-out")) {
             console.log('⏰ Timeout reached - hiding preloader');
@@ -124,7 +138,7 @@ $(document).ready(function () {
             videosLoaded = true;
             hidePreloader();
         }
-    }, 10000);
+    }, 3000);
 
     // Lazy Loading Implementation for other images/videos that appear later
     if ("IntersectionObserver" in window) {
@@ -136,9 +150,28 @@ $(document).ready(function () {
 
                         // Handle videos
                         if (media.tagName === "VIDEO") {
-                            const source = media.querySelector("source");
-                            if (source && source.dataset.src) {
-                                source.src = source.dataset.src;
+                            const sources = media.querySelectorAll("source");
+                            let hasNewSrc = false;
+                            sources.forEach(function(srcTag) {
+                                if (srcTag.dataset.src) {
+                                    srcTag.src = srcTag.dataset.src;
+                                    hasNewSrc = true;
+                                }
+                            });
+                            if (hasNewSrc) {
+                                // Add canplay listener BEFORE load() to avoid race condition
+                                if (media.hasAttribute('autoplay')) {
+                                    media.addEventListener('canplay', function onCanPlay() {
+                                        media.removeEventListener('canplay', onCanPlay);
+                                        media.play().catch(function() {});
+                                    });
+                                    // Fallback: retry play after 500ms if canplay already fired
+                                    setTimeout(function() {
+                                        if (media.paused) {
+                                            media.play().catch(function() {});
+                                        }
+                                    }, 500);
+                                }
                                 media.load();
                             }
                         }
@@ -155,7 +188,7 @@ $(document).ready(function () {
                 });
             },
             {
-                rootMargin: "50px 0px",
+                rootMargin: "500px 0px",
                 threshold: 0.01,
             },
         );
@@ -174,6 +207,30 @@ $(document).ready(function () {
         });
         $("img.lazy-load[data-src]").each(function () {
             $(this).attr("src", $(this).data("src"));
+        });
+    }
+
+    // MutationObserver: watch for dynamically added lazy-load elements (owl-carousel clones, AJAX content, etc.)
+    if ("MutationObserver" in window && "IntersectionObserver" in window) {
+        const lazyMutationObserver = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node.nodeType === 1) {
+                        if (node.matches && node.matches("video.lazy-load, img.lazy-load")) {
+                            lazyMediaObserver.observe(node);
+                        }
+                        if (node.querySelectorAll) {
+                            node.querySelectorAll("video.lazy-load, img.lazy-load").forEach(function (el) {
+                                lazyMediaObserver.observe(el);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        lazyMutationObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
         });
     }
 });
@@ -545,7 +602,10 @@ function scrollF() {
                     .hasClass("brands_section") &&
                 !$(".page-section")
                     .eq(i - 1)
-                    .hasClass("impact_section")
+                    .hasClass("impact_section") &&
+                !$(".page-section")
+                    .eq(i - 1)
+                    .hasClass("our_story_section")
             ) {
                 $(".page-section")
                     .eq(i - 1)
@@ -978,9 +1038,9 @@ function scrollF() {
                 $vid.css("height", "200px");
                 $vid.css("width", "300px");
                 if (window.screen.width > 800) {
-                    $vid.css("transform", "translate(-23px,-43vh)");
+                    $vid.css("transform", "translate(-23px, -42vh)");
                 } else {
-                    $vid.css("transform", "translate(0,-30vh)");
+                    $vid.css("transform", "translate(0,-15vh)");
                 }
             }
 
@@ -1000,7 +1060,7 @@ function scrollF() {
                 $vid.css(
                     "transform",
                     "translate(0,-" +
-                        ((100 - w) * ((h654 * 40) / 100)) / 100 +
+                        ((100 - w) * ((h654 * 25) / 100)) / 100 +
                         "px)",
                 );
             }
@@ -1027,15 +1087,26 @@ function scrollF() {
                         $vid.attr("data-cursor", "1");
                         $vid.prop("currentTime", 0);
 
-                        var playPromise = vid.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(function () {
-                                // Browser ne autoplay block kiya — muted fallback
-                                $vid.prop("muted", true);
-                                $vid.attr("data-cursor", "2");
-                                vid.play();
-                            });
+                        // Wait for video to be ready before playing
+                        function tryPlayVideo() {
+                            if (vid.readyState >= 2) {
+                                var playPromise = vid.play();
+                                if (playPromise !== undefined) {
+                                    playPromise.catch(function () {
+                                        // Browser ne autoplay block kiya — muted fallback
+                                        $vid.prop("muted", true);
+                                        $vid.attr("data-cursor", "2");
+                                        vid.play().catch(function() {});
+                                    });
+                                }
+                            } else {
+                                vid.addEventListener('canplay', function onCanPlay() {
+                                    vid.removeEventListener('canplay', onCanPlay);
+                                    vid.play().catch(function() {});
+                                }, { once: true });
+                            }
                         }
+                        tryPlayVideo();
 
                         // Jab video khatam ho — last frame pe freeze karo
                         $vid.off("ended.videofix").on(
@@ -1147,94 +1218,92 @@ function scrollF() {
             }
         }
 
-        w = (st / ((80 * 500) / 100)) * 100;
-
-        if (
-            $(".video_frame").length &&
-            st < (10 * parseInt($(".banner").css("height"))) / 100
-        ) {
-            if (window.screen.width < 500) {
-                $(".video_frame video").css("height", "100px");
-                $(".video_frame video").css("width", "150px");
-                $(".video_frame video").css("transform", "translate(0,-150px)");
-            } else {
-                $(".video_frame video").css("height", "150px");
-                $(".video_frame video").css("width", "250px");
-                if (window.screen.width > 800) {
-                    $(".video_frame video").css(
-                        "transform",
-                        "translate(0,-20vh)",
-                    );
-                } else {
-                    $(".video_frame video").css(
-                        "transform",
-                        "translate(0,-15vh)",
-                    );
-                }
-            }
-        }
-        if (
-            $(".video_frame").length &&
-            st < (10 * parseInt($(".banner").css("height"))) / 100
-        ) {
-            if ($(".video_frame").attr("data-active") == "1") {
-                $(".video_frame video").prop("currentTime", 0);
-                $(".video_frame video")[0].pause();
-                $(".video_frame").attr("data-active", "0");
-                // User wapas upar gaya — reset karo taaki phir audio ke sath play ho
-                $(".video_frame video").attr("data-played-once", "0");
-                $(".video_frame video").off("ended.videofix_m");
-            }
-        }
-        if (
-            $(".video_frame").length &&
-            st > (10 * parseInt($(".banner").css("height"))) / 100
-        ) {
-            if (window.screen.width < 500) {
-                var h654 = 200;
-            } else {
-                var h654 = 500;
-            }
-            var w654 = window.screen.width;
-
-            $(".video_frame video").css("height", h654 + "px");
-            $(".video_frame video").css("width", w654 + "px");
-            $(".video_frame video").css("transform", "translate(0,0px)");
-
-            if ($(".video_frame").attr("data-active") == "0") {
-                $(".video_frame").attr("data-active", "1");
-                var vid = $(".video_frame video")[0];
-                var $vid = $(".video_frame video");
-                var playedOnce = $vid.attr("data-played-once");
-
-                if (playedOnce == "0") {
-                    $vid.prop("muted", false);
-                    $vid.prop("currentTime", 0);
-                    var pp = vid.play();
-                    if (pp !== undefined) {
-                        pp.catch(function () {
-                            $vid.prop("muted", true);
-                            vid.play();
-                        });
-                    }
-                    $vid.off("ended.videofix_m").on(
-                        "ended.videofix_m",
-                        function () {
-                            vid.currentTime = vid.duration - 0.05;
-                            vid.pause();
-                            $vid.attr("data-played-once", "1");
-                            $vid.prop("muted", true);
-                        },
-                    );
-                    $vid.attr("data-played-once", "playing");
-                } else if (playedOnce == "1") {
-                    if (vid.duration) vid.currentTime = vid.duration - 0.05;
-                    vid.pause();
-                }
-            }
-        }
+        var bannerHeight = parseInt($(".banner").css("height")) || 800;
+        var threshold = (10 * bannerHeight) / 100;
 
         if ($(".video_frame").length) {
+            var $vframe = $(".video_frame");
+            var $vid = $(".video_frame video");
+
+            if (st < threshold) {
+                // Video is small and positioned higher. Moves down smoothly on scroll.
+                var progress = st / threshold;
+                if (progress < 0) progress = 0;
+                var startY = window.screen.width > 800 ? -40 : -30;
+                var currentY = startY * (1 - progress); 
+
+                if (window.screen.width < 500) {
+                    $vid.css({
+                        "height": "100px",
+                        "width": "150px",
+                        "transform": "translate3d(0, " + currentY + "vh, 0)"
+                    });
+                } else {
+                    $vid.css({
+                        "height": "150px",
+                        "width": "250px",
+                        "transform": "translate3d(0, " + currentY + "vh, 0)"
+                    });
+                }
+
+                if ($vframe.attr("data-active") == "1") {
+                    $vid.prop("currentTime", 0);
+                    $vid[0].pause();
+                    $vframe.attr("data-active", "0");
+                    $vid.attr("data-played-once", "0");
+                    $vid.off("ended.videofix_m");
+                }
+
+            } else {
+                // Video expands
+                var h654 = window.screen.width < 500 ? 200 : 500;
+                var w654 = window.screen.width;
+
+                $vid.css({
+                    "height": h654 + "px",
+                    "width": w654 + "px",
+                    "transform": "translate3d(0, 0px, 0)"
+                });
+
+                if ($vframe.attr("data-active") == "0") {
+                    $vframe.attr("data-active", "1");
+                    var vid = $vid[0];
+                    var playedOnce = $vid.attr("data-played-once");
+
+                    if (playedOnce == "0") {
+                        $vid.prop("muted", true); // Ensure muted for autoplay to work
+                        $vid.prop("currentTime", 0);
+                        // Wait for video to be ready before playing
+                        if (vid.readyState >= 2) {
+                            var pp = vid.play();
+                            if (pp !== undefined) {
+                                pp.catch(function (err) {
+                                    console.warn("Video play blocked:", err);
+                                    $vid.prop("muted", true);
+                                    vid.play().catch(function() {});
+                                });
+                            }
+                        } else {
+                            vid.addEventListener('canplay', function onCanPlay() {
+                                vid.removeEventListener('canplay', onCanPlay);
+                                vid.play().catch(function() {});
+                            }, { once: true });
+                        }
+                        $vid.off("ended.videofix_m").on(
+                            "ended.videofix_m",
+                            function () {
+                                if (vid.duration) vid.currentTime = vid.duration - 0.05;
+                                vid.pause();
+                                $vid.attr("data-played-once", "1");
+                            },
+                        );
+                        $vid.attr("data-played-once", "playing");
+                    } else if (playedOnce == "1") {
+                        if (vid.duration) vid.currentTime = vid.duration - 0.05;
+                        vid.pause();
+                    }
+                }
+            }
         }
     }
 
@@ -1293,8 +1362,15 @@ $(document).ready(function () {
         }
     }, 1500);
 
+    var isScrolling = false;
     $(window).on("scroll", function (event) {
-        scrollF();
+        if (!isScrolling) {
+            window.requestAnimationFrame(function() {
+                scrollF();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
     });
 
     $(".close_contact_popup_form").click(function () {
@@ -1352,16 +1428,77 @@ $(document).ready(function () {
         $(".part2", this).attr("data-selected", "1");
         $(".content_heading", this).attr("data-selected", "1");
     });
-    $(".values_section .part1").mouseenter(function () {
-        $(".values_section .part1").attr("data-selected", "1");
-        $(".values_section .part2").attr("data-selected", "0");
-        $(".values_section .part2Text").attr("data-selected", "0");
-        var img = $(this).attr("data-img-change");
+    // Hover effect — swap only center box part1 with effect image/video
+    var valuesHoverTimeout = null;
+    var valuesCenterOriginal = null;
+    var valuesEnterTimeout = null;
 
-        $(".values_section .part24 .part1").attr("src", img);
-        $(this).attr("data-selected", "0");
-        $(this).next(".part2").attr("data-selected", "1");
-        $(this).prev(".part2Text").attr("data-selected", "1");
+    $(".values_section .content_div").mouseenter(function () {
+        var $part1 = $(this).find(".part1").first();
+        var img = $part1.attr("data-img-change");
+        if (!img) return;
+
+        clearTimeout(valuesHoverTimeout);
+        clearTimeout(valuesEnterTimeout);
+
+        valuesEnterTimeout = setTimeout(function () {
+            // Reset ALL side boxes to default first
+            $(".values_section .content_div .part1").attr("data-selected", "1");
+            $(".values_section .content_div .part2").attr("data-selected", "0");
+            $(".values_section .content_div .part2Text").attr("data-selected", "0");
+
+            // Toggle THIS side box to selected
+            $part1.attr("data-selected", "0");
+            $part1.siblings(".part2").attr("data-selected", "1");
+            $part1.siblings(".part2Text").attr("data-selected", "1");
+
+            var $center = $(".values_section .part24 .part1");
+
+            // Save original center part1 HTML on first hover ever
+            if (valuesCenterOriginal === null) {
+                valuesCenterOriginal = $center.length ? $center[0].outerHTML : '';
+            }
+
+            // Replace center box content with effect media
+            if (img.match(/\.(mp4|webm|mov)$/i)) {
+                var videoType = 'video/mp4';
+                if (img.match(/\.webm$/i)) videoType = 'video/webm';
+                else if (img.match(/\.mov$/i)) videoType = 'video/quicktime';
+                var $video = $('<video class="part1" muted autoplay loop playsinline style="max-width:100%;height:auto"><source src="' + img + '" type="' + videoType + '"></video>');
+                $center.replaceWith($video);
+                $video[0].load();
+            } else {
+                var $img = $('<img class="part1" src="' + img + '" style="max-width:100%;height:auto">');
+                $center.replaceWith($img);
+            }
+        }, 50);
+    });
+
+    $(".values_section .content_div").mouseleave(function () {
+        clearTimeout(valuesEnterTimeout);
+        clearTimeout(valuesHoverTimeout);
+
+        valuesHoverTimeout = setTimeout(function () {
+            // If user moved to another box, don't restore yet
+            if ($(".values_section .content_div").filter(function () {
+                return $(this).is(":hover");
+            }).length > 0) return;
+
+            // Reset all side boxes to default
+            $(".values_section .content_div .part1").attr("data-selected", "1");
+            $(".values_section .content_div .part2").attr("data-selected", "0");
+            $(".values_section .content_div .part2Text").attr("data-selected", "0");
+
+            // Restore center box to original
+            if (valuesCenterOriginal !== null) {
+                var $center = $(".values_section .part24 .part1");
+                var $newEl = $(valuesCenterOriginal);
+                $center.replaceWith($newEl);
+                if ($newEl.is("video")) {
+                    $newEl[0].load();
+                }
+            }
+        }, 150);
     });
 
   $(".video_section_next").click(function(){
@@ -1703,6 +1840,145 @@ $(document).ready(function () {
         );
     });
 });
+// ========== OUR STORY SECTION - SMOOTH LEFT/RIGHT SLIDE ANIMATION ==========
+$(document).ready(function () {
+
+    if (!$(".our_story_section").length) return;
+
+    // Har story element ko initially hidden + translated set karo
+    function initStoryAnimations() {
+
+        // --- our_story_section eq(0): content1, content3, content4 ---
+        $(".our_story_section").eq(0).find(".content1 .img1")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(0).find(".content1 .content1_inner")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s" });
+        $(".our_story_section").eq(0).find(".content1 .img2")
+            .css({ opacity: "0", transform: "translateY(60px)", transition: "opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s" });
+
+        $(".our_story_section").eq(0).find(".content3 .text")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(0).find(".content3 .img1")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s" });
+
+        $(".our_story_section").eq(0).find(".content4 .text")
+            .css({ opacity: "0", transform: "translateY(-60px)", transition: "opacity 0.8s ease, transform 0.8s ease" });
+        $(".our_story_section").eq(0).find(".content4 .img1")
+            .css({ opacity: "0", transform: "scale(0.5)", transition: "opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s" });
+        $(".our_story_section").eq(0).find(".content_4_upper .img3")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s ease 0.1s, transform 0.85s ease 0.1s" });
+
+        // --- our_story_section eq(1): content5, content6 ---
+        $(".our_story_section").eq(1).find(".content5 .text")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(1).find(".content5 .img2")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s" });
+        $(".our_story_section").eq(1).find(".content6 .img2")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(1).find(".content6 .text")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s" });
+
+        // --- our_story_section eq(2): content7, content8 ---
+        $(".our_story_section").eq(2).find(".content7 .inner")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(2).find(".content7 .img2")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s" });
+        $(".our_story_section").eq(2).find(".content8 .img2")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(2).find(".content8 .inner")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s" });
+
+        // --- our_story_section eq(3): content5, content6 ---
+        $(".our_story_section").eq(3).find(".content5 .text")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(3).find(".content5 .img2")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s" });
+        $(".our_story_section").eq(3).find(".content6 .img2")
+            .css({ opacity: "0", transform: "translateX(-100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(3).find(".content6 .text")
+            .css({ opacity: "0", transform: "translateX(100px)", transition: "opacity 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s" });
+
+        // --- our_story_section eq(4): content7, content8 ---
+        $(".our_story_section").eq(4).find(".content7 .inner")
+            .css({ opacity: "1", transform: "translateX(-100px)", transition: "opacity 1s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(4).find(".content7 .img2")
+            .css({ opacity: "1", transform: "translateX(100px)", transition: "opacity 1s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s" });
+        $(".our_story_section").eq(4).find(".content8 .img2")
+            .css({ opacity: "1", transform: "translateX(-100px)", transition: "opacity 1s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94)" });
+        $(".our_story_section").eq(4).find(".content8 .inner")
+            .css({ opacity: "1", transform: "translateX(100px)", transition: "opacity 1s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s, transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s" });
+    }
+
+    // Element ko animate-in karo
+    function animateIn(el) {
+        $(el).css({ opacity: "1", transform: "translateX(0) translateY(0) scale(1)" });
+    }
+
+    // IntersectionObserver se scroll pe trigger
+    function setupStoryObserver() {
+        if (!("IntersectionObserver" in window)) {
+            // Fallback: sabko show karo
+            $(".our_story_section").find(
+                ".content1 .img1, .content1 .content1_inner, .content1 .img2, " +
+                ".content3 .text, .content3 .img1, " +
+                ".content4 .text, .content4 .img1, .content_4_upper .img3, " +
+                ".content5 .text, .content5 .img2, " +
+                ".content6 .img2, .content6 .text, " +
+                ".content7 .inner, .content7 .img2, " +
+                ".content8 .img2, .content8 .inner"
+            ).css({ opacity: "1", transform: "none" });
+            return;
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    animateIn(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: "0px 0px -8% 0px",
+            threshold: 0.12
+        });
+
+        var selectors = [
+            ".our_story_section .content1 .img1",
+            ".our_story_section .content1 .content1_inner",
+            ".our_story_section .content1 .img2",
+            ".our_story_section .content3 .text",
+            ".our_story_section .content3 .img1",
+            ".our_story_section .content4 .text",
+            ".our_story_section .content4 .img1",
+            ".our_story_section .content_4_upper .img3",
+            ".our_story_section .content5 .text",
+            ".our_story_section .content5 .img2",
+            ".our_story_section .content6 .img2",
+            ".our_story_section .content6 .text",
+            ".our_story_section .content7 .inner",
+            ".our_story_section .content7 .img2",
+            ".our_story_section .content8 .img2",
+            ".our_story_section .content8 .inner"
+        ];
+
+        selectors.forEach(function (sel) {
+            $(sel).each(function () {
+                observer.observe(this);
+            });
+        });
+    }
+
+    // Window load ke baad init karo (preloader ke baad)
+    $(window).on("load", function () {
+        setTimeout(function () {
+            initStoryAnimations();
+            setupStoryObserver();
+        }, 500);
+    });
+});
+// ========== END OUR STORY SECTION ANIMATION ==========
+
 // Testimonial 3D Tilt Effect
 $(document).on("mousemove", ".testimonial_section .review", function(e) {
     var card = $(this);

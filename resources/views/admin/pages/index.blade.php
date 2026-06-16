@@ -39,6 +39,9 @@
             <a href="{{ route('admin.page.view', $data->page) }}" class="btn btn-teal">
               <i class="fas fa-eye"></i> View
             </a>
+            <a href="{{ route('admin.page.faqs', $data->page) }}" class="btn btn-ghost" style="margin-left:6px;">
+              <i class="fas fa-question-circle"></i> FAQs
+            </a>
           </td>
         </tr>
         @endforeach
