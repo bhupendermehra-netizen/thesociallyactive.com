@@ -2470,6 +2470,14 @@ footer .credit p a {
 	.desktop-view {
 		display: none
 	}
+
+	.mobile-view2 {
+		display: block
+	}
+
+	.desktop-view2 {
+		display: none !important
+	}
 }
 
 @media screen and (max-width:800px) {
@@ -2935,6 +2943,18 @@ img.lazy-load.loaded {
 	.brand_strategy_section .visuals {
 		height: 100%;
 		width: 100%;
+	}
+
+	.brand_strategy_section .col-4,
+	.brand_strategy_section .col-8 {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
+
+	.brand_strategy_section video {
+		height: 100%;
+		width: 100%;
+		object-fit: contain;
 	}
 
 	.outer_video_section video {

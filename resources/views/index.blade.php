@@ -339,7 +339,7 @@
 	<div class="invisible_page desktop-view page-section">
 	</div>
 
-	<div class="brand_strategy_section page-section" data-id="1">
+	<div class="brand_strategy_section page-section" data-id="1" style="top:31%;opacity:1;">
 
 		<div class="col-11">
 			<div class="row">
@@ -401,7 +401,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="brand_strategy_section page-section" data-id="2">
+	<div class="brand_strategy_section page-section" data-id="2" style="top:46%;opacity:1;">
 
 		<div class="col-11">
 			<div class="row">
@@ -445,7 +445,7 @@
 
 
 				</div>
-				<div class="col-lg-3 col-md-3 col-12 mb-3">
+				<div class="col-lg-3 col-md-3 col-12 mb-3 desktop-view2">
 					<div class="visuals2">
 
 						<video playsinline id="video_banner_section" class="desktop-view2 video_customize2 lazy-load"
@@ -463,7 +463,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="brand_strategy_section page-section" data-id="3">
+	<div class="brand_strategy_section page-section" data-id="3" style="top:61%;opacity:1;">
 
 		<div class="col-11">
 			<div class="row">
@@ -507,7 +507,7 @@
 
 
 				</div>
-				<div class="col-lg-3 col-md-3 col-12 mb-3">
+				<div class="col-lg-3 col-md-3 col-12 mb-3 desktop-view2">
 					<div class="visuals2">
 
 						<video playsinline id="video_banner_section" class="desktop-view2  video_customize2 lazy-load"
@@ -525,7 +525,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="brand_strategy_section page-section" data-id="4">
+	<div class="brand_strategy_section page-section" data-id="4" style="top:31%;opacity:1;">
 
 		<div class="col-11">
 			<div class="row">
@@ -569,7 +569,7 @@
 
 
 				</div>
-				<div class="col-lg-3 col-md-3 col-12 mb-3">
+				<div class="col-lg-3 col-md-3 col-12 mb-3 desktop-view2">
 					<div class="visuals2">
 
 						<video playsinline id="video_banner_section" class="desktop-view2  video_customize2 lazy-load"
