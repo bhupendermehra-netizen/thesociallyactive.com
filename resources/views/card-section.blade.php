@@ -1,5 +1,5 @@
-@extends("layouts.front_app")
-@section("content")
+@extends("index")
+@section("cards")
 <style>
     #gsap-card-section {
         position: relative;
@@ -12,7 +12,7 @@
         justify-content: center;
         /* Perspective gives the 3D depth for the flip */
         perspective: 2000px; 
-    }
+    } 
 
     .gsap-card-stack {
         position: relative;
