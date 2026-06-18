@@ -906,7 +906,6 @@ window.addEventListener('mouseup', function () {
 });
 
 canvas.addEventListener('touchstart', function (e) {
-    e.preventDefault();
     var touches = e.targetTouches;
     while (touches.length >= pointers.length)
         { pointers.push(new pointerPrototype()); }
@@ -918,7 +917,6 @@ canvas.addEventListener('touchstart', function (e) {
 });
 
 canvas.addEventListener('touchmove', function (e) {
-    e.preventDefault();
     var touches = e.targetTouches;
     for (var i = 0; i < touches.length; i++) {
         var pointer = pointers[i + 1];

@@ -479,30 +479,7 @@
         {{abort(404)}}
     @endif
 
-    <!-- <div id="scroll-counter"
-         style="position:fixed;bottom:30px;right:30px;z-index:99999;
-                background:rgba(0,0,0,0.85);color:#daf301;
-                font-family:'Courier New',monospace;font-size:48px;font-weight:900;
-                padding:16px 28px;border-radius:12px;border:2px solid #daf301;
-                box-shadow:0 0 30px rgba(218,243,1,0.3);
-                pointer-events:none;user-select:none;">
-        0
-    </div>
-    <script>
-        (function(){
-            var el = document.getElementById('scroll-counter');
-            var ticking = false;
-            window.addEventListener('scroll', function(){
-                if (!ticking) {
-                    window.requestAnimationFrame(function(){
-                        el.textContent = window.scrollY;
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-        })();
-    </script> -->
+
 </body>
 
 </html>

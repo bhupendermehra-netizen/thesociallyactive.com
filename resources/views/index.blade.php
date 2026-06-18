@@ -332,7 +332,7 @@
     .sweep-heading {
         position: relative;
         display: inline-block;
-        font-size: clamp(28px, 5.5vw, 72px);
+        font-size: clamp(28px, 4vw, 48px);
         font-weight: 800;
         color: #ffffff;
         line-height: 2;
@@ -447,7 +447,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             if (typeof gsap === 'undefined') return;
             gsap.registerPlugin(ScrollTrigger);
-            ScrollTrigger.normalizeScroll(true);
+            // ScrollTrigger.normalizeScroll(true);
 
             gsap.set('.gsap-card', {
                 xPercent: -50,

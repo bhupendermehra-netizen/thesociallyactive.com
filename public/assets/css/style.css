@@ -1280,7 +1280,6 @@ footer .credit p a {
 }
 
 .navbar-options {
-	touch-action: none;
 	position: fixed;
 	height: 100%;
 	top: 0;

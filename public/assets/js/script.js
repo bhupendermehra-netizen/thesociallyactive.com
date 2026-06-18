@@ -8,18 +8,21 @@ $(document).ready(function () {
     // Function to hide preloader when everything is ready
     function hidePreloader() {
         if (imagesLoaded && videosLoaded && documentReady) {
-            console.log('✅ All content loaded - hiding preloader');
-            
-            // Fade out preloader
             $(".loader").addClass("fade-out");
-            
-            // Show page content with fade-in
             setTimeout(function() {
                 $(".page-content").addClass("show");
-                $("body").css("overflow-y", "visible");
+                $("body").css("overflow-y", "auto");
             }, 300);
         }
     }
+
+    setTimeout(function() {
+        $(".loader").addClass("fade-out");
+        setTimeout(function() {
+            $(".page-content").addClass("show");
+            $("body").css("overflow-y", "auto");
+        }, 300);
+    }, 8000);
 
     // 1. Check all images are loaded
     function checkImagesLoaded() {
@@ -1377,12 +1380,11 @@ $(document).ready(function () {
     $(".navbar_close").click(function () {
         $(".navbar-options").hide();
         $(".navbar-top").show();
-        $("body").css("overflow-y", "visible");
+        $("body").css("overflow-y", "auto");
     });
     $(".navbar_open").click(function () {
         $(".navbar-options").show();
         $(".navbar-top").hide();
-        $("body").css("overflow-y", "hidden");
     });
     $(".service_dropdown").click(function () {
         $(".service_drop").toggle();
