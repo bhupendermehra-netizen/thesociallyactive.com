@@ -19,11 +19,6 @@ class Blog extends Model
         return $this->attributes['author_id'];
     }
 
-    public function getBlogDateAttribute()
-    {
-        return $this->attributes['blog_date'];
-    }
-
     protected $casts = [
         'is_published' => 'boolean',
         'enable_comments' => 'boolean',

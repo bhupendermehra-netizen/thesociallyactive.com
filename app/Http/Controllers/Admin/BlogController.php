@@ -69,8 +69,8 @@ class BlogController extends Controller
     public function create()
     {
         $categories = BlogCategory::orderBy('name')->get();
-        $users = \App\Models\User::orderBy('name')->get();
-        return view('admin.blog.create', compact('categories', 'users'));
+        $authors = \App\Models\Author::orderBy('name')->get();
+        return view('admin.blog.create', compact('categories', 'authors'));
     }
 
     public function store(Request $request)
@@ -141,8 +141,8 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail($id);
         $categories = BlogCategory::orderBy('name')->get();
-        $users = \App\Models\User::orderBy('name')->get();
-        return view('admin.blog.edit', compact('blog', 'categories', 'users'));
+        $authors = \App\Models\Author::orderBy('name')->get();
+        return view('admin.blog.edit', compact('blog', 'categories', 'authors'));
     }
 
     public function update(Request $request, $id)

@@ -19,7 +19,7 @@
         $pageSeo = isset($seo) && is_array($seo) ? $seo : [];
         $pageTitle = $pageSeo['title'] ?? $defaultTitle;
     @endphp
-    <title>{{ $pageTitle }}</title>
+    <title>@yield('title', $pageTitle)</title>
 
     @if(count($pageSeo))
         @foreach($pageSeo as $name => $content)
@@ -246,6 +246,9 @@
         @yield('content')
 
         <div class="footer_upper">
+            <div class="pebbles_upper">
+                <div id="footer_pebble_canvas"></div>
+            </div>
 
             <div class="inner">
                 <footer>
@@ -339,6 +342,8 @@
         <script src="{{ asset('assets/owl-carousel/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('assets/js/script.js') }}?v={{ filemtime(public_path('assets/js/script.js')) }}"></script>
         <script src="{{ asset('assets/js/background_script.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -357,11 +362,147 @@
             });
         </script>
 
+        <script>
+            const Engine = Matter.Engine;
+            const World = Matter.World;
+            const Bodies = Matter.Bodies;
+            const Body = Matter.Body;
+
+            var pebbles_Data = [
+                "Identity", "Positioning", "Vision", "Legacy", "Influence", "Authority", "Signature", "Alignment", "Authenticity", "Differentiation", "Perception", "Purpose", "Trust", "Consistency", "Transformation", "Engagement", "Viral", "Reach", "Trend", "Relevance", "Community", "Aesthetic", "Stories", "UGC (User Generated Content)", "Real-time", "Relatable", "Impact", "Collab (Collaboration)", "Creator", "Credibility", "Micro influencer", "Resonance", "Partnership", "Audience", "Niche", "Campaign", "Retention", "ROI (Return on Investment)", "Funnels", "Conversions", "Awareness", "Visibility", "Disruption", "Innovation", "Metrics", "Bold", "Elevate", "Magnetic", "Loud", "Unforgettable",
+            ];
+
+            let engine;
+            let ground, wallLeft, wallRight, roof;
+            let words = [];
+
+            class Word {
+                constructor(x, y, word) {
+                    if (window.screen.width > 500) {
+                        this.body = Bodies.rectangle(x, y, word.length * 5, 20);
+                    } else {
+                        this.body = Bodies.rectangle(x, y, word.length * 2, 20);
+                    }
+                    this.word = word;
+                    World.add(engine.world, this.body);
+                }
+                show() {
+                    let pos = this.body.position;
+                    let angle = this.body.angle;
+                    push();
+                    translate(pos.x, pos.y);
+                    rotate(angle);
+                    rectMode(CENTER);
+                    fill("#000");
+                    stroke("#DAF301");
+                    strokeWeight(3);
+                    if (window.screen.width > 500) {
+                        rect(0, 0, this.word.length * 20 + 30, 30, 20);
+                    } else {
+                        rect(0, 0, this.word.length * 7 + 15, 15, 20);
+                    }
+                    noStroke();
+                    fill("#fff");
+                    if (window.screen.width > 500) {
+                        textSize(20);
+                    } else {
+                        textSize(13);
+                    }
+                    textAlign(CENTER, CENTER);
+                    text(this.word, 0, 0);
+                    pop();
+                }
+            }
+
+            function setup() {
+                var cw = document.getElementById("footer_pebble_canvas").parentElement.clientWidth || window.innerWidth;
+                if (window.screen.height > 500) {
+                    var canvas = createCanvas(cw, 300);
+                } else {
+                    var canvas = createCanvas(cw, 50);
+                }
+                canvas.parent("footer_pebble_canvas");
+                engine = Engine.create();
+                roof = Bodies.rectangle(width / 2, height, width, 30, { isStatic: true });
+                ground = Bodies.rectangle(width / 2, height - 20, width, 10, { isStatic: true });
+                wallLeft = Bodies.rectangle(0, height / 2, 10, height, { isStatic: true });
+                wallRight = Bodies.rectangle(width, height / 2, 10, height, { isStatic: true });
+                World.add(engine.world, [ground, wallLeft, wallRight, roof]);
+                for (let i = 0; i < pebbles_Data.length; i++) {
+                    words.push(new Word(random(width), -200, pebbles_Data[i]));
+                }
+            }
+
+            function windowResized() {
+                var cw = document.getElementById("footer_pebble_canvas").parentElement.clientWidth || window.innerWidth;
+                resizeCanvas(cw, height);
+            }
+
+            function draw() {
+                background("#000");
+                Engine.update(engine);
+                for (let word of words) {
+                    word.show();
+                }
+            }
+
+            $("#footer_pebble_canvas").on("touchstart", function () {
+                for (let word of words) {
+                    if (dist(mouseX, mouseY, word.body.position.x, word.body.position.y) < 50) {
+                        Body.applyForce(word.body,
+                            { x: word.body.position.x, y: word.body.position.y },
+                            { x: random(-0.01, 0.01), y: random(-0.01, 0.01) }
+                        );
+                    }
+                }
+            });
+
+            $(window).on("resize", function () {
+                if (typeof windowResized === "function") windowResized();
+            });
+
+            function mouseMoved() {
+                for (let word of words) {
+                    if (dist(mouseX, mouseY, word.body.position.x, word.body.position.y) < 50) {
+                        Body.applyForce(word.body,
+                            { x: word.body.position.x, y: word.body.position.y },
+                            { x: random(-0.02, 0.02), y: random(-0.02, 0.02) }
+                        );
+                    }
+                }
+            }
+        </script>
+
         </div><!-- End .page-content -->
 
     @else
         {{abort(404)}}
     @endif
+
+    <!-- <div id="scroll-counter"
+         style="position:fixed;bottom:30px;right:30px;z-index:99999;
+                background:rgba(0,0,0,0.85);color:#daf301;
+                font-family:'Courier New',monospace;font-size:48px;font-weight:900;
+                padding:16px 28px;border-radius:12px;border:2px solid #daf301;
+                box-shadow:0 0 30px rgba(218,243,1,0.3);
+                pointer-events:none;user-select:none;">
+        0
+    </div>
+    <script>
+        (function(){
+            var el = document.getElementById('scroll-counter');
+            var ticking = false;
+            window.addEventListener('scroll', function(){
+                if (!ticking) {
+                    window.requestAnimationFrame(function(){
+                        el.textContent = window.scrollY;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        })();
+    </script> -->
 </body>
 
 </html>

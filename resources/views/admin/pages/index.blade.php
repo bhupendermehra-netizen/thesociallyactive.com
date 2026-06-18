@@ -42,6 +42,13 @@
             <a href="{{ route('admin.page.faqs', $data->page) }}" class="btn btn-ghost" style="margin-left:6px;">
               <i class="fas fa-question-circle"></i> FAQs
             </a>
+            <form action="{{ route('admin.page.delete', $data->page) }}" method="POST" style="display:inline;margin-left:6px;"
+                  onsubmit="return confirm('Delete page &quot;{{ $data->page }}&quot; and all its sections? This cannot be undone.');">
+              @csrf
+              <button type="submit" class="btn btn-red">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
           </td>
         </tr>
         @endforeach

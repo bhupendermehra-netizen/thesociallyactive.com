@@ -40,6 +40,18 @@ function initSplashCursor(canvasId, options) {
     let gl = canvas.getContext("webgl2", params);
     const isWebGL2 = !!gl;
     if (!isWebGL2) gl = canvas.getContext("webgl", params) || canvas.getContext("experimental-webgl", params);
+    if (!gl) {
+      return {
+        gl: null,
+        ext: {
+          formatRGBA: null,
+          formatRG: null,
+          formatR: null,
+          halfFloatTexType: null,
+          supportLinearFiltering: false
+        }
+      };
+    }
     let halfFloat, supportLinearFiltering;
     if (isWebGL2) {
       gl.getExtension("EXT_color_buffer_float");
@@ -529,6 +541,7 @@ function initSplashCursor(canvasId, options) {
   function hashCode(s) { if(!s.length)return 0; let h=0; for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;} return h; }
 
   // Event listeners
+  let firstMove = true;
   window.addEventListener("mousedown", e => {
     const p = pointers[0];
     updatePointerDownData(p, -1, scaleByPixelRatio(e.clientX), scaleByPixelRatio(e.clientY));
@@ -548,15 +561,22 @@ function initSplashCursor(canvasId, options) {
     const touches = e.targetTouches, p = pointers[0];
     for (let i = 0; i < touches.length; i++)
       updatePointerDownData(p, touches[i].identifier, scaleByPixelRatio(touches[i].clientX), scaleByPixelRatio(touches[i].clientY));
+    if (firstMove) {
+      firstMove = false;
+      updateFrame();
+    }
   });
   window.addEventListener("touchmove", e => {
     const touches = e.targetTouches, p = pointers[0];
     for (let i = 0; i < touches.length; i++)
       updatePointerMoveData(p, scaleByPixelRatio(touches[i].clientX), scaleByPixelRatio(touches[i].clientY), p.color);
+    if (firstMove) {
+      firstMove = false;
+      updateFrame();
+    }
   }, false);
   window.addEventListener("touchend", e => {
-    const touches = e.changedTouches, p = pointers[0];
-    for (let i = 0; i < touches.length; i++) updatePointerUpData(p);
+    updatePointerUpData(pointers[0]);
   });
 }
 

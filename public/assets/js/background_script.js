@@ -1,6 +1,3 @@
-if($("#bannerCanvas").length){
-
-
 function HSVtoRGB(h, s, v) {
   let r, g, b, i, f, p, q, t;
   i = Math.floor(h * 6);
@@ -536,7 +533,18 @@ class FluidSimulation {
     if (!isWebGL2) {
       gl = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
     }
-    
+    if (!gl) {
+      return {
+        gl: null,
+        ext: {
+          formatRGBA: null,
+          formatRG: null,
+          formatR: null,
+          halfFloatTexType: null,
+          supportLinearFiltering: false
+        }
+      };
+    }
     let halfFloat;
     let supportLinearFiltering;
     if (isWebGL2) {
@@ -993,4 +1001,3 @@ document.addEventListener('DOMContentLoaded', () => {
    new FluidSimulation(canvas, config);
     
 });
-}

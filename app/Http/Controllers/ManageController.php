@@ -276,15 +276,23 @@ class ManageController extends Controller
 
             if ($data == "text") {
                 $fields[$key]["text"] = $request->text[$key];
-                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
-                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                if (isset($request->heading_tag[$key])) {
+                    if ($request->heading_tag[$key] !== '') {
+                        $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                    } else {
+                        unset($fields[$key]["heading_tag"]);
+                    }
                 }
             }
             if ($data == "link") {
                 $fields[$key]["text"] = $request->text[$key];
                 $fields[$key]["link"] = $request->link[$key];
-                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
-                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                if (isset($request->heading_tag[$key])) {
+                    if ($request->heading_tag[$key] !== '') {
+                        $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                    } else {
+                        unset($fields[$key]["heading_tag"]);
+                    }
                 }
             }
             if ($data == "image") {
@@ -324,15 +332,23 @@ class ManageController extends Controller
 
             if ($data == "text") {
                 $fields[$key]["text"] = $request->text[$key];
-                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
-                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                if (isset($request->heading_tag[$key])) {
+                    if ($request->heading_tag[$key] !== '') {
+                        $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                    } else {
+                        unset($fields[$key]["heading_tag"]);
+                    }
                 }
             }
             if ($data == "link") {
                 $fields[$key]["text"] = $request->text[$key];
                 $fields[$key]["link"] = $request->link[$key];
-                if (isset($request->heading_tag[$key]) && $request->heading_tag[$key] !== '') {
-                    $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                if (isset($request->heading_tag[$key])) {
+                    if ($request->heading_tag[$key] !== '') {
+                        $fields[$key]["heading_tag"] = $request->heading_tag[$key];
+                    } else {
+                        unset($fields[$key]["heading_tag"]);
+                    }
                 }
             }
             if ($data == "image") {
@@ -362,6 +378,18 @@ class ManageController extends Controller
         $page->save();
 
         return redirect()->back();
+    }
+
+    public function pageDelete($page)
+    {
+        $rows = Page::wherePage($page)->get();
+        if ($rows->isEmpty()) {
+            return redirect()->route('admin.page')->with('error', 'Page not found!');
+        }
+        foreach ($rows as $row) {
+            $row->delete();
+        }
+        return redirect()->route('admin.page')->with('success', "Page '$page' deleted successfully!");
     }
 
     public function profile()
@@ -419,7 +447,14 @@ class ManageController extends Controller
         ]);
     }
     public function cardSection(){
-        return view('card-section');
+        $cardSections = ['card_1', 'card_2', 'card_3', 'card_4'];
+        $pages = [];
+        foreach ($cardSections as $section) {
+            $record = \App\Models\Page::wherePage('Cards')->whereSection($section)->first();
+            $pages[$section] = $record ? json_decode($record->fields) : [];
+        }
+        $seo = page_seo('Cards');
+        return view('card-section', compact('pages', 'seo'));
     }
 
     public function scripts()

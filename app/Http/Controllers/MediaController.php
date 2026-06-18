@@ -97,6 +97,41 @@ class MediaController extends Controller
         return back()->with('error', 'File not found.');
     }
 
+    public function deleteBulk(Request $request)
+    {
+        $paths = $request->input('paths', []);
+        if (empty($paths) || !is_array($paths)) {
+            return back()->with('error', 'No files selected.');
+        }
+
+        $deleted = 0;
+        $errors = 0;
+        $dbRefs = $this->loadDbReferences();
+
+        foreach ($paths as $path) {
+            $path = str_replace(['..', './', '../'], '', $path);
+            if (empty($path)) continue;
+
+            $references = $this->findReferences($dbRefs, $path, basename($path));
+            if (count($references) > 0) {
+                $errors++;
+                continue;
+            }
+
+            $fullPath = public_path('uploaded_files/' . $path);
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
+                $deleted++;
+            }
+        }
+
+        $msg = "Deleted {$deleted} file(s).";
+        if ($errors > 0) {
+            $msg .= " {$errors} file(s) skipped (in use).";
+        }
+        return back()->with('success', $msg);
+    }
+
     // ─── Private helpers ───
 
     private function scanFiles($dir)

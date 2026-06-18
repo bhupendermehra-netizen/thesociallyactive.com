@@ -70,8 +70,9 @@
                 <i class="fas fa-edit"></i>
               </a>
               <form action="{{ route('admin.authors.destroy', $author->id) }}" method="POST"
-                    onsubmit="return confirm('Delete {{ $author->name }}? Blogs by this author will become unassigned.')">
+                    onsubmit="return confirm('Delete {{ $author->name }}? Blogs by this author will become unassigned.');">
                 @csrf
+                @method('DELETE')
                 <button type="submit" class="btn btn-red" style="padding:6px 12px;font-size:12px;">
                   <i class="fas fa-trash"></i>
                 </button>

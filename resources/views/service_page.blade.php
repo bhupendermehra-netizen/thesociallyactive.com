@@ -1,4 +1,5 @@
 	@extends("layouts.front_app")
+@section('title', ($pages['banner'][0]->text ?? 'Service') . ' - The Socially Active')
 @section("content")
 
 	<div class="brand_strategy_banner page-section"style="background:url('{{webp_url(env('IMG_FETCH_URL').'uploaded_files/'.$pages['banner'][2]->img)}}');background-size:100% 100%;">

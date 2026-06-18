@@ -11,7 +11,7 @@
 </div>
 
 <div class="tsa-card" style="max-width:800px;">
-  <form action="{{ route('admin.authors.update', $author->id) }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('admin.authors.update', $author->id) }}" method="POST" enctype="multipart/form-data" id="authorForm">
     @csrf
 
     <div class="form-group">
@@ -26,16 +26,51 @@
 
     <div class="form-group">
       <label>Profile Image</label>
-      @if($author->profile_image)
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-          <img src="{{ asset('uploaded_files/image/' . $author->profile_image) }}"
-               style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--border);"
-               alt="{{ $author->name }}" />
-          <span style="font-size:12px;color:var(--muted);">{{ $author->profile_image }}</span>
+      <div id="cropUploader">
+        {{-- Drop zone / click to select --}}
+        <div id="dropZone" style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:border-color 0.2s;background:rgba(255,255,255,0.02);{{ $author->profile_image ? 'display:none;' : '' }}"
+             onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:48px;color:var(--muted);margin-bottom:8px;">
+            <i class="fas fa-cloud-upload-alt"></i>
+          </div>
+          <div style="color:var(--text);font-weight:500;margin-bottom:4px;">
+            Click to select a new image
+          </div>
+          <div style="font-size:12px;color:var(--muted);">
+            JPEG, PNG, GIF, WebP. Max 2MB. Will be cropped to a square.
+          </div>
         </div>
-      @endif
-      <input class="form-control" type="file" name="profile_image" accept="image/*" />
-      <p style="font-size:11px;color:var(--muted);margin-top:4px;">Leave empty to keep current image.</p>
+
+        {{-- Hidden file input --}}
+        <input type="file" id="cropInput" name="profile_image" accept="image/*" style="display:none;" />
+
+        {{-- Preview area --}}
+        <div id="cropPreview" style="margin-top:16px;{{ $author->profile_image ? '' : 'display:none;' }}">
+          <div style="position:relative;display:inline-block;border-radius:12px;overflow:hidden;border:2px solid var(--border);">
+            <img id="cropPreviewImg" src="{{ $author->profile_image ? asset('uploaded_files/image/' . $author->profile_image) : '' }}"
+                 alt="Preview" style="max-width:280px;display:block;" />
+            <div id="cropPreviewOverlay"
+                 style="position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;gap:10px;opacity:0;transition:opacity 0.2s;cursor:pointer;"
+                 onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+              <button type="button" class="btn btn-sm btn-light" onclick="openCropper()">
+                <i class="fas fa-crop-alt"></i> Crop
+              </button>
+              <button type="button" class="btn btn-sm btn-danger" onclick="removeImage()">
+                <i class="fas fa-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:6px;">
+            @if($author->profile_image)
+              <span style="font-size:12px;color:var(--muted);display:block;margin-top:4px;">{{ $author->profile_image }}</span>
+            @endif
+            <i class="fas fa-check-circle" style="color:var(--lime);"></i> Hover to crop again or replace.
+          </p>
+        </div>
+
+        {{-- Hidden input for cropped base64 --}}
+        <input type="hidden" name="profile_image_cropped" id="cropData" value="" />
+      </div>
     </div>
 
     <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
@@ -67,4 +102,145 @@
   </form>
 </div>
 
+{{-- Crop Modal --}}
+<div id="cropModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;flex-direction:column;padding:20px;">
+  <div style="background:#1a1a2e;border-radius:16px;overflow:hidden;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <div style="padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.08);">
+      <h3 style="margin:0;font-size:16px;font-weight:600;color:#fff;">
+        <i class="fas fa-crop-alt" style="margin-right:8px;color:var(--lime);"></i>Crop Profile Image
+      </h3>
+      <button type="button" onclick="closeCropper()" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;padding:4px 8px;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div style="flex:1;overflow:hidden;min-height:300px;background:#0d0d1a;">
+      <img id="cropModalImage" src="" alt="Crop" style="max-width:100%;display:block;" />
+    </div>
+    <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;gap:8px;">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button type="button" onclick="cropper.zoom(0.1)" class="btn btn-sm btn-ghost" style="padding:6px 10px;" title="Zoom In">
+          <i class="fas fa-search-plus"></i>
+        </button>
+        <button type="button" onclick="cropper.zoom(-0.1)" class="btn btn-sm btn-ghost" style="padding:6px 10px;" title="Zoom Out">
+          <i class="fas fa-search-minus"></i>
+        </button>
+        <button type="button" onclick="cropper.reset()" class="btn btn-sm btn-ghost" style="padding:6px 10px;" title="Reset">
+          <i class="fas fa-undo"></i>
+        </button>
+      </div>
+      <button type="button" id="cropApplyBtn" class="btn btn-lime" style="padding:8px 28px;" onclick="applyCrop()">
+        <i class="fas fa-check"></i> Apply Crop
+      </button>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+// ==================== Cropper.js ====================
+let cropper = null;
+let cropperFile = null;
+
+// Click on drop zone → trigger file input
+document.getElementById('dropZone').addEventListener('click', function() {
+  document.getElementById('cropInput').click();
+});
+
+// File selected → open cropper
+document.getElementById('cropInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image is too large. Maximum size is 2MB.');
+    this.value = '';
+    return;
+  }
+  cropperFile = file;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('cropModalImage').src = ev.target.result;
+    document.getElementById('cropModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (cropper) cropper.destroy();
+    setTimeout(function() {
+      cropper = new Cropper(document.getElementById('cropModalImage'), {
+        aspectRatio: 1,
+        viewMode: 1,
+        dragMode: 'move',
+        cropBoxResizable: true,
+        cropBoxMovable: true,
+        responsive: true,
+        minCropBoxWidth: 100,
+        minCropBoxHeight: 100,
+      });
+    }, 100);
+  };
+  reader.readAsDataURL(file);
+});
+
+function openCropper() {
+  // Re-open with existing image
+  const src = document.getElementById('cropPreviewImg').src;
+  if (src && src !== '#' && src !== '') {
+    document.getElementById('cropModalImage').src = src;
+    document.getElementById('cropModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (cropper) cropper.destroy();
+    setTimeout(function() {
+      cropper = new Cropper(document.getElementById('cropModalImage'), {
+        aspectRatio: 1,
+        viewMode: 1,
+        dragMode: 'move',
+        cropBoxResizable: true,
+        cropBoxMovable: true,
+        responsive: true,
+        minCropBoxWidth: 100,
+        minCropBoxHeight: 100,
+      });
+    }, 100);
+  }
+}
+
+function closeCropper() {
+  if (cropper) { cropper.destroy(); cropper = null; }
+  document.getElementById('cropModal').style.display = 'none';
+  document.body.style.overflow = '';
+  document.getElementById('cropInput').value = '';
+}
+
+function applyCrop() {
+  if (!cropper) return;
+  const canvas = cropper.getCroppedCanvas({
+    width: 400,
+    height: 400,
+    imageSmoothingEnabled: true,
+    imageSmoothingQuality: 'high',
+  });
+  const dataUrl = canvas.toDataURL('image/webp', 0.85);
+  document.getElementById('cropPreviewImg').src = dataUrl;
+  document.getElementById('cropPreview').style.display = 'block';
+  document.getElementById('dropZone').style.display = 'none';
+  document.getElementById('cropData').value = dataUrl;
+  closeCropper();
+}
+
+function removeImage() {
+  document.getElementById('cropPreview').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'block';
+  document.getElementById('cropData').value = 'remove';
+  document.getElementById('cropInput').value = '';
+  document.getElementById('cropPreviewImg').src = '';
+  if (cropper) { cropper.destroy(); cropper = null; }
+  cropperFile = null;
+}
+
+// On form submit: if cropped data exists, clear file input to avoid dual upload
+document.getElementById('authorForm').addEventListener('submit', function(e) {
+  const cropped = document.getElementById('cropData').value;
+  if (cropped) {
+    document.getElementById('cropInput').disabled = true;
+  }
+});
+</script>
 @endsection

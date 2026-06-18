@@ -36,7 +36,7 @@
     @endif
 
     {{-- Search / filter bar --}}
-    <div style="margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;">
+    <div style="margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
         <input type="text" id="mediaSearch" placeholder="Search by filename..." 
                style="flex:1;min-width:200px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;">
         <select id="filterUsed" style="padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;">
@@ -50,7 +50,22 @@
             <option value="video">Videos</option>
             <option value="other">Other</option>
         </select>
+        <span style="flex:1;"></span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer;">
+            <input type="checkbox" id="selectAll" style="accent-color:#67fcc6;width:16px;height:16px;cursor:pointer;">
+            Select All
+        </label>
+        <button id="deleteSelectedBtn" disabled
+                style="padding:8px 16px;background:rgba(255,107,129,0.12);border:1px solid rgba(255,107,129,0.3);border-radius:8px;color:var(--danger);font-size:12px;font-weight:600;cursor:pointer;opacity:0.4;transition:all 0.2s;display:flex;align-items:center;gap:6px;">
+            <i class="fas fa-trash-alt"></i> Delete Selected (<span id="selectedCount">0</span>)
+        </button>
     </div>
+
+    {{-- Bulk delete form --}}
+    <form id="bulkDeleteForm" method="POST" action="{{ route('admin.media.delete-bulk') }}" style="display:none;">
+        @csrf
+        <input type="hidden" name="paths" id="bulkPaths" value="">
+    </form>
 
     {{-- Files grid --}}
     <div id="mediaGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
@@ -59,7 +74,15 @@
                  data-filename="{{ strtolower($item['filename']) }}"
                  data-used="{{ $item['used'] ? '1' : '0' }}"
                  data-type="{{ $item['is_image'] ? 'image' : ($item['is_video'] ? 'video' : 'other') }}"
+                 data-path="{{ $item['path'] }}"
                  style="background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:transform 0.2s,box-shadow 0.2s;position:relative;">
+
+                {{-- Checkbox --}}
+                <div style="position:absolute;top:8px;left:8px;z-index:3;">
+                    <input type="checkbox" class="media-checkbox" value="{{ $item['path'] }}"
+                           style="accent-color:#67fcc6;width:18px;height:18px;cursor:pointer;"
+                           {{ $item['used'] ? 'disabled title="File in use"' : '' }}>
+                </div>
 
                 {{-- Badge --}}
                 <div style="position:absolute;top:8px;right:8px;z-index:2;display:flex;gap:4px;">
@@ -211,11 +234,92 @@ document.addEventListener('keydown', function(e) {
             if (type !== 'all' && card.dataset.type !== type) match = false;
             card.style.display = match ? '' : 'none';
         });
+        updateSelectAllState();
     }
 
     search.addEventListener('input', applyFilters);
     filterUsed.addEventListener('change', applyFilters);
     filterType.addEventListener('change', applyFilters);
+})();
+
+// Multi-select delete
+(function() {
+    var selectAll = document.getElementById('selectAll');
+    var deleteBtn = document.getElementById('deleteSelectedBtn');
+    var selectedCount = document.getElementById('selectedCount');
+    var bulkForm = document.getElementById('bulkDeleteForm');
+    var bulkPaths = document.getElementById('bulkPaths');
+
+    function getSelected() {
+        var checked = [];
+        document.querySelectorAll('.media-checkbox:checked:not([disabled])').forEach(function(cb) {
+            checked.push(cb.value);
+        });
+        return checked;
+    }
+
+    function updateUI() {
+        var selected = getSelected();
+        var count = selected.length;
+        selectedCount.textContent = count;
+        deleteBtn.disabled = count === 0;
+        deleteBtn.style.opacity = count === 0 ? '0.4' : '1';
+
+        var allCheckboxes = document.querySelectorAll('.media-checkbox:not([disabled])');
+        var allChecked = allCheckboxes.length > 0;
+        allCheckboxes.forEach(function(cb) {
+            if (!cb.checked) allChecked = false;
+        });
+        selectAll.checked = allChecked;
+    }
+
+    function updateSelectAllState() {
+        var visibleCheckboxes = [];
+        document.querySelectorAll('.media-card').forEach(function(card) {
+            if (card.style.display !== 'none') {
+                var cb = card.querySelector('.media-checkbox');
+                if (cb && !cb.disabled) visibleCheckboxes.push(cb);
+            }
+        });
+        var allVisibleChecked = visibleCheckboxes.length > 0;
+        visibleCheckboxes.forEach(function(cb) {
+            if (!cb.checked) allVisibleChecked = false;
+        });
+        selectAll.checked = allVisibleChecked;
+    }
+
+    // Select All
+    selectAll.addEventListener('change', function() {
+        document.querySelectorAll('.media-card').forEach(function(card) {
+            if (card.style.display !== 'none') {
+                var cb = card.querySelector('.media-checkbox');
+                if (cb && !cb.disabled) {
+                    cb.checked = selectAll.checked;
+                }
+            }
+        });
+        updateUI();
+    });
+
+    // Individual checkbox change
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('media-checkbox')) {
+            updateUI();
+        }
+    });
+
+    // Delete Selected
+    deleteBtn.addEventListener('click', function() {
+        var selected = getSelected();
+        if (selected.length === 0) return;
+        var msg = 'Permanently delete ' + selected.length + ' selected file(s)?';
+        if (selected.length === 1) {
+            msg = 'Permanently delete ' + selected[0].split('/').pop() + '?';
+        }
+        if (!confirm(msg)) return;
+        bulkPaths.value = JSON.stringify(selected);
+        bulkForm.submit();
+    });
 })();
 </script>
 

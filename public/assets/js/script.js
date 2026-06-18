@@ -141,8 +141,9 @@ $(document).ready(function () {
     }, 3000);
 
     // Lazy Loading Implementation for other images/videos that appear later
+    let lazyMediaObserver = null;
     if ("IntersectionObserver" in window) {
-        const lazyMediaObserver = new IntersectionObserver(
+        lazyMediaObserver = new IntersectionObserver(
             function (entries, observer) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
@@ -211,7 +212,7 @@ $(document).ready(function () {
     }
 
     // MutationObserver: watch for dynamically added lazy-load elements (owl-carousel clones, AJAX content, etc.)
-    if ("MutationObserver" in window && "IntersectionObserver" in window) {
+    if ("MutationObserver" in window && lazyMediaObserver) {
         const lazyMutationObserver = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 mutation.addedNodes.forEach(function (node) {
@@ -458,7 +459,7 @@ function movingnoeffect(div) {
 
 function wordchangeeffect(div, word_i) {
     var words32 = div.attr("words").split(";");
-    var wordremainetime = parseInt(div.attr("word-remaine-time"));
+    var wordremainetime = parseInt(div.attr("word-remaine-time")) || 3000;
     //letterchangetime
     var lct = 100;
 
@@ -544,8 +545,10 @@ function scrollF() {
     var expertise_section_distance_top = 0;
     var screen80height = (window.screen.height * 40) / 100;
     var page_height = 0;
-    for (let i = 1; i <= totalClass; i++) {
-        l = l + parseInt($(".page-section").eq(i).css("height"));
+    for (let i = 1; i < totalClass; i++) {
+        var secH_i = parseInt($(".page-section").eq(i).css("height")) || 0;
+
+        l = l + secH_i;
         if (
             $(".page-section")
                 .eq(i - 1)
@@ -566,6 +569,7 @@ function scrollF() {
                     .eq(i - 1)
                     .css("height"),
             );
+
         }
         if (
             st > pl - (80 * window.screen.height) / 100 &&
@@ -585,9 +589,6 @@ function scrollF() {
                 !$(".page-section")
                     .eq(i - 1)
                     .hasClass("expertise_section") &&
-                !$(".page-section")
-                    .eq(i - 1)
-                    .hasClass("brand_strategy_section") &&
                 !$(".page-section")
                     .eq(i - 1)
                     .hasClass("brand_strategy_section") &&
@@ -621,18 +622,14 @@ function scrollF() {
             pl = pl + (window.screen.height * 80) / 100;
             pl_1 = (window.screen.height * 80) / 100;
         } else {
-            pl =
-                pl +
-                parseInt(
-                    $(".page-section")
-                        .eq(i - 1)
-                        .css("height"),
-                );
-            pl_1 = parseInt(
+            var secPl = parseInt(
                 $(".page-section")
                     .eq(i - 1)
                     .css("height"),
             );
+
+            pl = pl + secPl;
+            pl_1 = secPl;
         }
 
         if (
@@ -706,6 +703,7 @@ function scrollF() {
             }
         } else {
             if (
+                i >= 2 &&
                 st >
                     pl -
                         (parseInt(
@@ -717,7 +715,7 @@ function scrollF() {
                                 $(".page-section")
                                     .eq(i - 2)
                                     .css("height"),
-                            )) &&
+                        )) &&
                 st < pl &&
                 !$(".page-section")
                     .eq(i - 1)
@@ -1027,7 +1025,7 @@ function scrollF() {
             $(".expertise_section .service_img_2").attr("data-selected", "0");
         }
 
-        w = (st / ((50 * window.screen.width) / 100)) * 100;
+        var w = (st / ((50 * window.screen.width) / 100)) * 100;
 
         // ===== VIDEO FRAME SCROLL FIX (SMOOTH + NO BLACK SCREEN) =====
         if ($(".video_frame").length) {

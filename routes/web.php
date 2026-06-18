@@ -45,6 +45,9 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
     Route::get("page/seo/{page}", [ManageController::class, "seo"])->name("page.seo");
     Route::post("page/seo/{page}", [ManageController::class, "seoUpdate"])->name("page.seo.update");
 
+    // Page Delete
+    Route::post("page/delete/{page}", [ManageController::class, "pageDelete"])->name("page.delete");
+
     // Site-wide Custom Scripts
     Route::get("scripts", [ManageController::class, "scripts"])->name("scripts");
     Route::post("scripts/update", [ManageController::class, "scriptsUpdate"])->name("scripts.update");
@@ -119,6 +122,7 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
     Route::get("media", [App\Http\Controllers\MediaController::class, "index"])->name("media.index");
     Route::post("media/delete", [App\Http\Controllers\MediaController::class, "delete"])->name("media.delete");
     Route::post("media/delete-force", [App\Http\Controllers\MediaController::class, "deleteForce"])->name("media.delete-force");
+    Route::post("media/delete-bulk", [App\Http\Controllers\MediaController::class, "deleteBulk"])->name("media.delete-bulk");
 
 });
  // Card Section
