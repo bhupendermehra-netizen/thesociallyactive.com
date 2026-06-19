@@ -3986,16 +3986,10 @@ img.lazy-load.loaded {
 		transform: scale(0.6);
 		transform-origin: left;
 	}
+}
 
-
-
-
-
-
-
-
-	/* ========== MOBILE SCROLL FIX ========== */
-	@media screen and (max-width: 1000px) {
+/* ========== MOBILE SCROLL FIX ========== */
+@media screen and (max-width: 1000px) {
 		body {
 			overflow-y: auto !important;
 			overflow-x: hidden;
