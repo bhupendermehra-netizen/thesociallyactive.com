@@ -1,4 +1,5 @@
 var canvas = document.getElementById('footer_pebble_canvas');
+if (!canvas) { var canvas = { width: 0, height: 0, clientWidth: 0, clientHeight: 0, getContext: function() { return null; }, addEventListener: function() {} }; }
 resizeCanvas();
 
 var config = {
@@ -50,10 +51,16 @@ var ref = getWebGLContext(canvas);
 var gl = ref.gl;
 var ext = ref.ext;
 
-if (isMobile()) {
+if (!gl || !ext.formatRGBA) {
+    if (!gl) console.warn("background2: WebGL unavailable");
+    var noop = function(){};
+    canvas = null; gl = null;
+}
+
+if (gl && isMobile()) {
     config.DYE_RESOLUTION = 512;
 }
-if (!ext.supportLinearFiltering) {
+if (gl && !ext.supportLinearFiltering) {
     config.DYE_RESOLUTION = 512;
     config.SHADING = false;
     config.BLOOM = false;
@@ -246,20 +253,23 @@ Material.prototype.setKeywords = function setKeywords (keywords) {
 };
 
 Material.prototype.bind = function bind () {
+    if (!gl || !this.activeProgram) return;
     gl.useProgram(this.activeProgram);
 };
 
 var Program = function Program (vertexShader, fragmentShader) {
     this.uniforms = {};
     this.program = createProgram(vertexShader, fragmentShader);
-    this.uniforms = getUniforms(this.program);
+    this.uniforms = this.program ? getUniforms(this.program) : [];
 };
 
 Program.prototype.bind = function bind () {
+    if (!gl || !this.program) return;
     gl.useProgram(this.program);
 };
 
 function createProgram (vertexShader, fragmentShader) {
+    if (!gl || !vertexShader || !fragmentShader) return null;
     var program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
@@ -272,6 +282,7 @@ function createProgram (vertexShader, fragmentShader) {
 }
 
 function getUniforms (program) {
+    if (!gl || !program) return [];
     var uniforms = [];
     var uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     for (var i = 0; i < uniformCount; i++) {
@@ -284,7 +295,9 @@ function getUniforms (program) {
 function compileShader (type, source, keywords) {
     source = addKeywords(source, keywords);
 
+    if (!gl) return null;
     var shader = gl.createShader(type);
+    if (!shader) return null;
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
 
@@ -1002,17 +1015,17 @@ function HSVtoRGB (h, s, v) {
     var r, g, b, i, f, p, q, t;
     i = Math.floor(h * 6);
     f = h * 6 - i;
-    p = s * (0 - s);
-    q = s * (1 - f * s);
-    t = s * (1 - (1 - f) * s);
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
 
     switch (i % 6) {
-        case 0: r = v, g = t, r = p; break;
-        case 1: r = q, g = v, r = p; break;
-        case 2: r = p, g = v, r = t; break;
-        case 3: r = p, g = q, r = v; break;
-        case 4: r = t, r = p, r = v; break;
-        case 5: r = v, g = p, r = q; break;
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        case 5: r = v; g = p; b = q; break;
     }
 
     return {

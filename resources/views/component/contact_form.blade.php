@@ -6,7 +6,7 @@ $services = explode(";",header_footer()["main_component"][3]->text);
                 <div class="row col-lg-10 col-12">
                     <div class="col-lg-6 col-12 mb-3 fields">
                         <label for="name">Name</label>
-                        <input type="name" name="name" required>
+                        <input type="text" name="name" required>
                     </div>
                     <div class="col-lg-6 col-12 mb-3 fields">
                         <label for="email">Email</label>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Models\ExtraImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ExtraImageController extends Controller
 {
@@ -29,26 +30,34 @@ class ExtraImageController extends Controller
 		return view("admin.extra_images.edit",compact('extraImage','pages'));
 	}
 	public function create(Request $req){
+		$req->validate([
+			'banner' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+			'page' => 'required|string|max:255',
+		]);
+
 		$extraImage = new ExtraImage();
-		
-		if(!empty($req->banner)){
-			$img = $req->banner->store("image");
-		}else{
-			dd("please insert image");
-		}
+		$img = $req->banner->store("image", "public");
 		$extraImage->banner = $img;
 		$extraImage->page = $req->page;
 		$extraImage->save();
 		
-		return redirect()->route("admin.extraImage",$extraImage->page);
+		return redirect()->route("admin.extraImage",$extraImage->page)->with('success', 'Image added successfully!');
 	}
 	public function update(Request $req,$id){
 		$extraImage = ExtraImage::findOrFail($id);
+
+		$req->validate([
+			'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+			'page' => 'required|string|max:255',
+		]);
 		
 		if(!empty($req->banner)){
-			$img = $req->banner->store("image");
+			$img = $req->banner->store("image", "public");
 			
-			unlink("storage/".$extraImage->banner);
+			$oldPath = storage_path('app/public/' . $extraImage->banner);
+			if (file_exists($oldPath)) {
+				unlink($oldPath);
+			}
 		}else{
 			$img = $extraImage->banner;
 		}
@@ -56,15 +65,16 @@ class ExtraImageController extends Controller
 		$extraImage->page = $req->page;
 		$extraImage->save();
 		
-		return redirect()->route("admin.extraImage",$extraImage->page);
+		return redirect()->route("admin.extraImage",$extraImage->page)->with('success', 'Image updated successfully!');
 	}
 	public function delete($id){
 		$extraImage = ExtraImage::findOrFail($id);
-		if(file_exists("storage/".$extraImage->banner)){
-			unlink("storage/".$extraImage->banner);
+		$oldPath = storage_path('app/public/' . $extraImage->banner);
+		if (file_exists($oldPath)) {
+			@unlink($oldPath);
 		}
 		$extraImage->delete();
-		return redirect()->back();
+		return redirect()->back()->with('success', 'Image deleted successfully!');
 		
 	}
 }

@@ -447,8 +447,9 @@ $(window).on("resize", function () {
 });
 
 function movingnoeffect(div) {
-    var no = parseInt(div.attr("data-no"));
-    var time = parseInt(div.attr("data-time"));
+    var no = parseInt(div.attr("data-no")) || 0;
+    if (no === 0) return;
+    var time = parseInt(div.attr("data-time")) || 100;
     for (let i2 = 1; i2 <= no; i2++) {
         if (i2 <= 9) {
             i2 = "0" + i2;
@@ -461,7 +462,9 @@ function movingnoeffect(div) {
 }
 
 function wordchangeeffect(div, word_i) {
-    var words32 = div.attr("words").split(";");
+    var wordsAttr = div.attr("words");
+    if (!wordsAttr) return;
+    var words32 = wordsAttr.split(";");
     var wordremainetime = parseInt(div.attr("word-remaine-time")) || 3000;
     //letterchangetime
     var lct = 100;
@@ -543,7 +546,8 @@ function scrollF() {
     var selected_id = 0;
     var start = 100;
     var totalClass = $(".page-section").length;
-    var l = parseInt($(".page-section").eq(0).css("height"));
+    if (totalClass === 0) return;
+    var l = parseInt($(".page-section").eq(0).css("height")) || 0;
     var pl = 0;
     var expertise_section_distance_top = 0;
     var screen80height = (window.screen.height * 40) / 100;

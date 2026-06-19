@@ -29,7 +29,9 @@ function initSplashCursor(canvasId, options) {
   }
 
   const pointers = [new pointerPrototype()];
-  const { gl, ext } = getWebGLContext(canvas);
+  const ctx = getWebGLContext(canvas);
+  if (!ctx.gl) return;
+  const { gl, ext } = ctx;
   if (!ext.supportLinearFiltering) {
     config.DYE_RESOLUTION = 256;
     config.SHADING = false;
@@ -61,7 +63,7 @@ function initSplashCursor(canvasId, options) {
       supportLinearFiltering = gl.getExtension("OES_texture_half_float_linear");
     }
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : halfFloat && halfFloat.HALF_FLOAT_OES;
+    const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : (halfFloat ? halfFloat.HALF_FLOAT_OES : null);
     let formatRGBA, formatRG, formatR;
     if (isWebGL2) {
       formatRGBA = getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, halfFloatTexType);

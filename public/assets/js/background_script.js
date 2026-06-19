@@ -556,7 +556,8 @@ class FluidSimulation {
     }
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     
-    const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : halfFloat.HALF_FLOAT_OES;
+    const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : (halfFloat ? halfFloat.HALF_FLOAT_OES : null);
+    if (!halfFloatTexType) return { gl: null, ext: { formatRGBA: null, formatRG: null, formatR: null, halfFloatTexType: null, supportLinearFiltering: false } };
     let formatRGBA, formatRG, formatR;
     if (isWebGL2) {
       formatRGBA = this.getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, halfFloatTexType);
@@ -995,9 +996,7 @@ const config = {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-	
    const canvas = document.getElementById("bannerCanvas");
-    
+   if (!canvas) return;
    new FluidSimulation(canvas, config);
-    
 });

@@ -90,6 +90,7 @@ class BlogController extends Controller
             'sort_order'      => 'integer|min:0',
             'slug'            => 'nullable|string|max:255|unique:blogs,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
             'title_tag'       => 'nullable|string|in:h1,h2,h3,h4,h5,h6',
+            'custom_meta_tags' => 'nullable|string',
         ]);
 
         $imagePath = null;
@@ -164,6 +165,7 @@ class BlogController extends Controller
             'sort_order'      => 'integer|min:0',
             'slug'            => 'nullable|string|max:255|unique:blogs,slug,' . $id . '|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
             'title_tag'       => 'nullable|string|in:h1,h2,h3,h4,h5,h6',
+            'custom_meta_tags' => 'nullable|string',
         ]);
 
         $imagePath = $blog->cover_image;
@@ -181,7 +183,7 @@ class BlogController extends Controller
             'title'           => $request->title,
             'slug'            => $request->slug ? Str::slug($request->slug) : $blog->slug,
             'title_tag'       => $request->title_tag ?? $blog->title_tag ?? 'h1',
-            'author_id'       => $request->author_id ?? $blog->getAuthorIdAttribute(),
+            'author_id'       => $request->author_id ?? $blog->author_id,
             'category_id'     => $request->category_id,
             'blog_date'       => $request->blog_date ?? $blog->blog_date,
             'cover_image'     => $imagePath,

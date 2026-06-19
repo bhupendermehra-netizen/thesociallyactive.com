@@ -347,6 +347,7 @@
         position: relative;
         z-index: 1;
         white-space: nowrap;
+        overflow: hidden;
     }
     /* White fill layer — clip-path driven by scroll */
     .sweep-heading .fill-layer {
@@ -547,7 +548,7 @@
                                 Photography & Videography Solutions</h2>
                             <p class="text">
                                 We specialize in branded visual content that commands attention and drives results. From fashion and bridal campaigns to reels, photography, and full-scale brand films, our creative production blends artistry with performance for digital-first impact. We make your brand seen, felt, and remembered.</p>
-                            <div onclick="window.location.href='#'" class="button-style-div">
+                            <div onclick="window.location.href='{{ route('contact') }}'" class="button-style-div">
                                 <div class="button-style-span">
                                     <div class="button-style-span2">Learn More</div>
                                 </div>
@@ -586,7 +587,7 @@
                                 BRAND STRATEGY & ADVISORY DIVISION</h2>
                             <p class="text">
                                 We specialize in building brands that stand out and scale with purpose. From defining your core positioning and brand voice to crafting strategic narratives and market differentiation, we align creativity with business goals to create lasting impact. Our approach blends insight, storytelling, and sharp strategy to ensure your brand is not just seen but understood, trusted, and chosen.</p>
-                            <div onclick="window.location.href='#'" class="button-style-div">
+                            <div onclick="window.location.href='{{ route('contact') }}'" class="button-style-div">
                                 <div class="button-style-span">
                                     <div class="button-style-span2">Learn More</div>
                                 </div>
@@ -625,7 +626,7 @@
                                 SOCIAL MEDIA & WEB SOLUTIONS</h2>
                             <p class="text">
                                 We specialize in end-to-end social media and web solutions that build a powerful digital presence. From strategic content planning and platform management to immersive, high-performing website development, we create seamless brand experiences across touchpoints. Our approach blends creativity, technology, and performance to ensure your brand not only looks exceptional but engages, converts, and grows consistently.</p>
-                            <div onclick="window.location.href='#'" class="button-style-div">
+                            <div onclick="window.location.href='{{ route('contact') }}'" class="button-style-div">
                                 <div class="button-style-span">
                                     <div class="button-style-span2">Learn More</div>
                                 </div>
@@ -664,7 +665,7 @@
                                 INFLUENCER & CREATOR MANAGEMENT</h2>
                             <p class="text">
                                 We specialize in influencer and creator management that drives authentic engagement and measurable impact. From identifying the right talent and building meaningful collaborations to managing campaigns end-to-end, we align creators with your brand's voice and goals. Our approach blends strategy, relationships, and performance to ensure every partnership feels genuine, reaches the right audience, and delivers real results.</p>
-                            <div onclick="window.location.href='#'" class="button-style-div">
+                            <div onclick="window.location.href='{{ route('contact') }}'" class="button-style-div">
                                 <div class="button-style-span">
                                     <div class="button-style-span2" style="background: transparent; left: 0px; top: 0px; color: white;">Learn More</div>
                                 </div>

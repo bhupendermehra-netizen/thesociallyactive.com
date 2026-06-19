@@ -6,7 +6,7 @@
         <div class="container">
             <h1 class="heading">Contact Us</h1>
             <h3 class="subheading">Get in Touch</h3>
-            <p class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <p class="content">Ready to make an impact? Fill out the form below and we'll get back to you.</p>
             <div class="form col-lg-8 col-12">
                 
                 @include("component.contact_form")

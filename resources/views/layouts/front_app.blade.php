@@ -18,13 +18,31 @@
         $defaultTitle = header_footer()['main_component'][1]->text;
         $pageSeo = isset($seo) && is_array($seo) ? $seo : [];
         $pageTitle = $pageSeo['title'] ?? $defaultTitle;
+        $pageDesc = $pageSeo['description'] ?? ($pageSeo['og:description'] ?? '');
+        $defaultDesc = 'TheSociallyActive — Brand strategy, visual content, and digital solutions that command attention.';
+        $ogImage = $pageSeo['og:image'] ?? ($pageSeo['image'] ?? '');
+        $canonical = url()->current();
     @endphp
     <title>@yield('title', $pageTitle)</title>
+    <link rel="canonical" href="{{ $canonical }}">
+    <meta name="description" content="{{ $pageDesc ?: $defaultDesc }}">
+    <meta property="og:title" content="{{ $pageSeo['og:title'] ?? $pageTitle }}">
+    <meta property="og:description" content="{{ $pageSeo['og:description'] ?? ($pageDesc ?: $defaultDesc) }}">
+    <meta property="og:url" content="{{ $canonical }}">
+    <meta property="og:type" content="website">
+    @if($ogImage)
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageSeo['og:title'] ?? $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageSeo['og:description'] ?? ($pageDesc ?: $defaultDesc) }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    @endif
 
     @if(count($pageSeo))
         @foreach($pageSeo as $name => $content)
             @continue($name === 'title')
-            @continue(in_array($name, ['custom_meta_tags', 'head_script', 'body_script']))
+            @continue($name === 'description')
+            @continue(in_array($name, ['custom_meta_tags', 'head_script', 'body_script', 'og:title', 'og:description', 'og:image', 'og:url']))
             @php
                 $low = strtolower($name);
                 $isProperty = strpos($low, 'og:') === 0 || strpos($low, 'twitter:') === 0;
@@ -39,11 +57,18 @@
     <link rel="icon" type="image/x-icon"
         href="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][0]->img)}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
-    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}">
+        crossorigin="anonymous" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
+        <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}">
+    </noscript>
     <!-- Google tag (gtag.js) -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
     <script>
@@ -77,7 +102,7 @@
 
         <div class="side_contact_button">
             <button class="mainButton" type="button">
-                <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['side_buttons'][0]->img)}}">
+                <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['side_buttons'][0]->img)}}" alt="Contact">
             </button>
             <div class="sideButtonDiv" data-selected="0">
                 <button class="sideButton" type="button"
@@ -102,7 +127,7 @@
         <header class="navbar-top">
             <div class="navbar">
                 <div class="logo" onclick="window.location.href='{{route('index')}}'">
-                    <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][0]->img)}}">
+                    <img src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][0]->img)}}" alt="TSA Logo">
                 </div>
                 <div class="link">
                     <div class="audio_control">
@@ -113,10 +138,10 @@
                         </audio>
                         <img class="audio_style_1"
                             src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][15]->img)}}"
-                            data-select="0">
+                            data-select="0" alt="Audio control">
                         <img class="audio_style_2"
                             src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][16]->img)}}"
-                            data-select="1">
+                            data-select="1" alt="Audio control">
                     </div>
                     <div class="button">
                         <div class="button_before"></div>
@@ -135,7 +160,7 @@
             <div class="navbar-top-2">
                 <div class="navbar">
                     <div class="logo">
-                        <img loading="lazy" src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][0]->img)}}">
+                        <img loading="lazy" src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['navbar'][0]->img)}}" alt="TSA Logo">
                     </div>
                     <div class="link">
                         <div class="button">
@@ -280,7 +305,7 @@
                                             </li>
                                             <li><a href="{{ route('projects') }}">Our Projects</a>
                                             </li>
-                                            <li><a href="{{ route('blog') }}">Blog</a></a>
+                                            <li><a href="{{ route('blog') }}">Blog</a>
                                             </li>
                         
 
