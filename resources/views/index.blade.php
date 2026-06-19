@@ -474,10 +474,12 @@
                 gsap.to('.gsap-card', { y: 0, duration: 0.4, ease: 'power2.out' });
             }
 
+            var isMobile = window.innerWidth <= 768;
+
             var tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: '.gsap-card-stack',
-                    start: 'top 10%',
+                    start: isMobile ? 'top 80%' : 'top 10%',
                     end: 'bottom top',
                     scrub: 1.5,
                     onUpdate: function(self) {
@@ -489,10 +491,17 @@
                 }
             });
 
-            tl.to('.gsap-card-1', { x: '-32vw', rotation: -8, ease: 'power1.inOut' }, 0)
-              .to('.gsap-card-2', { x: '-11vw', rotation: -3, ease: 'power1.inOut' }, 0)
-              .to('.gsap-card-3', { x:  '11vw', rotation:  3, ease: 'power1.inOut' }, 0)
-              .to('.gsap-card-4', { x:  '32vw', rotation:  8, ease: 'power1.inOut' }, 0);
+            if (isMobile) {
+                tl.to('.gsap-card-1', { x: '-28vw', rotation: -8, ease: 'power1.inOut' }, 0)
+                  .to('.gsap-card-2', { x: '-9vw', rotation: -3, ease: 'power1.inOut' }, 0)
+                  .to('.gsap-card-3', { x:  '9vw', rotation:  3, ease: 'power1.inOut' }, 0)
+                  .to('.gsap-card-4', { x:  '28vw', rotation:  8, ease: 'power1.inOut' }, 0);
+            } else {
+                tl.to('.gsap-card-1', { x: '-32vw', rotation: -8, ease: 'power1.inOut' }, 0)
+                  .to('.gsap-card-2', { x: '-11vw', rotation: -3, ease: 'power1.inOut' }, 0)
+                  .to('.gsap-card-3', { x:  '11vw', rotation:  3, ease: 'power1.inOut' }, 0)
+                  .to('.gsap-card-4', { x:  '32vw', rotation:  8, ease: 'power1.inOut' }, 0);
+            }
 
             tl.to('.card-inner', {
                 rotationY: 180,

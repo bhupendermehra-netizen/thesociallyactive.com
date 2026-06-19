@@ -161,15 +161,7 @@ class ManageController extends Controller
 
     public function queryStore(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'service' => 'nullable|string|max:255',
-            'message' => 'nullable|string',
-        ]);
-
-        $query = Query::create($request->only(['name', 'phone', 'email', 'service', 'message']));
+        $query = Query::create($request->all());
         return redirect()->route('thankyou');
     }
 
@@ -275,22 +267,6 @@ class ManageController extends Controller
 
     public function pageStore(Request $request)
     {
-        $request->validate([
-            'page' => 'required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'section' => 'nullable|string|max:255',
-            'slug' => 'nullable|string|max:255',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
-            'status' => 'nullable|in:draft,published',
-            'type' => 'required|array',
-            'name' => 'required|array',
-            'text' => 'nullable|array',
-            'image' => 'nullable|array',
-            'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,mp4,mov,avi,webm,mkv|max:10240',
-        ]);
-
         $type = $request->type;
         $fields = [];
 
@@ -345,22 +321,6 @@ class ManageController extends Controller
 
     public function pageUpdate(Request $request, $id)
     {
-        $request->validate([
-            'page' => 'required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'section' => 'nullable|string|max:255',
-            'slug' => 'nullable|string|max:255',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
-            'status' => 'nullable|in:draft,published',
-            'type' => 'required|array',
-            'name' => 'required|array',
-            'text' => 'nullable|array',
-            'image' => 'nullable|array',
-            'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,mp4,mov,avi,webm,mkv|max:10240',
-        ]);
-
         $type = $request->type;
         $fields = [];
         $page = Page::findorfail($id);
@@ -439,14 +399,9 @@ class ManageController extends Controller
 
     public function profileUpdate(Request $req)
     {
-        $req->validate([
-            'email' => 'required|email|max:255',
-            'password' => 'nullable|string|min:8',
-        ]);
-
         $user = User::first();
         $user->email = $req->email;
-        if ($req->filled('password')) {
+        if ($req->password != "") {
             $user->password = Hash::make($req->password);
         }
         $user->save();

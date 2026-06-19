@@ -29,7 +29,7 @@ class BlogFrontController extends Controller
 
     public function show($slug)
     {
-        $blog = Blog::with(['category', 'author', 'faqs'])->where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $blog    = Blog::with(['category', 'author', 'faqs'])->where('slug', $slug)->where('is_published', true)->firstOrFail();
         $related = Blog::with(['category', 'author'])
             ->where('is_published', true)
             ->where('id', '!=', $blog->id)

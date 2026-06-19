@@ -64,7 +64,7 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
     Route::post("extraImage/add", [ExtraImageController::class, "create"])->name("extraImage.add");
     Route::get("extraImage/edit/{id}", [ExtraImageController::class, "edit"])->name("extraImage.edit");
     Route::post("extraImage/edit/{id}", [ExtraImageController::class, "update"])->name("extraImage.update");
-    Route::post("extraImage/delete/{id}", [ExtraImageController::class, "delete"])->name("extraImage.delete");
+    Route::get("extraImage/delete/{id}", [ExtraImageController::class, "delete"])->name("extraImage.delete");
 
     // Projects (admin CRUD)
     Route::get("projects", [ProjectController::class, "index"])->name("projects.index");

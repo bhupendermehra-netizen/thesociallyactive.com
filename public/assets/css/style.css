@@ -41,10 +41,10 @@
 
 .loader img,
 .loader-video {
+	width: 200px;
+	height: 200px;
 	max-width: 200px;
 	max-height: 200px;
-	width: 60vw;
-	height: auto;
 	object-fit: contain;
 }
 
@@ -59,6 +59,18 @@
 }
 
 /* ========== End Preloader Styles ========== */
+
+/* Hide audio control until page fully loaded */
+.page-content:not(.show) .audio_control {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.page-content.show .audio_control {
+	opacity: 1;
+	pointer-events: auto;
+	transition: opacity 0.5s ease 0.5s;
+}
 
 .page-section {
 	opacity: 1;
@@ -2662,27 +2674,6 @@ footer .credit p a {
 	}
 }
 
-
-.loader {
-	position: fixed;
-	height: 100vh;
-	width: 100vw;
-	z-index: 999999999999999999999999999999999999;
-	top: 0;
-	left: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	touch-action: none;
-	background: black
-}
-
-.loader img,
-.loader-video {
-	height: 200px;
-	width: 200px;
-	object-fit: contain
-}
 
 /* Lazy Loading Styles */
 video.lazy-load:not(.loaded),

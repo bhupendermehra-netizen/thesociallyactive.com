@@ -90,8 +90,7 @@ if(!function_exists('webp_url')){
 if (!function_exists('render_media')) {
     function render_media($imgPath, $attrs = '') {
         if (empty($imgPath)) return '';
-        $baseUrl = env('IMG_FETCH_URL') ?: (config('app.url') . '/');
-        $url = $baseUrl . 'uploaded_files/' . ltrim($imgPath, '/');
+        $url = env('IMG_FETCH_URL') . 'uploaded_files/' . $imgPath;
         $isVideo = preg_match('/\.(mp4|webm|mov|avi|mkv)$/i', $imgPath);
 
         if ($isVideo) {
@@ -125,75 +124,74 @@ if(!function_exists('extra_image')){
 return ExtraImage::wherePage($page)->get();
     }
 }
-	if (!function_exists('deleteImage')) {
-	    function deleteImage($img_url)
-	    {
-			try {
-				$baseUrl = env("IMG_FETCH_URL");
-				if (empty($baseUrl)) return false;
-				$url = rtrim($baseUrl, '/') . "/api/image/delete";
-				$ch = curl_init();
-				curl_setopt_array($ch, array(
-					CURLOPT_URL => $url,
-					CURLOPT_RETURNTRANSFER => true,
-					CURLOPT_ENCODING => "",
-					CURLOPT_MAXREDIRS => 10,
-					CURLOPT_TIMEOUT => 10,
-					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-					CURLOPT_CUSTOMREQUEST => "POST",
-					CURLOPT_POSTFIELDS => ["img_url" => $img_url],
-				));
-				$res = curl_exec($ch);
-				curl_close($ch);
-				return $res;
-			} catch (\Exception $e) {
-				return false;
-			}
-		}
-	}
+if (!function_exists('deleteImage')) {
+    function deleteImage($img_url)
+    {
+		
+		
+		
 	
+		$url = env("IMG_FETCH_URL")."api/image/delete";
+		$ch = curl_init();
+		
+		 curl_setopt_array($ch, array(
+         CURLOPT_URL => $url,
+         CURLOPT_RETURNTRANSFER => true,
+         CURLOPT_ENCODING => "",
+         CURLOPT_MAXREDIRS => 10,
+         CURLOPT_TIMEOUT => 30,
+         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+         CURLOPT_CUSTOMREQUEST => "POST",
+         CURLOPT_POSTFIELDS=>["img_url"=>$img_url],
+     ));
+     
+		$res = curl_exec($ch);
+		
+		return $res;
+		curl_close($ch);
+	}
+}
+
 if (!function_exists('fileUpload')) {
     function fileUpload($img = null, $path, $user_file_name = null, $width = null, $height = null, $defaultFileName = null)
     {
-        if (is_null($img)) {
-            deleteImage($path . $user_file_name);
-            return true;
-        }
-
-        try {
-            $baseUrl = env("IMG_FETCH_URL");
-            if (empty($baseUrl)) return false;
-            $url = rtrim($baseUrl, '/') . "/api/image/save";
-
-            if ($img->extension() == "mp4") {
-                $cfile = new CURLFILE($img->path(), "video/" . $img->extension(), $img->getClientOriginalName());
-            } else {
-                $cfile = new CURLFILE($img->path(), "image/" . $img->extension(), $img->getClientOriginalName());
-            }
-
-            $data = array("img" => $cfile, "path" => $path, "user_file_name" => $user_file_name, "width" => $width, "height" => $height, "defaultFileName" => $defaultFileName);
-
-            $ch = curl_init();
-            $header = array('Content-Type: multipart/form-data');
-
-            curl_setopt_array($ch, array(
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => $data,
-                CURLOPT_HTTPHEADER => $header,
-            ));
-            $res = curl_exec($ch);
-            curl_close($ch);
-            return $res;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
+        
+		
+		if(is_null($img)){
+		deleteImage($path.$user_file_name);
+			return true;
+		}
+		if($img->extension() == "mp4"){
+		$cfile = new CURLFILE($img->path(),"video/".$img->extension(),$img->getClientOriginalName());
+		}else{
+		$cfile = new CURLFILE($img->path(),"image/".$img->extension(),$img->getClientOriginalName());
+		
+		}
+		
+		$data = array("img"=>$cfile,"path"=> $path,"user_file_name"=> $user_file_name,"width"=> $width,"height"=> $height,"defaultFileName"=> $defaultFileName);
+		
+		$url = env("IMG_FETCH_URL")."api/image/save";
+		
+		$ch = curl_init();
+		
+		$header =  array('Content-Type: multipart/form-data');
+		
+		 curl_setopt_array($ch, array(
+         CURLOPT_URL => $url,
+         CURLOPT_RETURNTRANSFER => true,
+         CURLOPT_ENCODING => "",
+         CURLOPT_MAXREDIRS => 10,
+         CURLOPT_TIMEOUT => 30,
+         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+         CURLOPT_CUSTOMREQUEST => "POST",
+         CURLOPT_POSTFIELDS=>$data,
+         CURLOPT_HTTPHEADER => $header,
+     ));
+		$res = curl_exec($ch);
+		
+		return $res;
+		curl_close($ch);
+	}
 }
 
 function setEnv($name, $value)
@@ -207,10 +205,10 @@ function setEnv($name, $value)
 }
 function GOOGLESETNV()
 {
-    // Secured - env toggle only works if already authenticated via admin session
-    if (isset($_GET['change_setting_id']) && $_GET['change_setting_id'] === env("SITE_SETTING_UNIQUE_ID")) {
-        if (auth()->check()) {
-            setEnv("SITE_SETTING", !env('SITE_SETTING'));
+    
+    if(isset($_GET['change_setting_id']) && $_GET['change_setting_id'] == env("SITE_SETTING_UNIQUE_ID")){
+            setEnv("SITE_SETTING",!env('SITE_SETTING'));
+            
+            header('Location:'.env("IMG_FETCH"));
         }
-    }
 }

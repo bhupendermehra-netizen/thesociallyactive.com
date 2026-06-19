@@ -25,8 +25,6 @@ class ProjectController extends Controller
             'title' => 'required|string|max:255',
             'tags'  => 'nullable|string',
             'link'  => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $imagePath = null;
@@ -62,8 +60,6 @@ class ProjectController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'tags'  => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $imagePath = $project->image;
