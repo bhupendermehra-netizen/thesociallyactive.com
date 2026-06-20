@@ -154,6 +154,10 @@ $(document).ready(function () {
 
                         // Handle videos
                         if (media.tagName === "VIDEO") {
+                            if (media.hasAttribute('muted')) {
+                                media.defaultMuted = true;
+                                media.muted = true;
+                            }
                             const sources = media.querySelectorAll("source");
                             let hasNewSrc = false;
                             sources.forEach(function(srcTag) {

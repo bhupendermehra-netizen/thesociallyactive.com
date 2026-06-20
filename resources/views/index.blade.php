@@ -261,7 +261,7 @@
 		<div class="inner">
 
 
-			<video playsinline class="video_customize2 lazy-load" autoplay muted data-cursor="2">
+			<video playsinline class="video_customize2 lazy-load" autoplay muted="muted" data-cursor="2">
 				<source
 					data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['video_section'][0]) ? $pages['video_section'][0]->img : ''))}}">
 			</video>

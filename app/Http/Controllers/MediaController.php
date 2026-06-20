@@ -100,6 +100,9 @@ class MediaController extends Controller
     public function deleteBulk(Request $request)
     {
         $paths = $request->input('paths', []);
+        if (is_string($paths)) {
+            $paths = json_decode($paths, true) ?? [];
+        }
         if (empty($paths) || !is_array($paths)) {
             return back()->with('error', 'No files selected.');
         }

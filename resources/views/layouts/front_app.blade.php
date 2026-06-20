@@ -57,18 +57,11 @@
     <link rel="icon" type="image/x-icon"
         href="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . header_footer()['main_component'][0]->img)}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}" media="print" onload="this.media='all'">
-    <noscript>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
-        <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}">
-    </noscript>
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/owl-carousel/owl.theme.default.min.css') }}">
     <!-- Google tag (gtag.js) -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8FS8NYVR4"></script>
     <script>

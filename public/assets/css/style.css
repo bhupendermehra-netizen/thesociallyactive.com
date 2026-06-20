@@ -41,10 +41,10 @@
 
 .loader img,
 .loader-video {
-	width: 200px;
-	height: 200px;
-	max-width: 200px;
-	max-height: 200px;
+	width: 120px;
+	height: 120px;
+	max-width: 120px;
+	max-height: 120px;
 	object-fit: contain;
 }
 
@@ -78,7 +78,7 @@
 }
 
 marquee {
-	width: 90vw;
+	width: 100%;
 }
 
 .invisible_page {
@@ -3832,20 +3832,6 @@ img.lazy-load.loaded {
 }
 
 
-@media screen and (max-width: 800px) {
-
-	.brand_strategy_section .visuals,
-	.brand_strategy_section .visuals2 {
-		display: none !important;
-	}
-
-	.brand_strategy_section .col-8 {
-		flex: 0 0 100% !important;
-		max-width: 100% !important;
-	}
-}
-
-
 @media screen and (max-width: 1000px) {
 	.banner {
 		height: 100vh;
@@ -3924,69 +3910,362 @@ img.lazy-load.loaded {
 	}
 }
 
+/* ==========================================================================
+   MOBILE-ONLY UI OVERRIDES (Strictly max-width: 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
 
-
-
-@media screen and (max-width: 800px) {
-	.brand_strategy_section .row {
-		display: flex !important;
-		flex-wrap: nowrap !important;
-		align-items: center !important;
-		gap: 10px;
+	/* 1. Header / Navigation Bar */
+	.navbar-top {
+		top: 10px !important;
+		width: 100vw !important;
 	}
 
-	.brand_strategy_section .row> :nth-child(1) {
+	.navbar {
+		height: 68px !important;
+		padding: 6px 16px !important;
+		width: 94% !important;
+		margin: 0 auto !important;
+	}
+
+	.navbar .logo img {
+		height: 42px !important;
+		width: auto !important;
+	}
+
+	.navbar .link .menu-control {
+		height: 44px !important;
+		width: 44px !important;
+		padding: 4px 6px !important;
+	}
+
+	.navbar .audio_control img {
+		height: 28px !important;
+		width: 28px !important;
+		margin: 5px !important;
+	}
+
+	.navbar .link .button {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		border: 1px solid #DAF301 !important;
+		border-radius: 10rem !important;
+		padding: 6px 14px !important;
+		background: transparent !important;
+		width: auto !important;
+		height: auto !important;
+		margin: 0 4px !important;
+	}
+
+	.navbar .link .button .let_talk_link {
+		color: #ffffff !important;
+		font-size: 13px !important;
+		text-transform: none !important;
+		text-decoration: none !important;
+		font-weight: 600 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		display: inline-flex !important;
+		align-items: center !important;
+		gap: 6px !important;
+		z-index: 1000 !important;
+	}
+
+	.navbar .link .button .let_talk_link i {
+		font-size: 12px !important;
+		color: #ffffff !important;
+		margin: 0 !important;
+	}
+
+	.navbar .link .button_before {
 		display: none !important;
 	}
 
-	.brand_strategy_section .row> :nth-child(2) {
-		flex: 0 0 55% !important;
-		max-width: 55% !important;
-	}
-
-	.brand_strategy_section .row> :nth-child(3) {
-		flex: 0 0 40% !important;
-		max-width: 40% !important;
+	/* 2. Hero Section */
+	.banner {
+		height: auto !important;
+		min-height: 0vh !important;
+		padding: 70px 0 23px 0 !important;
 		display: flex !important;
 		align-items: center !important;
+		justify-content: center !important;
+		background: #000 !important;
+		/* Ensure high contrast black background */
 	}
 
-	.brand_strategy_section .row> :nth-child(3) video {
-		width: 100% !important;
+	.banner .content {
 		height: auto !important;
-		max-height: 180px !important;
-		object-fit: contain !important;
-		border-radius: 8px;
+		position: relative !important;
+		background: #000 !important;
+		/* Ensure background is solid black */
 	}
 
-	.brand_strategy_section .content {
+	.banner .canvasBg {
+		background: #000 !important;
+		/* Prevent white background canvas bleed-through */
+	}
+
+	.banner .heading.mobile-view {
+		font-size: clamp(3rem, 11vw, 5.5rem) !important;
+		line-height: 0.95 !important;
+		letter-spacing: -0.03em !important;
+		font-weight: 800 !important;
+		text-align: center !important;
+		width: 100% !important;
+		position: relative !important;
+		padding: 0 20px !important;
+		display: block !important;
+	}
+
+	.banner .heading.mobile-view .bhe1,
+	.banner .heading.mobile-view .bhe2,
+	.banner .heading.mobile-view .bhe3,
+	.banner .heading.mobile-view .bhe4 {
+		position: static !important;
+		left: auto !important;
+		right: auto !important;
+		transform: none !important;
+		background-clip: text !important;
 		padding: 0 !important;
 	}
 
+	.banner .heading.mobile-view br {
+		display: none !important;
+	}
+
+	.banner .heading.mobile-view .bhe4 {
+		display: block !important;
+		color: #ffffff !important;
+		-webkit-text-fill-color: #ffffff !important;
+		margin: 0 !important;
+	}
+
+	.banner .heading.mobile-view .bhe1 {
+		display: block !important;
+		color: #ffffff !important;
+		-webkit-text-fill-color: #ffffff !important;
+		margin: 0 !important;
+	}
+
+	.banner .heading.mobile-view .bhe2 {
+		display: inline-block !important;
+		color: #ffffff !important;
+		-webkit-text-fill-color: #ffffff !important;
+		margin: 0 !important;
+		margin-right: 0.28em !important;
+	}
+
+	.banner .heading.mobile-view .bhe3 {
+		display: inline-block !important;
+		color: #DAF301 !important;
+		-webkit-text-fill-color: #DAF301 !important;
+		margin: 0 !important;
+	}
+
+	/* Adjust canvas backdrop */
+	.banner .canvasBg,
+	.banner .canvasBg canvas {
+		height: 100% !important;
+		min-height: 70vh !important;
+	}
+
+	.video_frame video {
+		height: 200px !important;
+		width: 300px !important;
+	}
+
+	/* 3. Our Expertise & Services (Sticky Cards restoration) */
+	#gsap-card-section {
+		position: sticky !important;
+		top: 0 !important;
+		/* height: 60vh !important;
+		min-height: 60vh !important; */
+		background: #DAF301 !important;
+		overflow: hidden !important;
+	}
+
+	#gsap-card-inner {
+		position: relative !important;
+		padding-top: 60px !important;
+		/* clear header */
+		padding-bottom: 20px !important;
+		height: 100% !important;
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+	}
+
+	/* 4. Service Detail Blocks (Sticky timing and transition logic optimized for space) */
+	.brand_strategy_section {
+		position: sticky !important;
+		height: 35vh !important;
+		min-height: 41vh !important;
+		display: flex !important;
+		flex-direction: column !important;
+		justify-content: center !important;
+		align-items: center !important;
+		background: #000 !important;
+		padding: 10px 0 !important;
+		overflow: hidden !important;
+	}
+
+	/* Optimized staggered sticky offsets to prevent Section 4 cutoff */
+	.brand_strategy_section[data-id="1"] {
+		top: 27% !important;
+	}
+
+	.brand_strategy_section[data-id="2"] {
+		top: 36% !important;
+	}
+
+	.brand_strategy_section[data-id="3"] {
+		top: 46% !important;
+	}
+
+	.brand_strategy_section[data-id="4"] {
+		top: 56% !important;
+	}
+
+	.brand_strategy_section .col-11 {
+		width: 100% !important;
+		max-width: 100% !important;
+		padding: 0 15px !important;
+	}
+
+	.brand_strategy_section .row {
+		display: flex !important;
+		flex-direction: row-reverse !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		gap: 18px !important;
+		width: 100% !important;
+	}
+
+	/* Column 1: Mobile Media Column (Contains .visuals) - Left Column */
+	.brand_strategy_section .row> :nth-child(1) {
+		display: block !important;
+		flex: 0 0 110px !important;
+		width: 110px !important;
+		max-width: 110px !important;
+		margin: 0 !important;
+	}
+
+	/* Column 2: Content Column - Right Column */
+	.brand_strategy_section .row> :nth-child(2) {
+		display: block !important;
+		flex: 1 !important;
+		max-width: calc(100% - 122px) !important;
+		width: auto !important;
+		padding: 0 !important;
+		text-align: left !important;
+	}
+
+	/* Column 3: Desktop Media Column (Hidden on mobile) */
+	.brand_strategy_section .row> :nth-child(3) {
+		display: none !important;
+	}
+
+	/* Media sizing and visualization - Compact portrait preview on left */
+	.brand_strategy_section .visuals {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		height: 226px !important;
+		width: 120px !important;
+		margin: 0 !important;
+	}
+
+	.brand_strategy_section .visuals video {
+		height: 100% !important;
+		width: 100% !important;
+		object-fit: cover !important;
+		border-radius: 8px !important;
+		display: block !important;
+	}
+
+	/* Text / Button layout optimization */
+	.brand_strategy_section .content {
+		padding: 0 !important;
+		text-align: left !important;
+	}
+
 	.brand_strategy_section .content .heading {
-		font-size: 13px !important;
-		margin-bottom: 4px !important;
+		/* font-size: clamp(0.9rem, 4vw, 1.15rem) !important; */
+		/* line-height: 1.25 !important; */
+		margin-bottom: 5px !important;
+		text-align: center !important;
+		display: block !important;
+		background: none !important;
+		color: #DAF301 !important;
+		-webkit-text-fill-color: #DAF301 !important;
 	}
 
 	.brand_strategy_section .content .text {
-		font-size: 10px !important;
-		margin-bottom: 4px !important;
+		font-size: 15px !important;
+		/* line-height: 1.35 !important; */
+		color: rgba(255, 255, 255, 0.85) !important;
+		/* margin-bottom: 8px !important; */
+		text-align: justify !important;
 	}
 
 	.brand_strategy_section .button-style-div {
-		transform: scale(0.6);
-		transform-origin: left;
+		margin: 8px auto 0 auto !important;
+		justify-content: center !important;
+		transform: none !important;
+		display: flex !important;
+		width: max-content !important;
+	}
+
+	.brand_strategy_section .button-style-span2 {
+		padding: 8px 18px !important;
+		font-size: 11px !important;
+	}
+
+	/* 5. Floating elements & Chat widget safe boundaries */
+	.side_contact_button {
+		height: auto !important;
+		width: auto !important;
+		top: auto !important;
+		bottom: 20px !important;
+		right: 20px !important;
+		position: fixed !important;
+	}
+
+	.side_contact_button .mainButton {
+		position: static !important;
+		margin: 0 !important;
+	}
+
+	.side_contact_button button {
+		height: 48px !important;
+		width: 48px !important;
+		font-size: 18px !important;
+	}
+
+	.side_contact_button .mainButton img {
+		height: 40px !important;
+		width: 40px !important;
+	}
+
+	.side_contact_button .sideButtonDiv {
+		position: absolute !important;
+		bottom: 60px !important;
+		right: 0 !important;
+		margin-bottom: 0 !important;
 	}
 }
 
 /* ========== MOBILE SCROLL FIX ========== */
 @media screen and (max-width: 1000px) {
-		body {
-			overflow-y: auto !important;
-			overflow-x: hidden;
-		}
-
-		.page-section {
-			opacity: 1 !important;
-		}
+	body {
+		overflow-y: auto !important;
+		overflow-x: hidden;
 	}
+
+	.page-section {
+		opacity: 1 !important;
+	}
+}
