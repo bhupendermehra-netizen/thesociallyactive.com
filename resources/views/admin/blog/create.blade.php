@@ -96,7 +96,7 @@
       {{-- Hidden textarea for form submit --}}
       <textarea name="content" id="content" style="display:none;">{{ old('content') }}</textarea>
       {{-- Quill editor container --}}
-      <div id="quill-editor" style="min-height:350px;background:#fff;border-radius:0 0 8px 8px;"></div>
+      <div id="quill-editor" style="min-height:350px;background:var(--card);border-radius:0 0 8px 8px;"></div>
     </div>
 
     {{-- SEO --}}
@@ -183,15 +183,32 @@
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 <style>
-  #quill-editor { color: #0d0b1a; font-size: 14px; line-height: 1.7; }
+  /* Quill editor — dark theme fixes */
+  #quill-editor { color: #ffffff; font-size: 15px; line-height: 1.8; font-family: 'Inter', sans-serif; background: var(--card); }
+  .ql-container.ql-snow { border-color: var(--border) !important; border-radius: 0 0 8px 8px; background: var(--card); }
+  .ql-editor { color: #ffffff !important; background: var(--card) !important; min-height: 350px; }
+  .ql-editor p, .ql-editor li, .ql-editor ol, .ql-editor ul { color: #ffffff !important; }
+  .ql-editor h1, .ql-editor h2, .ql-editor h3 { color: #ffffff !important; }
+  .ql-editor blockquote { color: #c8c4d9 !important; border-left-color: var(--lime) !important; }
+  .ql-editor pre.ql-syntax, .ql-editor code { color: #c8c4d9 !important; background: rgba(255,255,255,0.05) !important; }
+  /* Toolbar */
   .ql-toolbar.ql-snow { background: var(--card); border-color: var(--border) !important; border-radius: 8px 8px 0 0; }
-  .ql-container.ql-snow { border-color: var(--border) !important; border-radius: 0 0 8px 8px; }
-  .ql-toolbar .ql-stroke { stroke: var(--muted) !important; }
-  .ql-toolbar .ql-fill { fill: var(--muted) !important; }
+  .ql-toolbar .ql-stroke { stroke: #c8c4d9 !important; }
+  .ql-toolbar .ql-fill { fill: #c8c4d9 !important; }
   .ql-toolbar button:hover .ql-stroke { stroke: var(--lime) !important; }
   .ql-toolbar button:hover .ql-fill { fill: var(--lime) !important; }
-  .ql-toolbar .ql-active .ql-stroke { stroke: var(--lime) !important; }
-  .ql-toolbar .ql-picker-label { color: var(--muted) !important; }
+  .ql-toolbar button.ql-active .ql-stroke { stroke: var(--lime) !important; }
+  .ql-toolbar button.ql-active .ql-fill { fill: var(--lime) !important; }
+  .ql-toolbar .ql-picker-label { color: #c8c4d9 !important; }
+  .ql-toolbar .ql-picker-options { background: var(--card) !important; border-color: var(--border) !important; }
+  .ql-toolbar .ql-picker-item:hover { color: var(--lime) !important; }
+  .ql-snow .ql-tooltip { background: var(--card) !important; border-color: var(--border) !important; color: var(--text) !important; }
+  .ql-snow .ql-tooltip input { background: var(--hover) !important; border-color: var(--border) !important; color: var(--text) !important; }
+  .ql-editor.ql-blank::before { color: var(--muted) !important; font-style: normal !important; }
+  /* Color picker dropdown */
+  .ql-snow .ql-picker-options .ql-picker-item { color: inherit !important; }
+  /* Link URL tooltip */
+  .ql-snow .ql-tooltip a { color: var(--teal) !important; }
   small.form-text { font-size: 11px; color: var(--muted); display: block; margin-top: 4px; }
 </style>
 
@@ -326,3 +343,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   updateFaqEmpty();
 });
+</script>
+@endsection
