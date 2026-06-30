@@ -4269,3 +4269,418 @@ img.lazy-load.loaded {
 		opacity: 1 !important;
 	}
 }
+
+
+/* ==========================================================================
+   RESPONSIVE TEXT SIZING & LAYOUT FIXES (30 June 2026)
+   Fixes: text overflow, proportional sizing, overlapping, readability
+   ========================================================================== */
+
+/* --- 1. GLOBAL FLUID TYPOGRAPHY --- */
+/* Replace fixed px headings with clamp() for smooth scaling */
+.heading {
+	/* font-size: clamp(1.5rem, 5vw, 3.125rem) !important; */
+}
+
+.passion_section .section_1 .heading {
+	font-size: clamp(1.25rem, 4.5vw, 1.5625rem) !important;
+}
+
+.aboutus_section .heading {
+	font-size: clamp(1.125rem, 3.5vw, 2.5rem) !important;
+}
+
+/* --- 2. CONTACT POPUP FORM - Heading overflow fix --- */
+@media screen and (max-width: 600px) {
+	.contact_popup_form .heading {
+		font-size: clamp(1rem, 5vw, 1.5625rem) !important;
+		word-break: break-word;
+		padding: 0 10px;
+	}
+
+	.contact_popup_form .content {
+		font-size: clamp(0.75rem, 3vw, 0.9375rem) !important;
+		padding: 0 10px;
+	}
+
+	.contact_popup_form .form {
+		padding: 20px 10px !important;
+	}
+
+	.contact_popup_form .form label {
+		font-size: 12px;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.contact_popup_form .heading {
+		font-size: clamp(0.875rem, 4.5vw, 1.25rem) !important;
+		line-height: 1.3;
+	}
+}
+
+/* --- 3. NAVBAR - Tight spacing at very small widths --- */
+@media screen and (max-width: 380px) {
+	.navbar {
+		padding: 6px 10px !important;
+		height: 60px !important;
+	}
+
+	.navbar .logo img {
+		height: 36px !important;
+		width: 36px !important;
+	}
+
+	.navbar .link a {
+		font-size: 14px !important;
+		margin: 3px 5px !important;
+	}
+
+	.navbar .audio_control img {
+		height: 22px !important;
+		width: 22px !important;
+		margin: 3px !important;
+	}
+
+	.navbar .link .menu-control {
+		height: 36px !important;
+		width: 36px !important;
+	}
+
+	.navbar .link .button .let_talk_link {
+		font-size: 11px !important;
+	}
+
+	.navbar .link .button {
+		padding: 4px 10px !important;
+	}
+}
+
+/* --- 4. BRAND STRATEGY SECTIONS - Overlap fix on mobile/tablet --- */
+@media screen and (max-width: 768px) {
+
+	/* Increase min-height to prevent overlap between stacked sections */
+	.brand_strategy_section {
+		min-height: 45vh !important;
+		overflow: visible !important;
+	}
+
+	/* Content text clamp for readability */
+	.brand_strategy_section .content .heading {
+		font-size: clamp(0.875rem, 3.8vw, 1.125rem) !important;
+		line-height: 1.3 !important;
+		margin-bottom: 6px !important;
+	}
+
+	.brand_strategy_section .content .text {
+		font-size: clamp(0.6875rem, 3vw, 0.9375rem) !important;
+		line-height: 1.45 !important;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 5;
+		-webkit-box-orient: vertical;
+	}
+
+	/* Staggered sticky offsets - more spacing between sections */
+	.brand_strategy_section[data-id="1"] {
+		top: 22% !important;
+	}
+
+	.brand_strategy_section[data-id="2"] {
+		top: 34% !important;
+	}
+
+	.brand_strategy_section[data-id="3"] {
+		top: 46% !important;
+	}
+
+	.brand_strategy_section[data-id="4"] {
+		top: 58% !important;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.brand_strategy_section .content .text {
+		font-size: clamp(0.625rem, 2.8vw, 0.8125rem) !important;
+		-webkit-line-clamp: 4;
+	}
+
+	.brand_strategy_section .content .heading {
+		font-size: clamp(0.8125rem, 3.5vw, 1rem) !important;
+	}
+}
+
+/* --- 5. TESTIMONIAL SECTION - Header overlap & text size fix --- */
+@media screen and (max-width: 768px) {
+	.testimonial_section {
+		padding-top: 80px !important;
+	}
+
+	.testimonial_section .upper {
+		padding-top: 60px !important;
+	}
+
+	.testimonial_section .review .review_content {
+		font-size: clamp(0.75rem, 3vw, 0.9375rem) !important;
+		height: auto !important;
+		max-height: 150px;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.testimonial_section .review .customer .name {
+		font-size: clamp(0.8125rem, 3.5vw, 1.125rem) !important;
+	}
+
+	.testimonial_section .review .customer .type {
+		font-size: clamp(0.6875rem, 2.8vw, 0.9375rem) !important;
+	}
+}
+
+/* --- 6. BRAND LOWER (Ticker bar) - Text cut-off fix --- */
+@media screen and (max-width: 768px) {
+	.brand_lower {
+		overflow: hidden;
+	}
+
+	.brand_lower p {
+		font-size: clamp(0.8125rem, 3.5vw, 1.25rem) !important;
+		text-align: center;
+		white-space: normal !important;
+		word-break: break-word;
+	}
+}
+
+/* --- 7. FOOTER - Sticky header overlap on footer content fix --- */
+@media screen and (max-width: 1000px) {
+	.footer {
+		padding-top: 80px !important;
+	}
+
+	.footer .logo .sub {
+		font-size: clamp(0.75rem, 3vw, 0.875rem);
+	}
+
+	.footer .logo .content {
+		font-size: clamp(0.6875rem, 2.5vw, 0.8125rem);
+	}
+
+	.footer .footer-links ul li a,
+	.footer .information ul li a {
+		font-size: clamp(0.75rem, 3vw, 0.9375rem);
+	}
+
+	footer .credit p {
+		font-size: clamp(0.6875rem, 2.5vw, 0.9375rem) !important;
+	}
+
+	.footer .social a {
+		font-size: clamp(1rem, 4vw, 1.375rem);
+	}
+}
+
+/* Fix footer being hidden by the fixed header at the bottom */
+@media screen and (max-width: 768px) {
+	.footer {
+		padding-bottom: 80px !important;
+		/* Extra padding so content isn't hidden behind sticky header */
+	}
+}
+
+/* --- 8. FOOTER UPPER (Pebbles/capsules) - Text overflow fix --- */
+@media screen and (max-width: 600px) {
+	.footer_upper .pebbles_box {
+		font-size: clamp(0.625rem, 2.5vw, 0.9375rem) !important;
+		padding: 4px 8px !important;
+		margin: 3px !important;
+		white-space: normal;
+		overflow: hidden;
+		max-width: 90vw;
+		display: inline-block;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.footer_upper .pebbles_box {
+		font-size: clamp(0.5625rem, 2.2vw, 0.75rem) !important;
+		max-width: 90vw;
+	}
+}
+
+/* --- 9. CONTACT SECTION - Heading visibility on tablet --- */
+@media screen and (max-width: 768px) {
+	.contact_section .subheading {
+		font-size: clamp(1.25rem, 5vw, 2.5rem) !important;
+	}
+
+	.contact_section .heading {
+		font-size: clamp(1rem, 4vw, 1.5625rem) !important;
+	}
+
+	.contact_section .content {
+		font-size: clamp(0.6875rem, 2.8vw, 0.8125rem);
+	}
+
+	.impact_section .form label {
+		font-size: clamp(0.75rem, 3vw, 1rem) !important;
+	}
+
+	.impact_section .form input,
+	.impact_section .form select {
+		font-size: clamp(0.75rem, 3vw, 0.9375rem) !important;
+	}
+}
+
+/* --- 10. BRANDS SECTION - Logo overflow fix --- */
+@media screen and (max-width: 600px) {
+	.brands_section img {
+		width: clamp(60px, 20vw, 100px) !important;
+		height: clamp(40px, 12vw, 80px) !important;
+		margin: 5px !important;
+	}
+
+	.brands_section .inner {
+		margin: 20px 0 !important;
+	}
+}
+
+/* --- 11. EXPLORE MORE SECTION - Text proportional sizing --- */
+@media screen and (max-width: 480px) {
+	.explore_more_section .c1 .content_heading h1 {
+		font-size: clamp(0.75rem, 3.5vw, 1.25rem) !important;
+	}
+
+	.explore_more_section .c1 .content_text {
+		font-size: clamp(0.625rem, 2.5vw, 0.8125rem) !important;
+	}
+
+	.explore_more_section .c1 .content_text p {
+		font-size: clamp(0.5rem, 2.2vw, 0.6875rem) !important;
+	}
+
+	.explore_more_section .heading {
+		font-size: clamp(1rem, 4vw, 1.5625rem) !important;
+	}
+}
+
+/* --- 12. TALK SECTION - Heading proportional sizing --- */
+.talk_section .heading {
+	font-size: clamp(1rem, 4.5vw, 3.125rem) !important;
+}
+
+.talk_section .text {
+	font-size: clamp(0.75rem, 3vw, 0.9375rem);
+}
+
+.talk_section .link {
+	font-size: clamp(0.875rem, 3.5vw, 1.25rem);
+}
+
+/* --- 13. PASSION SECTION - Content readability --- */
+@media screen and (max-width: 768px) {
+	.passion_section .section_1 .content {
+		font-size: clamp(0.75rem, 3vw, 1rem) !important;
+	}
+
+	.whoweare_section .sub-heading {
+		font-size: clamp(0.6875rem, 2.8vw, 0.9375rem) !important;
+		width: 95% !important;
+	}
+}
+
+/* --- 14. WHO WE HELP SECTION - Card text proportional sizing --- */
+@media screen and (max-width: 600px) {
+	.who_we_help_section .content .content_heading {
+		font-size: clamp(0.875rem, 3.5vw, 1.25rem) !important;
+	}
+
+	.who_we_help_section .content .content_text {
+		font-size: clamp(0.625rem, 2.5vw, 0.75rem) !important;
+	}
+}
+
+/* --- 15. NAVBAR OPTIONS (Full-screen menu) --- */
+@media screen and (max-width: 480px) {
+	.navbar-options .navbar-links .links a {
+		font-size: clamp(1.25rem, 6vw, 1.875rem) !important;
+	}
+
+	.navbar-options .navbar-links .links a i {
+		font-size: clamp(0.875rem, 4vw, 1.25rem) !important;
+	}
+
+	.navbar-options .service_drop a {
+		font-size: clamp(0.75rem, 3.5vw, 0.9375rem) !important;
+	}
+}
+
+/* --- 16. VALUES SECTION - Mobile text sizing --- */
+@media screen and (max-width: 480px) {
+	.values_section .text {
+		font-size: clamp(0.5625rem, 2.5vw, 0.75rem) !important;
+	}
+
+	.values_section.mobile-view .content .content_div .part2Text .text_heading {
+		font-size: clamp(0.5rem, 2.2vw, 0.625rem) !important;
+	}
+
+	.values_section.mobile-view .content .content_div .part2Text .text_content {
+		font-size: clamp(0.75rem, 3vw, 0.9375rem) !important;
+	}
+}
+
+/* --- 17. FOUNDER SECTION - Title sizing --- */
+@media screen and (max-width: 600px) {
+	.founder_section .content .title {
+		font-size: clamp(1.5rem, 8vw, 3.75rem) !important;
+	}
+
+	.founder_section .content .position {
+		font-size: clamp(1rem, 5vw, 1.875rem) !important;
+	}
+}
+
+/* --- 18. OUR STORY SECTION - Text sizing on small screens --- */
+@media screen and (max-width: 480px) {
+
+	.our_story_section .text,
+	.our_story_section .text2 {
+		font-size: clamp(0.75rem, 3.5vw, 1rem) !important;
+	}
+}
+
+/* --- 19. BANNER HEADING - Fluid scaling across all sizes --- */
+@media screen and (max-width: 768px) {
+	.banner .heading.mobile-view {
+		font-size: clamp(2rem, 9vw, 4rem) !important;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.banner .heading.mobile-view {
+		font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
+	}
+}
+
+/* --- 20. IMPACT SECTION (Contact Form) - Proper padding to clear header --- */
+@media screen and (max-width: 768px) {
+	.impact_section {
+		height: auto !important;
+		padding-top: 80px !important;
+	}
+}
+
+/* --- 21. POPUP CLOSE BUTTON OVERLAP FIX --- */
+.contact_popup_form .close_contact_popup_form {
+	z-index: 100;
+}
+
+@media screen and (max-width: 600px) {
+	.contact_popup_form .heading {
+		padding-right: 35px !important;
+		/* Make room for the close button */
+	}
+}
+
+/* ==========================================================================
+   END RESPONSIVE TEXT SIZING & LAYOUT FIXES
+   ========================================================================== */

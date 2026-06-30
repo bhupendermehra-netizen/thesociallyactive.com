@@ -23,14 +23,14 @@
 					@php
 						$heading = explode(";", (isset($pages['home_banner'][1]) ? $pages['home_banner'][1]->text : ''));
 					@endphp
-					<h1 class="heading desktop-view" style="position:relative">
+					<{{ $pages['home_banner'][1]->heading_tag ?? 'h1' }} class="heading desktop-view" style="position:relative">
 						<span class="bhe4">{{$heading[0]}}</span><br> <span class="bhe1">{{$heading[1]}}</span><br> <span
 							class="bhe2" style="">{{$heading[2]}}</span> <span class="bhe3" style="">{{$heading[3]}}</span>
-					</h1>
-					<h1 class="heading mobile-view" style="position:relative">
+					</{{ $pages['home_banner'][1]->heading_tag ?? 'h1' }}>
+					<{{ $pages['home_banner'][1]->heading_tag ?? 'h1' }} class="heading mobile-view" style="position:relative">
 						<span class="bhe4">{{$heading[0]}}</span><span class="bhe1">{{$heading[1]}}</span><br> <span
 							class="bhe2" style="">{{$heading[2]}}</span> <span class="bhe3" style="">{{$heading[3]}}</span>
-					</h1>
+					</{{ $pages['home_banner'][1]->heading_tag ?? 'h1' }}>
 				</center>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 
 
 		<center>
-			<h2 class="heading">{{(isset($pages['about_section'][6]) ? $pages['about_section'][6]->text : '')}}</h2>
+			<{{ $pages['about_section'][6]->heading_tag ?? 'h2' }} class="heading">{{(isset($pages['about_section'][6]) ? $pages['about_section'][6]->text : '')}}</{{ $pages['about_section'][6]->heading_tag ?? 'h2' }}>
 			<div class="col-lg-8 col-11 p-4">
 				<div class="row">
 					<div class="col-lg-6 section_2">
@@ -76,11 +76,11 @@
 					</div>
 					<div class="col-lg-6 section_1">
 						<div>
-							<h2 class="heading">
+							<{{ $pages['about_section'][0]->heading_tag ?? 'h2' }} class="heading">
 								{{(isset($pages['about_section'][0]) ? $pages['about_section'][0]->text : '')}}<br> <span
 									class="impact word-change" word-remaine-time="1500"
 									words="{{(isset($pages['about_section'][1]) ? $pages['about_section'][1]->text : '')}}"></span>
-							</h2>
+							</{{ $pages['about_section'][0]->heading_tag ?? 'h2' }}>
 							<p class="content">
 								{{(isset($pages['about_section'][2]) ? $pages['about_section'][2]->text : '')}}</p>
 							<div onclick="window.location.href='{{(isset($pages['about_section'][3]) ? (isset($pages['about_section'][3]) ? $pages['about_section'][3]->link : '#') : '#')}}'"
@@ -116,7 +116,7 @@
 
 			<div class="whoweare_setion_width_section col-12">
 
-				<h4 class="heading">{{(isset($pages['who_we_are'][0]) ? $pages['who_we_are'][0]->text : '') ?? ''}}</h4>
+				<{{ $pages['who_we_are'][0]->heading_tag ?? 'h4' }} class="heading">{{(isset($pages['who_we_are'][0]) ? $pages['who_we_are'][0]->text : '') ?? ''}}</{{ $pages['who_we_are'][0]->heading_tag ?? 'h4' }}>
 				<p class="sub-heading">{{(isset($pages["who_we_are"][1]) ? $pages["who_we_are"][1]->text : '') ?? ''}}</p>
 
 				<div class="video_section_outer mb-4 col-lg-10">
@@ -192,7 +192,7 @@
 			data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_help'][15]) ? $pages['who_we_help'][15]->img : ''))}}">
 		<div class="inner">
 			<div class="container">
-				<h3 class="heading">{{(isset($pages['who_we_help'][0]) ? $pages['who_we_help'][0]->text : '')}}</h3>
+				<{{ $pages['who_we_help'][0]->heading_tag ?? 'h3' }} class="heading">{{(isset($pages['who_we_help'][0]) ? $pages['who_we_help'][0]->text : '')}}</{{ $pages['who_we_help'][0]->heading_tag ?? 'h3' }}>
 				<div class="content">
 					<div class="row">
 						<div class="col-lg-4 col-md-6 mb-3">
@@ -203,8 +203,8 @@
 								<img class="part2 lazy-load"
 									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_help'][5]) ? $pages['who_we_help'][5]->img : ''))}}"
 									data-selected="0">
-								<h4 class="content_heading">
-									{{(isset($pages['who_we_help'][2]) ? $pages['who_we_help'][2]->text : '')}}</h4>
+								<{{ $pages['who_we_help'][2]->heading_tag ?? 'h4' }} class="content_heading">
+																{{(isset($pages['who_we_help'][2]) ? $pages['who_we_help'][2]->text : '')}}</{{ $pages['who_we_help'][2]->heading_tag ?? 'h4' }}>
 								<p class="content_text">
 									{{(isset($pages['who_we_help'][3]) ? $pages['who_we_help'][3]->text : '')}}</p>
 							</div>
@@ -217,8 +217,8 @@
 								<img class="part2 lazy-load"
 									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_help'][9]) ? $pages['who_we_help'][9]->img : ''))}}"
 									data-selected="0">
-								<h4 class="content_heading">
-									{{(isset($pages['who_we_help'][6]) ? $pages['who_we_help'][6]->text : '')}}</h4>
+								<{{ $pages['who_we_help'][6]->heading_tag ?? 'h4' }} class="content_heading">
+																{{(isset($pages['who_we_help'][6]) ? $pages['who_we_help'][6]->text : '')}}</{{ $pages['who_we_help'][6]->heading_tag ?? 'h4' }}>
 								<p class="content_text">
 									{{(isset($pages['who_we_help'][7]) ? $pages['who_we_help'][7]->text : '')}}</p>
 							</div>
@@ -231,8 +231,8 @@
 								<img class="part2 lazy-load"
 									data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . (isset($pages['who_we_help'][13]) ? $pages['who_we_help'][13]->img : ''))}}"
 									data-selected="0">
-								<h4 class="content_heading">
-									{{(isset($pages['who_we_help'][10]) ? $pages['who_we_help'][10]->text : '')}}</h4>
+								<{{ $pages['who_we_help'][10]->heading_tag ?? 'h4' }} class="content_heading">
+																{{(isset($pages['who_we_help'][10]) ? $pages['who_we_help'][10]->text : '')}}</{{ $pages['who_we_help'][10]->heading_tag ?? 'h4' }}>
 								<p class="content_text">
 									{{(isset($pages['who_we_help'][11]) ? $pages['who_we_help'][11]->text : '')}}</p>
 							</div>
@@ -701,8 +701,8 @@
 			<div class="inner">
 				<center>
 					<div class="col-lg-4">
-						<h3 class="heading">
-							{{(isset($pages['values_section'][0]) ? $pages['values_section'][0]->text : '')}}</h3>
+						<{{ $pages['values_section'][0]->heading_tag ?? 'h3' }} class="heading">
+							{{(isset($pages['values_section'][0]) ? $pages['values_section'][0]->text : '')}}</{{ $pages['values_section'][0]->heading_tag ?? 'h3' }}>
 						<p class="text">{{(isset($pages['values_section'][1]) ? $pages['values_section'][1]->text : '')}}
 						</p>
 					</div>
@@ -712,9 +712,9 @@
 								<div class="content_upper_div">
 									<div class="content_div">
 										<div class="part2Text" data-selected="0" style="top:100px;left:-10px">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][2]) ? $pages['values_section'][2]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][2]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][2]) ? $pages['values_section'][2]->text : '')}}
+																		</{{ $pages['values_section'][2]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][3]) ? $pages['values_section'][3]->text : '')}}
 											</p>
@@ -732,9 +732,9 @@
 									</div>
 									<div class="content_div" style="left:200px;top:100px">
 										<div class="part2Text" data-selected="0" style="top:-90px;left:-10px;">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][6]) ? $pages['values_section'][6]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][6]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][6]) ? $pages['values_section'][6]->text : '')}}
+																		</{{ $pages['values_section'][6]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][7]) ? $pages['values_section'][7]->text : '')}}
 											</p>
@@ -767,9 +767,9 @@
 								<div class="content_upper_div">
 									<div class="content_div" style="top:100px;right:200px">
 										<div class="part2Text" data-selected="0" style="top:-110px;right:-10px;">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][10]) ? $pages['values_section'][10]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][10]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][10]) ? $pages['values_section'][10]->text : '')}}
+																		</{{ $pages['values_section'][10]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][11]) ? $pages['values_section'][11]->text : '')}}
 											</p>
@@ -787,9 +787,9 @@
 									</div>
 									<div class="content_div" style="right:0;top:300px">
 										<div class="part2Text" data-selected="0" style="top:-190px;right:-20px">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][14]) ? $pages['values_section'][14]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][14]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][14]) ? $pages['values_section'][14]->text : '')}}
+																		</{{ $pages['values_section'][14]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][15]) ? $pages['values_section'][15]->text : '')}}
 											</p>
@@ -822,8 +822,8 @@
 			<div class="inner">
 				<center>
 					<div class="col-8">
-						<h3 class="heading">
-							{{(isset($pages['values_section'][0]) ? $pages['values_section'][0]->text : '')}}</h3>
+						<{{ $pages['values_section'][0]->heading_tag ?? 'h3' }} class="heading">
+							{{(isset($pages['values_section'][0]) ? $pages['values_section'][0]->text : '')}}</{{ $pages['values_section'][0]->heading_tag ?? 'h3' }}>
 						<p class="text">{{(isset($pages['values_section'][1]) ? $pages['values_section'][1]->text : '')}}
 						</p>
 					</div>
@@ -844,9 +844,9 @@
 								<div class="content_upper_div">
 									<div class="content_div">
 										<div class="part2Text" data-selected="0" style="top:-70px;right:0;left:0">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][2]) ? $pages['values_section'][2]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][2]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][2]) ? $pages['values_section'][2]->text : '')}}
+																		</{{ $pages['values_section'][2]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][3]) ? $pages['values_section'][3]->text : '')}}
 											</p>
@@ -863,9 +863,9 @@
 									</div>
 									<div class="content_div">
 										<div class="part2Text" data-selected="0" style="top:-70px;right:0;left:0">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][6]) ? $pages['values_section'][6]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][6]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][6]) ? $pages['values_section'][6]->text : '')}}
+																		</{{ $pages['values_section'][6]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][7]) ? $pages['values_section'][7]->text : '')}}
 											</p>
@@ -887,9 +887,9 @@
 								<div class="content_upper_div">
 									<div class="content_div">
 										<div class="part2Text" data-selected="0" style="top:-30px;right:0;left:0">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][10]) ? $pages['values_section'][10]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][10]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][10]) ? $pages['values_section'][10]->text : '')}}
+																		</{{ $pages['values_section'][10]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][11]) ? $pages['values_section'][11]->text : '')}}
 											</p>
@@ -906,9 +906,9 @@
 									</div>
 									<div class="content_div">
 										<div class="part2Text" data-selected="0" style="top:-30px;right:0;left:0">
-											<h4 class="text_heading">
-												{{(isset($pages['values_section'][14]) ? $pages['values_section'][14]->text : '')}}
-											</h4>
+											<{{ $pages['values_section'][14]->heading_tag ?? 'h4' }} class="text_heading">
+																			{{(isset($pages['values_section'][14]) ? $pages['values_section'][14]->text : '')}}
+																		</{{ $pages['values_section'][14]->heading_tag ?? 'h4' }}>
 											<p class="text_content">
 												{{(isset($pages['values_section'][15]) ? $pages['values_section'][15]->text : '')}}
 											</p>
@@ -936,7 +936,7 @@
 	<div class="brands_section page-section">
 		<center>
 			<div class="inner">
-				<h1 class="heading">{{(isset($pages['brands_section'][0]) ? $pages['brands_section'][0]->text : '')}}</h1>
+				<{{ $pages['brands_section'][0]->heading_tag ?? 'h1' }} class="heading">{{(isset($pages['brands_section'][0]) ? $pages['brands_section'][0]->text : '')}}</{{ $pages['brands_section'][0]->heading_tag ?? 'h1' }}>
 				<marquee scrollamount="10" style="display:flex">
 					@foreach(extra_image("Home") as $data)
 						<img class="lazy-load" data-src="{{(env('IMG_FETCH_URL') . 'uploaded_files/' . $data->banner)}}">
@@ -955,7 +955,7 @@
 
 	<div class="impact_section page-section">
 		<center>
-			<h1 class="heading">{{(isset($pages['impact_section'][0]) ? $pages['impact_section'][0]->text : '')}}</h1>
+			<{{ $pages['impact_section'][0]->heading_tag ?? 'h1' }} class="heading">{{(isset($pages['impact_section'][0]) ? $pages['impact_section'][0]->text : '')}}</{{ $pages['impact_section'][0]->heading_tag ?? 'h1' }}>
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-8">
@@ -1005,7 +1005,7 @@ style="background:url('{{ isset($pages["testimonial_section"][27]->img) ? env('I
 <center>
 
 <div class="col-lg-6 col-10">
-    <h1 class="heading">{{ $pages["testimonial_section"][0]->text ?? '' }}</h1>
+    <{{ $pages["testimonial_section"][0]->heading_tag ?? 'h1' }} class="heading">{{ $pages["testimonial_section"][0]->text ?? '' }}</{{ $pages["testimonial_section"][0]->heading_tag ?? 'h1' }}>
     <p class="content">{{ $pages["testimonial_section"][1]->text ?? '' }}</p>
 </div>
 

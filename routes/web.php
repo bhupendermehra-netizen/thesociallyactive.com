@@ -105,14 +105,12 @@ Route::prefix("admin")->name("admin.")->middleware("auth")->group(function () {
     Route::get("/analytics/data", [AnalyticsController::class, "getAnalyticsData"])->name("analytics.data");
 
     // Authors
-    Route::resource("authors", App\Http\Controllers\Admin\AuthorController::class)->names([
-        'index' => 'authors.index',
-        'create' => 'authors.create',
-        'store' => 'authors.store',
-        'edit' => 'authors.edit',
-        'update' => 'authors.update',
-        'destroy' => 'authors.destroy',
-    ]);
+    Route::get("authors", [App\Http\Controllers\Admin\AuthorController::class, "index"])->name("authors.index");
+    Route::get("authors/create", [App\Http\Controllers\Admin\AuthorController::class, "create"])->name("authors.create");
+    Route::post("authors", [App\Http\Controllers\Admin\AuthorController::class, "store"])->name("authors.store");
+    Route::get("authors/{id}/edit", [App\Http\Controllers\Admin\AuthorController::class, "edit"])->name("authors.edit");
+    Route::post("authors/{id}", [App\Http\Controllers\Admin\AuthorController::class, "update"])->name("authors.update");
+    Route::post("authors/{id}/delete", [App\Http\Controllers\Admin\AuthorController::class, "destroy"])->name("authors.destroy");
 
     // Page FAQs
     Route::get("page/faqs/{page}", [ManageController::class, "pageFaqs"])->name("page.faqs");
